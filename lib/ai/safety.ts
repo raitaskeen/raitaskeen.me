@@ -1,0 +1,63 @@
+export interface RateLimitConfig {
+  windowMs: number;
+  maxRequests: number;
+}
+
+const DEFAULT_CONFIG: RateLimitConfig = {
+  windowMs: 60 * 1000, // 1 minute window
+  maxRequests: 30,      // max 30 requests per minute
+};
+
+const ipRequestMap = new Map<string, number[]>();
+
+/**
+ * Checks whether an incoming client IP is allowed within the rate limit window.
+ */
+export function isAllowedRate(ip: string, config: RateLimitConfig = DEFAULT_CONFIG): boolean {
+  const now = Date.now();
+  const timestamps = (ipRequestMap.get(ip) || []).filter((t) => now - t < config.windowMs);
+
+  if (timestamps.length >= config.maxRequests) {
+    return false;
+  }
+
+  timestamps.push(now);
+  ipRequestMap.set(ip, timestamps);
+  return true;
+}
+
+/**
+ * Sanitizes input string to prevent denial-of-service / oversized payloads.
+ */
+export function sanitizeInput(input: unknown, maxLength: number = 800): string {
+  if (typeof input !== "string") {
+    return "";
+  }
+  return input.trim().slice(0, maxLength);
+}
+
+/**
+ * Validates and trims message history array to avoid exceeding context limits.
+ */
+export function sanitizeMessages(
+  messages: unknown[],
+  maxTurns: number = 10
+): { role: "user" | "assistant"; content: string }[] {
+  if (!Array.isArray(messages)) return [];
+
+  const valid = messages
+    .filter(
+      (m): m is { role: string; content: string } =>
+        typeof m === "object" &&
+        m !== null &&
+        typeof (m as any).role === "string" &&
+        typeof (m as any).content === "string"
+    )
+    .map((m) => ({
+      role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
+      content: sanitizeInput(m.content, 600),
+    }));
+
+  // Keep latest turns
+  return valid.slice(-maxTurns);
+}

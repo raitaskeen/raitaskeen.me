@@ -1,0 +1,631 @@
+/*
+  Additive effects layer — the original style.css (globals.css) is left
+  completely untouched so the core theme can never drift. Everything here
+  reuses the same custom properties (--orange-yellow-crayola, --jet, etc.)
+  so new elements match the existing design language exactly.
+*/
+
+/* ---------- Gradient border that animates in on hover ---------- */
+.gradient-border-hover {
+  position: relative;
+  border-radius: 14px;
+  background: var(--bg-gradient-jet);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid hsla(0, 0%, 100%, 0.08);
+  transition: transform var(--transition-1), box-shadow var(--transition-1);
+  isolation: isolate;
+}
+
+.gradient-border-hover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    120deg,
+    hsla(45, 100%, 72%, 0) 0%,
+    hsla(45, 100%, 72%, 0.9) 50%,
+    hsla(45, 100%, 72%, 0) 100%
+  );
+  background-size: 250% 250%;
+  background-position: 0% 50%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--transition-1), background-position 1.1s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gradient-border-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-2);
+}
+
+.gradient-border-hover:hover::before {
+  opacity: 1;
+  background-position: 100% 50%;
+}
+
+/* ---------- Shimmer sweep on buttons ---------- */
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, hsla(0, 0%, 100%, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+
+.shimmer-btn:hover::after {
+  left: 130%;
+}
+
+/* ---------- Underline draw-in for links ---------- */
+.link-draw {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-draw::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: var(--orange-yellow-crayola);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-1);
+}
+
+.link-draw:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Chips ("now exploring" pills) ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid hsla(45, 100%, 72%, 0.35);
+  background: hsla(45, 100%, 72%, 0.08);
+  color: var(--orange-yellow-crayola);
+  font-size: var(--fs-8);
+  white-space: nowrap;
+}
+
+/* ---------- Soft ambient glow behind hero ---------- */
+.hero-glow {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, hsla(45, 100%, 72%, 0.18) 0%, transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ---------- Skill bar fill animation ---------- */
+@keyframes fillBar {
+  from { width: 0%; }
+}
+
+.skill-bar-animate {
+  animation: fillBar 1s ease forwards;
+}
+
+/* ---------- Reduced motion respect ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-border-hover,
+  .gradient-border-hover::before,
+  .shimmer-btn::after,
+  .link-draw::after,
+  .skill-bar-animate {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ---------- Stagger group layout helpers ---------- */
+.stagger-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* ---------- Chip micro-interaction (hover glow + lift, no infinite motion) ---------- */
+.chip-motion {
+  transition: transform var(--transition-1), border-color var(--transition-1), background var(--transition-1);
+}
+
+.chip-motion:hover {
+  transform: translateY(-2px);
+  border-color: hsla(45, 100%, 72%, 0.7);
+  background: hsla(45, 100%, 72%, 0.14);
+}
+
+/* ---------- Floating-label form fields (contact page) ---------- */
+.field-group {
+  position: relative;
+}
+
+.field-group input,
+.field-group textarea {
+  width: 100%;
+}
+
+.field-label {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  color: var(--light-gray-70);
+  font-size: var(--fs-6);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform var(--transition-1), color var(--transition-1), top var(--transition-1);
+  background: var(--eerie-black-1);
+  padding: 0 4px;
+}
+
+.field-group.active .field-label {
+  top: -8px;
+  transform: scale(0.78);
+  color: var(--orange-yellow-crayola);
+}
+
+/* ---------- New-page layout helpers (site nav wasn't in the original single-page CSS) ---------- */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  background: hsla(0, 0%, 7%, 0.75);
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.06);
+}
+
+.site-nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+}
+
+.site-nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+}
+
+.site-nav-link {
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: var(--light-gray-70);
+  font-size: var(--fs-7);
+  transition: color var(--transition-1), background var(--transition-1);
+}
+
+.site-nav-link:hover {
+  color: var(--white-2);
+}
+
+.site-nav-link.active {
+  color: var(--smoky-black);
+  background: var(--orange-yellow-crayola);
+}
+
+.page-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+
+/* ---------- Global atmosphere — Phase 4 fluid background (spec §3-11) ---------- */
+/* Superseded the old dot-field + ambient-pulse combo. FluidField.tsx owns
+   all layer positioning/motion inline via GPU-composited radial gradients. */
+
+/* ---------- Nav condensing (spec §24) ---------- */
+.site-nav {
+  backdrop-filter: blur(10px);
+  transition: backdrop-filter var(--transition-1), border-color var(--transition-1);
+}
+.site-nav[data-compact="true"] {
+  backdrop-filter: blur(16px);
+  border-bottom-color: hsla(45, 100%, 72%, 0.12);
+}
+
+/* ---------- Signature project showcase (Phase 2 §5-14) ---------- */
+.project-scroll-track {
+  margin-top: 40px;
+}
+
+.project-sticky-stage {
+  position: sticky;
+  top: 88px;
+  height: calc(100vh - 140px);
+  min-height: 480px;
+  max-height: 760px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.project-rail {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.project-rail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.project-rail-num {
+  font-family: monospace;
+  font-size: var(--fs-8);
+}
+
+.project-rail-bar {
+  width: 2px;
+  height: 30px;
+  border-radius: 2px;
+  background: var(--orange-yellow-crayola);
+  transform-origin: center;
+  display: block;
+}
+
+.project-stage-inner {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  min-width: 0;
+}
+
+.project-visual-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--eerie-black-2);
+  border: 1px solid hsla(0, 0%, 100%, 0.08);
+  isolation: isolate;
+}
+
+.project-visual-frame {
+  position: absolute;
+  inset: 0;
+}
+
+.project-visual-light {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.project-visual-image {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.project-visual-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, transparent 45%, hsla(0, 0%, 7%, 0.6) 100%);
+  pointer-events: none;
+}
+
+.project-link {
+  color: var(--white-2);
+  transition: color var(--transition-1);
+}
+.project-link:hover {
+  color: var(--orange-yellow-crayola);
+}
+.project-link-arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+.project-link:hover .project-link-arrow {
+  transform: translateX(4px);
+}
+
+.project-mobile-list { display: none; }
+
+.project-mobile-card {
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.project-mobile-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+}
+
+@media (max-width: 1023px) {
+  .project-stage-inner { grid-template-columns: 1fr; gap: 24px; }
+  .project-visual-stage { order: -1; aspect-ratio: 16 / 9; }
+}
+
+@media (max-width: 767px) {
+  .project-scroll-track { display: none; }
+  .project-mobile-list { display: block; margin-top: 32px; }
+}
+
+/* ---------- Portfolio bot (Phase 2 §30-46) ---------- */
+.portfolio-bot-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: hsla(0, 0%, 7%, 0.7);
+  backdrop-filter: blur(6px);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.portfolio-bot-button:focus-visible {
+  outline: 2px solid var(--orange-yellow-crayola);
+  outline-offset: 3px;
+}
+
+.portfolio-bot-bubble {
+  position: absolute;
+  right: 4px;
+  bottom: 56px;
+  max-width: 180px;
+  background: var(--eerie-black-1);
+  border: 1px solid hsla(45, 100%, 72%, 0.25);
+  color: var(--white-2);
+  font-size: var(--fs-8);
+  padding: 8px 12px;
+  border-radius: 12px 12px 2px 12px;
+  box-shadow: var(--shadow-2);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .portfolio-bot-wrap { right: 14px !important; bottom: 14px !important; }
+  .portfolio-bot-button { width: 38px; height: 38px; }
+  .portfolio-bot-button svg { width: 36px; height: 36px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-bot-button { animation: none; }
+}
+
+/* ---------- Static CSS Background (Matte, Grid + Sparse Dots) ---------- */
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+  background-color: var(--smoky-black);
+  contain: strict;
+}
+
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, hsla(0, 0%, 100%, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, hsla(0, 0%, 100%, 0.02) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.bg-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(hsla(45, 100%, 72%, 0.06) 1px, transparent 1px);
+  background-size: 112px 112px;
+  background-position: 28px 28px;
+}
+
+.bg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, transparent 40%, hsla(0, 0%, 7%, 0.85) 100%);
+}
+
+/* ---------- Tactile Press & Immediate Feedback (Hyper-Responsive UX) ---------- */
+button,
+a.shimmer-btn,
+button.shimmer-btn,
+.site-nav-link,
+.project-link,
+.form-btn,
+.portfolio-bot-button {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:active,
+a.shimmer-btn:active,
+button.shimmer-btn:active,
+.site-nav-link:active,
+.project-link:active,
+.form-btn:active {
+  transform: scale(0.98);
+  transition-duration: 0.05s;
+}
+
+/* Accessible focus ring in brand gold */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--orange-yellow-crayola);
+  outline-offset: 3px;
+}
+
+/* Enhanced Link Microinteractions */
+.project-link-arrow {
+  display: inline-block;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.project-link:hover .project-link-arrow {
+  transform: translateX(3px);
+}
+
+/* Skill bar CSS hover (zero React state overhead) */
+.skill-bar-wrap {
+  margin-bottom: 20px;
+}
+.skill-bar-wrap .skill-bar-name {
+  color: var(--light-gray);
+  transition: color 0.15s ease;
+}
+.skill-bar-wrap:hover .skill-bar-name {
+  color: var(--white-1);
+}
+.skill-bar-wrap .skill-bar-track {
+  transition: filter 0.18s ease;
+}
+.skill-bar-wrap:hover .skill-bar-track {
+  filter: drop-shadow(0 0 6px hsla(45, 100%, 72%, 0.4));
+}
+
+/* Timeline node CSS hover */
+.timeline-item {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.timeline-item:hover {
+  transform: translateX(4px);
+}
+.timeline-item .timeline-period {
+  transition: color 0.15s ease;
+}
+.timeline-item:hover .timeline-period {
+  color: var(--orange-yellow-crayola);
+}
+.timeline-item .timeline-node-dot {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.timeline-item:hover .timeline-node-dot {
+  transform: scale(1.25);
+}
+
+/* Social icon CSS hover & tooltip (zero React state overhead) */
+.social-icon-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.social-icon-item svg {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s ease;
+}
+.social-icon-item:hover svg {
+  transform: translateY(-2px) scale(1.08);
+  color: var(--orange-yellow-crayola) !important;
+}
+.social-icon-item .social-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--eerie-black-1);
+  border: 1px solid hsla(0, 0%, 100%, 0.12);
+  color: var(--white-2);
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 10;
+}
+.social-icon-item:hover .social-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- Navigation Breakpoint Strict Rules ---------- */
+@media (min-width: 768px) {
+  #desktop-nav {
+    display: flex !important;
+  }
+  .nav-mobile-toggle {
+    display: none !important;
+  }
+  .nav-mobile-menu {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  #desktop-nav {
+    display: none !important;
+  }
+  .nav-mobile-toggle {
+    display: flex !important;
+  }
+}
+
+/* ---------- Responsive Layouts & Badges ---------- */
+.achievement-count-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-family: monospace;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: hsla(45, 100%, 72%, 0.15);
+  color: var(--orange-yellow-crayola);
+  border: 1px solid hsla(45, 100%, 72%, 0.35);
+  margin-left: 6px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+}
+
+.about-skills-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .about-skills-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+}
