@@ -114,14 +114,7 @@ export const spokenLanguages = [
   { language: "German", proficiency: "Elementary", level: "A2", percentage: 45 },
 ];
 
-// NOTE (Claude): I don't have the exact course titles/completion dates for these —
-// placeholders below, tell me the real names and I'll swap them in.
-export const certifications = [
-  { title: "Web / AI course (add exact title)", issuer: "Udemy" },
-  { title: "Cloud skill badge (add exact title)", issuer: "Google Cloud Skills Boost" },
-  { title: "Bootcamp / program (add exact title)", issuer: "GitHub" },
-  { title: "Course (add exact title)", issuer: "LinkedIn Learning" },
-];
+
 
 export const githubAchievements = [
   { title: "Pair Extraordinaire", emoji: "🫛", count: 2 },
@@ -417,20 +410,4 @@ export const curatedResources: ResourceItem[] = [
   },
 ];
 
-export const roadmaps = curatedResources
-  .filter((r) => r.category === "Roadmaps")
-  .map((r) => ({ title: r.title, text: r.summary, url: r.url }));
 
-export const papers = curatedResources
-  .filter((r) => r.category === "Foundational Papers")
-  .map((r) => ({ title: r.title, text: r.summary, url: r.url }));
-
-export const devQuotes = [
-  "It works on my machine.",
-  "There are 2 hard problems in computer science: cache invalidation, naming things, and off-by-one errors.",
-  "A user reported a bug. Weeks later, so did I, in the same line of code.",
-  "99 little bugs in the code, 99 little bugs. Take one down, patch it around — 127 little bugs in the code.",
-  "I don't always test my code, but when I do, I do it in production.",
-  "The best code is no code at all — until product asks for a feature.",
-  "AI wrote half of this joke and I'm not telling you which half.",
-];
