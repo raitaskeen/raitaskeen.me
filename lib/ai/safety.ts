@@ -28,6 +28,17 @@ export function isAllowedRate(ip: string, config: RateLimitConfig = DEFAULT_CONF
         ipRequestMap.delete(key);
       }
     }
+
+    // Strict capacity ceiling under burst load: evict oldest entries
+    if (ipRequestMap.size > MAX_MAP_SIZE) {
+      const excess = ipRequestMap.size - MAX_MAP_SIZE;
+      let count = 0;
+      for (const key of ipRequestMap.keys()) {
+        if (count >= excess) break;
+        ipRequestMap.delete(key);
+        count++;
+      }
+    }
   }
 
   const existing = ipRequestMap.get(ip);
