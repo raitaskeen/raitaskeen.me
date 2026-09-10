@@ -74,10 +74,10 @@ export const taskeenKnowledge: KnowledgeBase = {
     linkedinUrl: profile.socials.linkedin,
   },
   education: {
-    degree: education[0]?.title || "BS Software Engineering",
-    institution: education[0]?.place || "University of Management and Technology (UMT), Lahore",
-    period: education[0]?.period || "2024 — 2028",
-    note: educationNote || "Attended university bootcamps, technical seminars, and workshops.",
+    degree: education[0]?.title ?? "BS Software Engineering",
+    institution: education[0]?.place ?? "University of Management and Technology (UMT), Lahore",
+    period: education[0]?.period ?? "",
+    note: educationNote ?? "",
   },
   flagship: {
     name: "LegacyExodus",
