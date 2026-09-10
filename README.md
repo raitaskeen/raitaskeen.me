@@ -1,4 +1,4 @@
-# Taskeen Haider — Engineering Portfolio & Systems Architecture Platform
+# Taskeen Haider â€” Engineering Portfolio & Systems Architecture Platform
 
 <div align="center">
 
@@ -8,14 +8,14 @@
 [![TypeScript 5](https://img.shields.io/badge/TypeScript-5.6.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Bun Runtime](https://img.shields.io/badge/Bun-1.4.2-FBF0DF?style=for-the-badge&logo=bun&logoColor=black)](https://bun.sh/)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.11-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
-[![GitHub Actions CI](https://img.shields.io/badge/CI_Pipeline-Passing-2EA44F?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/raitaskeen/portfolio/actions)
+[![GitHub Actions CI](https://img.shields.io/badge/CI_Pipeline-Passing-2EA44F?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/raitaskeen/raitaskeen.me/actions)
 [![CodeRabbit AI](https://img.shields.io/badge/CodeRabbit-AI_Reviewed-FF5722?style=for-the-badge&logo=coderabbit&logoColor=white)](https://coderabbit.ai/)
 [![PWA Ready](https://img.shields.io/badge/PWA-Precached_v2-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](public/sw.js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
 <br />
 
-**[Explore Live Deployment ?](https://raitaskeen.me)** • **[Audit & Remediation Report ?](docs/AUDIT_AND_REMEDIATION.md)** • **[LegacyExodus Compiler Case Study ?](https://raitaskeen.me/projects/legacy-exodus)** • **[CI/CD Workflow ?](.github/workflows/ci.yml)**
+**[Explore Live Deployment &rarr;](https://raitaskeen.me)** &nbsp;&bull;&nbsp; **[Audit & Remediation Report &rarr;](docs/AUDIT_AND_REMEDIATION.md)** &nbsp;&bull;&nbsp; **[LegacyExodus Compiler Case Study &rarr;](https://raitaskeen.me/projects/legacy-exodus)** &nbsp;&bull;&nbsp; **[CI/CD Workflow &rarr;](.github/workflows/ci.yml)**
 
 </div>
 
@@ -27,7 +27,7 @@ This repository houses the production codebase for the personal engineering plat
 
 The platform is designed as an executable demonstration of systems engineering principles:
 - **Compiler Modernization Engine ([LegacyExodus](https://raitaskeen.me/projects/legacy-exodus))**: An interactive static analysis pipeline detailing automated migration of legacy monoliths to memory-safe Rust/Axum services via AST decomposition, symbol tables, and CFG/DFG analysis.
-- **Interactive Graph Engineering & Dependency Section**: Live dependency graphs (`auth.ts` ? `user.ts` ? `database.ts` ? `postgres.ts`) with interactive neighborhood micro-inspection and strict reduced-motion adherence.
+- **Interactive Graph Engineering & Dependency Section**: Live dependency graphs (`auth.ts` &rarr; `user.ts` &rarr; `database.ts` &rarr; `postgres.ts`) with interactive neighborhood micro-inspection and strict reduced-motion adherence.
 - **Asymmetric Computational Entity (PortfolioBot)**: An intelligent engineering companion powered by **Groq Llama 3.3 70B** streaming over Server-Sent Events (SSE). Fortified with a persistent chunk-boundary line buffer, multi-hop client IP rate limiting, and an autonomous offline deterministic engine.
 - **Progressive Web App (PWA)**: Autonomous offline precache system driven by an active service worker ([`public/sw.js`](public/sw.js)) keyed to `raitaskeen-v2`.
 - **Zero Dead-Weight Architecture**: 100% clean bundle with zero unused imports, zero orphaned binary assets, non-interactive ESLint flat config, and sub-2.5s static generation across all 11 routes.
@@ -176,56 +176,56 @@ flowchart TD
 
 ## Repository Structure & Subsystems
 
-```
-work/
-+-- .github/
-¦   +-- workflows/
-¦   ¦   +-- ci.yml                 # Automated CI quality gate (Typecheck, Lint, Build, PWA)
-¦   ¦   +-- pr-labeler.yml         # PR auto-labeler & triage bot workflow
-¦   +-- ISSUE_TEMPLATE/            # Standardized bug report and feature request forms
-¦   ¦   +-- bug_report.yml
-¦   ¦   +-- feature_request.yml
-¦   +-- labeler.yml                # Path-based auto-labeling rules for actions/labeler@v5
-¦   +-- PULL_REQUEST_TEMPLATE.md   # Standardized pull request quality checklist
-+-- app/
-¦   +-- layout.tsx                 # Root layout, ambient grid, quiet creator mark & PWA bootstrap
-¦   +-- page.tsx                   # Main systems overview, stats, and graph narrative
-¦   +-- not-found.tsx              # Clean, accessible 404 error boundary
-¦   +-- manifest.ts                # Dynamic Web App Manifest source
-¦   +-- globals.css                # Polished design system stylesheet (pruned of dead rules)
-¦   +-- effects.css                # Architectural drafting grid & specialized animation effects
-¦   +-- about/page.tsx             # Interactive journey timeline & GitHub contribution graph
-¦   +-- projects/                  # Featured systems, compilers, and applications
-¦   ¦   +-- legacy-exodus/         # Deep compiler modernization case study & interactive pipeline
-¦   +-- resources/page.tsx         # Curated systems papers, roadmaps & live tech signals
-¦   +-- contact/page.tsx           # Kinetic signature pad & direct communication channel
-¦   +-- api/
-¦       +-- chat/route.ts          # Edge chat API with proxy-chain rate limiting & Groq stream
-¦       +-- resources/signals/     # Live Hacker News & tech telemetry feed
-+-- components/
-¦   +-- GraphEngineeringSection.tsx# Dependency graphs, symbol trees & AI orchestration flows
-¦   +-- SystemsMap.tsx             # Interactive 5-stage compiler pipeline (Beginner/Advanced)
-¦   +-- JourneyNarrative.tsx       # Career trajectory storyline with focus discipline badges
-¦   +-- ProjectShowcase.tsx        # Hardware-accelerated cards with 3D tilt & live repo stats
-¦   +-- ResourcesHub.tsx           # Categorized engineering literature & roadmap inspector
-¦   +-- motion/
-¦       +-- PortfolioBot.tsx       # Computational companion entity with SVG aperture & SSE parser
-¦       +-- Magnetic.tsx           # Pointer-attracted CTAs with hook-safe lifecycle
-¦       +-- CustomCursor.tsx       # Black & gold contextual cursor with multi-state inspection
-+-- docs/
-¦   +-- AUDIT_AND_REMEDIATION.md   # Exhaustive 15-point audit, verification, and benchmark report
-+-- lib/
-¦   +-- ai/                        # Companion knowledge base, prompt synthesis & rate limiter
-¦   +-- data.ts                    # Single source of truth for resume, projects, and education
-¦   +-- github.ts                  # Resilient GitHub REST API fetcher with ISR caching
-¦   +-- motion.ts                  # Coherent spring physics and motion language specification
-+-- public/
-¦   +-- sw.js                      # PWA Service Worker with offline precaching (raitaskeen-v2)
-¦   +-- assets/                    # Resume PDF, project visual diagrams, and SVG milestones
-+-- .gitattributes                 # Cross-platform LF line ending enforcement
-+-- eslint.config.mjs              # Non-interactive ESLint 9 flat configuration
-+-- implementation_plan.md         # Historical implementation design plan & completed status
-+-- LICENSE                        # MIT License
+```text
+.
+|-- .github/
+|   |-- workflows/
+|   |   |-- ci.yml                 # Automated CI quality gate (Typecheck, Lint, Build, PWA)
+|   |   +-- pr-labeler.yml         # PR auto-labeler & triage bot workflow
+|   |-- ISSUE_TEMPLATE/            # Standardized bug report and feature request forms
+|   |   |-- bug_report.yml
+|   |   +-- feature_request.yml
+|   |-- labeler.yml                # Path-based auto-labeling rules for actions/labeler@v5
+|   +-- PULL_REQUEST_TEMPLATE.md   # Standardized pull request quality checklist
+|-- app/
+|   |-- layout.tsx                 # Root layout, ambient grid, quiet creator mark & PWA bootstrap
+|   |-- page.tsx                   # Main systems overview, stats, and graph narrative
+|   |-- not-found.tsx              # Clean, accessible 404 error boundary
+|   |-- manifest.ts                # Dynamic Web App Manifest source
+|   |-- globals.css                # Polished design system stylesheet (pruned of dead rules)
+|   |-- effects.css                # Architectural drafting grid & specialized animation effects
+|   |-- about/page.tsx             # Interactive journey timeline & GitHub contribution graph
+|   |-- projects/                  # Featured systems, compilers, and applications
+|   |   +-- legacy-exodus/         # Deep compiler modernization case study & interactive pipeline
+|   |-- resources/page.tsx         # Curated systems papers, roadmaps & live tech signals
+|   |-- contact/page.tsx           # Kinetic signature pad & direct communication channel
+|   +-- api/
+|       |-- chat/route.ts          # Edge chat API with proxy-chain rate limiting & Groq stream
+|       +-- resources/signals/     # Live Hacker News & tech telemetry feed
+|-- components/
+|   |-- GraphEngineeringSection.tsx# Dependency graphs, symbol trees & AI orchestration flows
+|   |-- SystemsMap.tsx             # Interactive 5-stage compiler pipeline (Beginner/Advanced)
+|   |-- JourneyNarrative.tsx       # Career trajectory storyline with focus discipline badges
+|   |-- ProjectShowcase.tsx        # Hardware-accelerated cards with 3D tilt & live repo stats
+|   |-- ResourcesHub.tsx           # Categorized engineering literature & roadmap inspector
+|   +-- motion/
+|       |-- PortfolioBot.tsx       # Computational companion entity with SVG aperture & SSE parser
+|       |-- Magnetic.tsx           # Pointer-attracted CTAs with hook-safe lifecycle
+|       +-- CustomCursor.tsx       # Black & gold contextual cursor with multi-state inspection
+|-- docs/
+|   +-- AUDIT_AND_REMEDIATION.md   # Exhaustive 15-point audit, verification, and benchmark report
+|-- lib/
+|   |-- ai/                        # Companion knowledge base, prompt synthesis & rate limiter
+|   |-- data.ts                    # Single source of truth for resume, projects, and education
+|   |-- github.ts                  # Resilient GitHub REST API fetcher with ISR caching
+|   +-- motion.ts                  # Coherent spring physics and motion language specification
+|-- public/
+|   |-- sw.js                      # PWA Service Worker with offline precaching (raitaskeen-v2)
+|   +-- assets/                    # Resume PDF, project visual diagrams, and SVG milestones
+|-- .gitattributes                 # Cross-platform LF line ending enforcement
+|-- eslint.config.mjs              # Non-interactive ESLint 9 flat configuration
+|-- implementation_plan.md         # Historical implementation design plan & completed status
+|-- LICENSE                        # MIT License
 +-- package.json                   # Project scripts, dependencies, and metadata
 ```
 
@@ -233,23 +233,25 @@ work/
 
 ## Continuous Integration, Automation & CodeRabbit AI
 
-```
-+-----------------------------------------------------------------------------+
-¦                       GITHUB ACTIONS CI / CD PIPELINE                       ¦
-+-----------------------------------------------------------------------------¦
-¦                                                                             ¦
-¦  [ Git Push / PR ] --? [ Setup Bun v1.4.2 ] --? [ Cache Bun ~/.bun/cache ]   ¦
-¦                                                          ¦                  ¦
-¦                                                          ?                  ¦
-¦  [ Production Build ] ?-- [ ESLint Flat Config ] ?-- [ bun install frozen ] ¦
-¦           ¦                        ¦                         ¦              ¦
-¦           ?                        ?                         ?              ¦
-¦  [ Verify PWA / Manifest ]  [ TypeScript (tsc) ]     [ CodeRabbit AI Bot ]  ¦
-¦           ¦                        ¦                         ¦              ¦
-¦           +--------------------------------------------------+              ¦
-¦                                    ?                                        ¦
-¦                       SUCCESS: Zero-Downtime Deploy                         ¦
-+-----------------------------------------------------------------------------+
+```mermaid
+flowchart TD
+    subgraph CI["Automated CI / CD Quality Gate Pipeline"]
+        Push["Git Push / Pull Request"] --> Bun["Setup Bun v1.4 Runtime"]
+        Bun --> Cache["Restore Dependency Cache (~/.bun/install/cache)"]
+        Cache --> Install["Deterministic Install (bun install --frozen-lockfile)"]
+        
+        Install --> Typecheck["TypeScript Compiler (tsc --noEmit)<br>Zero Tolerated Errors"]
+        Install --> Lint["ESLint 9 Flat Config<br>Non-Interactive Validation"]
+        Install --> Build["Next.js 15 Standalone Build<br>Static Route Compilation"]
+        Install --> Review["CodeRabbit AI<br>Automated Pull Request Review"]
+        
+        Build --> Assert["Verify PWA Service Worker & Dynamic Manifest"]
+        
+        Typecheck --> Deploy["Production Ready: Zero-Downtime Edge Deploy"]
+        Lint --> Deploy
+        Assert --> Deploy
+        Review --> Deploy
+    end
 ```
 
 The repository features enterprise-grade automation:
@@ -359,4 +361,4 @@ An exhaustive 15-item hardening pass was conducted across the codebase. For full
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE) — see the LICENSE file for details.
+This project is open source and available under the [MIT License](LICENSE) &mdash; see the LICENSE file for details.
