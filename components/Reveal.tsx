@@ -8,11 +8,13 @@ export default function Reveal({
   delay = 0,
   variant = "fade-up",
   duration,
+  immediate = false,
 }: {
   children: React.ReactNode;
   delay?: number;
   variant?: RevealVariant;
   duration?: number;
+  immediate?: boolean;
 }) {
   const reduce = useReducedMotion();
   const variants = revealVariants[variant];
@@ -24,8 +26,9 @@ export default function Reveal({
   return (
     <motion.div
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
+      animate={immediate ? "show" : undefined}
+      whileInView={immediate ? undefined : "show"}
+      viewport={immediate ? undefined : { once: true, margin: "-60px" }}
       variants={variants}
       transition={duration ? { duration, delay, ease: [0.16, 1, 0.3, 1] } : { ...spring.gentle, delay }}
     >

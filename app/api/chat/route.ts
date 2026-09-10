@@ -36,32 +36,54 @@ export async function POST(req: Request) {
           ...sanitizedMessages,
         ];
 
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${groqApiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
-            messages: groqPayload,
-            temperature: 0.6,
-            max_tokens: 600,
-            stream: true,
-          }),
-        });
+        // Candidate models in order of priority: user-defined or modern Groq production models
+        const candidateModels = [
+          process.env.GROQ_MODEL,
+          "openai/gpt-oss-120b",
+          "openai/gpt-oss-20b",
+          "qwen/qwen3.8-27b",
+          "llama-3.3-70b-versatile",
+        ].filter(Boolean) as string[];
 
-        if (response.ok && response.body) {
-          return new Response(response.body, {
-            headers: {
-              "Content-Type": "text/event-stream",
-              "Cache-Control": "no-cache",
-              "Connection": "keep-alive",
-            },
-          });
+        for (const model of candidateModels) {
+          try {
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${groqApiKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                model,
+                messages: groqPayload,
+                temperature: 0.6,
+                max_tokens: 600,
+                stream: true,
+              }),
+            });
+
+            if (response.ok && response.body) {
+              return new Response(response.body, {
+                headers: {
+                  "Content-Type": "text/event-stream",
+                  "Cache-Control": "no-cache",
+                  "Connection": "keep-alive",
+                },
+              });
+            } else {
+              const errText = await response.text().catch(() => "");
+              console.warn(`[Groq API] Model "${model}" failed (${response.status}): ${errText}`);
+              // If model not found or invalid, continue to next candidate
+              if (response.status === 404 || response.status === 400) {
+                continue;
+              }
+            }
+          } catch (modelErr) {
+            console.warn(`[Groq API] Error requesting model "${model}":`, modelErr);
+          }
         }
-      } catch {
-        // Graceful fallback to deterministic engine
+      } catch (err) {
+        console.error("[Groq API] Unexpected error in chat route:", err);
       }
     }
 

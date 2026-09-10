@@ -32,8 +32,22 @@ export default async function Home() {
           />
 
           {/* Role / Typewriter */}
-          <Reveal variant="fade-blur" delay={0.25}>
-            <div style={{ fontSize: "var(--fs-2)", color: "var(--orange-yellow-crayola)", marginTop: 12, minHeight: "1.4em", display: "flex", alignItems: "center", gap: 8 }}>
+          <Reveal variant="fade-blur" delay={0.25} immediate>
+            <div
+              style={{
+                fontSize: "var(--fs-2)",
+                color: "var(--orange-yellow-crayola)",
+                marginTop: 12,
+                minHeight: "1.4em",
+                height: "1.4em",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                contain: "layout style",
+              }}
+            >
               <Typewriter words={[
                 "Full-Stack Engineer",
                 "Systems Architecture Builder",
@@ -53,7 +67,7 @@ export default async function Home() {
           </div>
 
           {/* Primary CTAs */}
-          <Reveal variant="fade-up" delay={0.15}>
+          <Reveal variant="fade-up" delay={0.15} immediate>
             <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap", alignItems: "center" }}>
               <Magnetic strength={0.3}>
                 <Link

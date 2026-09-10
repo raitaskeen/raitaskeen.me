@@ -51,31 +51,17 @@ export default function Nav() {
             aria-label="raitaskeen home"
             style={{
               color: "var(--orange-yellow-crayola)",
-              fontWeight: 300,
+              fontWeight: 400,
               fontSize: 13.5,
-              letterSpacing: "0.32em",
+              letterSpacing: "0.26em",
               textTransform: "lowercase",
-              fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+              fontFamily: "ui-monospace, 'JetBrains Mono', 'Space Mono', 'SF Mono', 'Roboto Mono', 'Fira Code', Menlo, Consolas, monospace",
               display: "inline-flex",
               alignItems: "center",
-              gap: 2,
               transition: "color 0.2s ease, opacity 0.2s ease",
             }}
           >
-            <span style={{ fontWeight: 300, letterSpacing: "0.32em" }}>raitaskeen</span>
-            <span
-              style={{
-                width: 3.5,
-                height: 3.5,
-                borderRadius: "50%",
-                background: "var(--orange-yellow-crayola)",
-                marginLeft: 4,
-                marginBottom: 2,
-                opacity: 0.85,
-                display: "inline-block",
-              }}
-              aria-hidden="true"
-            />
+            <span>raitaskeen</span>
           </Link>
         </motion.div>
 

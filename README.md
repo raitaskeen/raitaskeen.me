@@ -5,11 +5,12 @@
 [![Live Deployment](https://img.shields.io/badge/Production-Live-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://raitaskeen.me)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15.0.3-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19.0.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
-[![TypeScript 5](https://img.shields.io/badge/TypeScript-5.6.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![TypeScript 5](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Bun Runtime](https://img.shields.io/badge/Bun-1.4.2-FBF0DF?style=for-the-badge&logo=bun&logoColor=black)](https://bun.sh/)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.11-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
 [![GitHub Actions CI](https://img.shields.io/badge/CI_Pipeline-Passing-2EA44F?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/raitaskeen/raitaskeen.me/actions)
 [![CodeRabbit AI](https://img.shields.io/badge/CodeRabbit-AI_Reviewed-FF5722?style=for-the-badge&logo=coderabbit&logoColor=white)](https://coderabbit.ai/)
+[![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/raitaskeen/raitaskeen.me?utm_source=oss&utm_medium=github&utm_campaign=raitaskeen%2Fraitaskeen.me&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
 [![PWA Ready](https://img.shields.io/badge/PWA-Precached_v2-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](public/sw.js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
@@ -23,12 +24,12 @@
 
 ## Executive Overview
 
-This repository houses the production codebase for the personal engineering platform of **Taskeen Haider** ([@raitaskeen](https://github.com/raitaskeen)), engineered from the ground up on **Next.js 15 (App Router)**, **React 19**, **TypeScript 5.6**, **Bun**, and **Framer Motion**.
+This repository houses the production codebase for the personal engineering platform of **Taskeen Haider** ([@raitaskeen](https://github.com/raitaskeen)), engineered from the ground up on **Next.js 15 (App Router)**, **React 19**, **TypeScript 5.9**, **Bun**, and **Framer Motion**.
 
 The platform is designed as an executable demonstration of systems engineering principles:
 - **Compiler Modernization Engine ([LegacyExodus](https://raitaskeen.me/projects/legacy-exodus))**: An interactive static analysis pipeline detailing automated migration of legacy monoliths to memory-safe Rust/Axum services via AST decomposition, symbol tables, and CFG/DFG analysis.
 - **Interactive Graph Engineering & Dependency Section**: Live dependency graphs (`auth.ts` &rarr; `user.ts` &rarr; `database.ts` &rarr; `postgres.ts`) with interactive neighborhood micro-inspection and strict reduced-motion adherence.
-- **Asymmetric Computational Entity (PortfolioBot)**: An intelligent engineering companion powered by **Groq Llama 3.3 70B** streaming over Server-Sent Events (SSE). Fortified with a persistent chunk-boundary line buffer, multi-hop client IP rate limiting, and an autonomous offline deterministic engine.
+- **Asymmetric Computational Entity (PortfolioBot)**: An intelligent engineering companion powered by **Groq Cloud API** (high-throughput `openai/gpt-oss-120b` / `llama-3.3-70b-versatile`) streaming over Server-Sent Events (SSE). Fortified with a persistent chunk-boundary line buffer, multi-hop client IP rate limiting, and an autonomous offline deterministic engine.
 - **Progressive Web App (PWA)**: Autonomous offline precache system driven by an active service worker ([`public/sw.js`](public/sw.js)) keyed to `raitaskeen-v2`.
 - **Zero Dead-Weight Architecture**: 100% clean bundle with zero unused imports, zero orphaned binary assets, non-interactive ESLint flat config, and sub-2.5s static generation across all 11 routes.
 
@@ -161,12 +162,12 @@ flowchart TD
 |---|---|---|---|
 | **Framework** | [Next.js](https://nextjs.org/) | `15.0.3` | App Router, Server/Client components, SSG, ISR, Edge Routes |
 | **UI Library** | [React](https://react.dev/) | `19.0.0` | React 19 primitives, concurrent rendering, strict hook compliance |
-| **Language** | [TypeScript](https://www.typescriptlang.org/) | `5.6.3` | Strict static typing, zero `any` policy, interface definitions |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) | `5.9.3` | Strict static typing, zero `any` policy, interface definitions |
 | **Runtime & PM** | [Bun](https://bun.sh/) | `1.4.2` | High-speed package resolution, frozen lockfile management, testing |
 | **Animation** | [Framer Motion](https://www.framer.com/motion/) | `11.11.17` | GPU-accelerated spring physics, layout animations, reduced-motion |
 | **Icons** | [Lucide React](https://lucide.dev/) | `0.454.0` | Tree-shaken vector iconography typed with `LucideIcon` |
 | **Styles & Grid** | Bespoke Modern CSS | CSS3 | High-density drafting grid, onyx/jet dark mode theme, amber accents |
-| **Edge AI Inference** | [Groq API](https://groq.com/) | Llama 3.3 70B | Real-time streaming companion with deterministic fallback |
+| **Edge AI Inference** | [Groq Cloud API](https://groq.com/) | GPT-OSS 120B / Llama 3.3 | Real-time streaming companion with dynamic model failover & deterministic fallback |
 | **Telemetry** | [GitHub REST API v3](https://docs.github.com/rest) | v3 | Live repo count, follower count, project star badges (ISR cached) |
 | **CI / CD Gate** | [GitHub Actions](https://github.com/features/actions) | v4 | Automated typecheck, ESLint flat config, build & artifact audit |
 | **Code Review** | [CodeRabbit AI](https://coderabbit.ai/) | Latest | Automated pull request static analysis & architectural reviews |
@@ -270,6 +271,7 @@ The repository features enterprise-grade automation:
    - Automatically tags pull requests based on changed files: `area: compiler-engine`, `area: ai-companion`, `area: ui-and-motion`, `area: api-routes`, `area: pwa-and-cache`, `type: documentation`, `type: ci-cd`, `type: dependencies`.
 
 3. **CodeRabbit AI Automated Code Reviews**:
+   [![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/raitaskeen/raitaskeen.me?utm_source=oss&utm_medium=github&utm_campaign=raitaskeen%2Fraitaskeen.me&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
    - Continuous PR analysis checking for security vulnerabilities, AST patterns, type safety, and architectural regressions.
    - Enforces clean PR descriptions referencing the [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md).
 
