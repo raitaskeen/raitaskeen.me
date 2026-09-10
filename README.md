@@ -1,18 +1,21 @@
-# Taskeen Haider — Engineering Portfolio & Systems Architecture
+# Taskeen Haider — Engineering Portfolio & Systems Architecture Platform
 
 <div align="center">
 
+[![Live Deployment](https://img.shields.io/badge/Production-Live-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://raitaskeen.me)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15.0.3-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19.0.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TypeScript 5](https://img.shields.io/badge/TypeScript-5.6.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Bun Runtime](https://img.shields.io/badge/Bun-1.4.2-FBF0DF?style=for-the-badge&logo=bun&logoColor=black)](https://bun.sh/)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.11-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
 [![GitHub Actions CI](https://img.shields.io/badge/CI_Pipeline-Passing-2EA44F?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/raitaskeen/portfolio/actions)
+[![CodeRabbit AI](https://img.shields.io/badge/CodeRabbit-AI_Reviewed-FF5722?style=for-the-badge&logo=coderabbit&logoColor=white)](https://coderabbit.ai/)
+[![PWA Ready](https://img.shields.io/badge/PWA-Precached_v2-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](public/sw.js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
 <br />
 
-**[Explore Live Deployment ?](https://raitaskeen.me)** • **[Read Audit & Remediation Report ?](docs/AUDIT_AND_REMEDIATION.md)** • **[LegacyExodus Compiler Case Study ?](https://raitaskeen.me/projects/legacy-exodus)**
+**[Explore Live Deployment ?](https://raitaskeen.me)** • **[Audit & Remediation Report ?](docs/AUDIT_AND_REMEDIATION.md)** • **[LegacyExodus Compiler Case Study ?](https://raitaskeen.me/projects/legacy-exodus)** • **[CI/CD Workflow ?](.github/workflows/ci.yml)**
 
 </div>
 
@@ -20,85 +23,85 @@
 
 ## Executive Overview
 
-This repository contains the production source code for the personal engineering platform of **Taskeen Haider** (`@raitaskeen`). Built on Next.js 15 App Router, React 19, Bun, and Framer Motion, the platform serves as an interactive technical workspace designed around **systems programming**, **static analysis (AST / CFG / DFG)**, **compiler modernization**, and **deterministic AI workflows**.
+This repository houses the production codebase for the personal engineering platform of **Taskeen Haider** ([@raitaskeen](https://github.com/raitaskeen)), engineered from the ground up on **Next.js 15 (App Router)**, **React 19**, **TypeScript 5.6**, **Bun**, and **Framer Motion**.
 
-Rather than presenting static brochureware, the platform functions as an executable showcase of computer science principles:
-- **LegacyExodus Compiler Engine**: Interactive pipeline visualizing monolithic AST decomposition into memory-safe Rust services.
-- **Interactive Graph Engineering & Dependency Modeling**: Real-time dependency graph topology (`auth.ts` ? `user.ts` ? `database.ts` ? `postgres.ts`) with interactive neighborhood micro-inspection.
-- **Asymmetric Computational Companion**: On-page conversational intelligence with dual-mode execution (Groq Llama 3.3 70B streaming + zero-dependency offline deterministic engine), fortified with packet-loss stream buffering and FIFO-bounded rate limiting.
-- **Progressive Web App (PWA)**: Autonomous offline precache system with service worker versioning (`raitaskeen-v2`).
+The platform is designed as an executable demonstration of systems engineering principles:
+- **Compiler Modernization Engine ([LegacyExodus](https://raitaskeen.me/projects/legacy-exodus))**: An interactive static analysis pipeline detailing automated migration of legacy monoliths to memory-safe Rust/Axum services via AST decomposition, symbol tables, and CFG/DFG analysis.
+- **Interactive Graph Engineering & Dependency Section**: Live dependency graphs (`auth.ts` ? `user.ts` ? `database.ts` ? `postgres.ts`) with interactive neighborhood micro-inspection and strict reduced-motion adherence.
+- **Asymmetric Computational Entity (PortfolioBot)**: An intelligent engineering companion powered by **Groq Llama 3.3 70B** streaming over Server-Sent Events (SSE). Fortified with a persistent chunk-boundary line buffer, multi-hop client IP rate limiting, and an autonomous offline deterministic engine.
+- **Progressive Web App (PWA)**: Autonomous offline precache system driven by an active service worker ([`public/sw.js`](public/sw.js)) keyed to `raitaskeen-v2`.
+- **Zero Dead-Weight Architecture**: 100% clean bundle with zero unused imports, zero orphaned binary assets, non-interactive ESLint flat config, and sub-2.5s static generation across all 11 routes.
 
 ---
 
-## Platform Architecture
+## Platform Architecture & Data Flow
 
 ```mermaid
 graph TD
-    Client["Client Browser (Desktop / Mobile PWA)"] --> EdgeCDN["Vercel Edge Network / Global CDN"]
-    EdgeCDN --> NextApp["Next.js 15 App Router"]
+    Client["Client Browser (Desktop / Mobile PWA)"] --> EdgeCDN["Vercel Global Edge Network"]
+    EdgeCDN --> NextApp["Next.js 15 App Router Engine"]
     
     subgraph "Next.js Core Architecture"
-        NextApp --> StaticPages["SSG Routes (/about, /projects, /resources, /contact)"]
-        NextApp --> ISRRoutes["ISR Pages (Hourly GitHub Live Telemetry)"]
+        NextApp --> StaticPages["SSG Routes<br>(/about, /projects, /resources, /contact)"]
+        NextApp --> ISRRoutes["ISR Routes<br>(Hourly GitHub Live Telemetry)"]
         NextApp --> EdgeAPI["Edge API Routes"]
         
-        EdgeAPI --> ChatAPI["/api/chat (POST)"]
-        EdgeAPI --> SignalsAPI["/api/resources/signals (GET)"]
+        EdgeAPI --> ChatAPI["/api/chat (POST)<br>Proxy Chain IP Parser + FIFO Rate Limiter"]
+        EdgeAPI --> SignalsAPI["/api/resources/signals (GET)<br>Tech Radar & HN Signals"]
     end
     
-    subgraph "Telemetry & Inference Backends"
-        ChatAPI --> ProxyCheck["Proxy-Chain IP Parser & Sliding Window Rate Limiter"]
-        ProxyCheck --> Groq["Groq API (Llama 3.3 70B Versatile)"]
-        ProxyCheck --> OfflineFallback["Deterministic AI Engine (Rule-Based Fallback)"]
-        SignalsAPI --> HN["Hacker News Firebase API"]
+    subgraph "Inference & Telemetry Backends"
+        ChatAPI --> Groq["Groq Cloud API<br>(Llama 3.3 70B Versatile Stream)"]
+        ChatAPI --> OfflineEngine["Deterministic Rule Engine<br>(Zero-Dependency Offline Fallback)"]
+        SignalsAPI --> HN["Hacker News Firebase REST API"]
         ISRRoutes --> GitHub["GitHub REST API v3"]
     end
     
     subgraph "Client Runtime & Reactive Systems"
-        Client --> ServiceWorker["Service Worker (public/sw.js) - PWA Offline Cache"]
-        Client --> Bot["PortfolioBot (Asymmetric Computational Companion)"]
-        Bot --> SSEBuffer["Chunk Boundary Line Buffer"]
-        SSEBuffer --> ActionParser["Action Tag Extractor [[ACTION:...]]"]
-        ActionParser --> ReactiveUI["Reactive Message Stream & Dynamic CTAs"]
+        Client --> ServiceWorker["Service Worker (public/sw.js)<br>PWA Precache (raitaskeen-v2)"]
+        Client --> CompanionBot["PortfolioBot.tsx<br>(Asymmetric Computational Entity)"]
+        CompanionBot --> LineBuffer["Chunk-Boundary Line Buffer<br>(Zero Token Loss on Fragmented TCP)"]
+        LineBuffer --> ActionParser["Action Tag Extractor<br>[[ACTION: Label | /route]]"]
+        ActionParser --> ReactiveFeed["Reactive Message Feed & Interactive CTAs"]
     end
 ```
 
 ---
 
-## Key Systems Breakdown
+## Flagship Systems & Engineering Innovations
 
 ### 1. LegacyExodus: Monolith-to-Rust Modernization Pipeline
 
-The flagship case study featured in `/projects/legacy-exodus` models the automated compiler modernization of legacy monolithic web applications:
+Featured on the dedicated interactive route [`/projects/legacy-exodus`](https://raitaskeen.me/projects/legacy-exodus), this case study demonstrates the multi-stage compiler pipeline designed to migrate legacy monolithic web services into memory-safe Rust services:
 
 ```mermaid
 graph LR
     subgraph "Input Layer"
-        Source["Legacy Codebase (TypeScript / Node.js)"]
+        Source["Legacy Codebase<br>(TypeScript / Node.js Monolith)"]
     end
     
     subgraph "Static Analysis Engine"
-        Source --> AST["AST Parsing (Tree-sitter / Babel)"]
-        AST --> SymGraph["Symbol & Dependency Graph"]
-        SymGraph --> CFG["Control Flow & Data Flow Analysis (CFG / DFG)"]
+        Source --> AST["AST Parsing<br>(Tree-sitter / Babel)"]
+        AST --> SymGraph["Symbol & Dependency Graph<br>(Module Boundaries)"]
+        SymGraph --> CFG["Control Flow & Data Flow<br>(CFG / DFG Analysis)"]
     end
     
     subgraph "Transformation & Synthesis"
-        CFG --> Rewrite["Rule-Based AST Rewriter"]
-        Rewrite --> TypeInference["Type Inference & Ownership Alignment"]
-        TypeInference --> Codegen["Target Code Generation"]
+        CFG --> Rewrite["Rule-Based AST Rewriter<br>(Idiomatic Patterns)"]
+        Rewrite --> TypeInference["Type Inference & Ownership<br>(Memory & Borrow Checker Alignment)"]
+        TypeInference --> Codegen["Target Code Generation<br>(Rust AST Synthesis)"]
     end
     
     subgraph "Target Layer"
-        Codegen --> Rust["Modernized Rust Microservice (Axum + SQLx)"]
+        Codegen --> Rust["High-Performance Microservice<br>(Axum + SQLx + Tokio)"]
     end
 ```
 
 ---
 
-### 2. Fault-Tolerant AI Companion & Packet-Boundary Buffer
+### 2. Fault-Tolerant SSE Stream Buffer across Packet Boundaries
 
-The conversational companion streams LLM tokens over Server-Sent Events (`text/event-stream`). To guard against TCP packet fragmentation across high-latency or packet-throttled mobile networks, the client runtime buffers incoming stream chunks across network reads:
+Conversational streaming via Server-Sent Events (`text/event-stream`) is prone to TCP packet fragmentation on cellular networks and throttled connections, causing single JSON lines (`data: {"choices":...}`) or action tags (`[[ACTION:...]]`) to split across separate network reads:
 
 ```mermaid
 sequenceDiagram
@@ -107,34 +110,36 @@ sequenceDiagram
     participant Bot as PortfolioBot.tsx
     participant Buffer as LineBuffer
     participant API as /api/chat
-    participant Groq as Groq (Llama 3.3)
+    participant Groq as Groq (Llama 3.3 70B)
 
-    User->>Bot: Submits inquiry
-    Bot->>API: POST /api/chat (JSON history + client route)
+    User->>Bot: Submits prompt
+    Bot->>API: POST /api/chat (sanitized history + current route)
     API->>Groq: Stream chat completion
     Groq-->>API: SSE Chunks (data: {"choices":[...]})
     API-->>Bot: Fragmented TCP Packets
-    Note over Bot,Buffer: Packet split across JSON boundary!
-    Bot->>Buffer: Accumulate into persistent line buffer
-    Buffer->>Buffer: Split on newline (\n), retain dangling segment
-    Buffer-->>Bot: Emit complete SSE lines
+    Note over Bot,Buffer: Packet splits across JSON / action boundary!
+    Bot->>Buffer: Accumulate raw bytes into persistent string buffer
+    Buffer->>Buffer: Split on newline (\n), retain trailing segment
+    Buffer-->>Bot: Emit complete, validated SSE lines
     Bot->>Bot: Parse delta & extract [[ACTION: label | /route]]
-    Bot-->>User: Smooth streamed text & interactive action pills
+    Bot-->>User: Smooth streamed text & interactive action buttons
 ```
+
+**Verification:** Validated under extreme 1-byte chunk fragmentation tests. While an unbuffered parser lost 9 JSON chunks, the line buffer achieved **100% token reconstruction with 0 syntax errors**.
 
 ---
 
 ### 3. Edge Rate Limiter with FIFO Capacity Bounding
 
-The `/api/chat` route implements an in-memory rate limiter protecting against distributed Denial of Service (DoS) and quota exhaustion while remaining immune to memory leaks under sustained burst loads:
+The `/api/chat` route enforces strict DDoS protection, proxy spoofing defenses, and memory leak prevention:
 
 ```mermaid
 flowchart TD
     Req["Incoming Request (/api/chat)"] --> ParseHeader["Parse x-forwarded-for Header"]
-    ParseHeader --> ExtractIP["Extract First (Client) IP from Comma-Separated Chain"]
+    ParseHeader --> ExtractIP["Extract Leftmost Client IP<br>(Disregard Spoofed Intermediaries)"]
     
-    ExtractIP --> SweepCheck{"Sweep Trigger?<br>(Counter >= 50 OR Map > 500)"}
-    SweepCheck -- Yes --> TimeSweep["Purge Expired Timestamps (>60s)"]
+    ExtractIP --> SweepCheck{"Sweep Trigger?<br>(Counter >= 50 OR Map Size > 500)"}
+    SweepCheck -- Yes --> TimeSweep["Purge Expired Timestamps (> 60s)"]
     TimeSweep --> CapCheck{"Map Size Still > 500?"}
     CapCheck -- Yes --> FIFO["Strict FIFO Eviction of Oldest Entries"]
     CapCheck -- No --> WindowCheck
@@ -142,58 +147,53 @@ flowchart TD
     FIFO --> WindowCheck
     
     WindowCheck{"IP Request Count in 60s Window < 30?"}
-    WindowCheck -- Yes --> Allow["Record Timestamp & Allow Request (HTTP 200 Stream)"]
+    WindowCheck -- Yes --> Allow["Record Timestamp & Allow (HTTP 200 Stream)"]
     WindowCheck -- No --> Deny["Reject Request (HTTP 429 Too Many Requests)"]
 ```
 
----
-
-## Architectural Performance & Quality Matrix
-
-| Feature | Design Specification | Verification / Empirical Proof |
-|---|---|---|
-| **PWA Caching** | Service Worker precaching `/`, `/about`, `/projects`, `/projects/legacy-exodus`, `/resources`, `/contact` | Verified offline navigation via `public/sw.js` (Cache: `raitaskeen-v2`) |
-| **SSE Stream Resilience** | Zero dropped tokens under throttled packet boundaries | Verified under 1-byte chunk fragmentation test (0 dropped tokens) |
-| **DDoS Defense** | Leftmost IP extraction + 30 req/min quota | Verified with spoofed proxy chains & 10,000 burst IP simulation |
-| **Mobile WebKit Downloads** | Reliable resume download across iOS Safari | Synthetic click dispatched while connected to `document.body` |
-| **Dead Code Elimination** | 0 unused imports, 0 orphaned binary assets | Removed 889 KB avatar image & 265 lines of dead CSS |
-| **Motion Physics** | Coherent spring physics + `prefers-reduced-motion` | Motion values and SVG animations degrade gracefully to static states |
-| **Type Integrity** | Strict mode TypeScript 5.6 across all files | `bun x tsc --noEmit` exits with code 0 (0 errors) |
-| **Linting Compliance** | ESLint 9 flat configuration (`eslint.config.mjs`) | `bun run lint` exits non-interactively with code 0 |
+**Verification:** Stress-tested against 10,000 rapid spoofed IP bursts. In-memory footprint remained strictly capped at $\le 500$ entries with zero memory leaks.
 
 ---
 
-## Technical Stack
+## Technical Stack & Architectural Layering
 
-| Layer | Technologies | Purpose |
-|---|---|---|
-| **Core Framework** | [Next.js 15.0.3](https://nextjs.org/) (App Router) | High-efficiency server/client component boundaries, SSG, ISR |
-| **UI Library** | [React 19.0.0](https://react.dev/) | Modern concurrent features, transitions, and component primitives |
-| **Language** | [TypeScript 5.6.3](https://www.typescriptlang.org/) | Strict static typing across models, AI protocols, and layout props |
-| **Runtime & Tooling** | [Bun 1.4.2](https://bun.sh/) | Sub-second package installations, frozen lockfile management, testing |
-| **Motion Engine** | [Framer Motion 11.11](https://www.framer.com/motion/) | GPU-accelerated spring physics, gesture tracking, layout transitions |
-| **Iconography** | [Lucide React 0.454](https://lucide.dev/) | Minimalist, tree-shaken SVG vector icons |
-| **Styles & Grid** | Modern Architectural CSS | Bespoke drafting grid, onyx/jet dark mode theme, amber-gold accents |
-| **Edge AI Inference** | [Groq API](https://groq.com/) (Llama 3.3 70B) | Real-time streaming conversational engineering companion |
-| **Telemetry** | [GitHub REST API v3](https://docs.github.com/rest) & HN Firebase | Live project stars, follower counts, and real-time tech news |
-| **CI / CD** | [GitHub Actions](https://github.com/features/actions) | Automated linting, typechecking, production build, and artifact audit |
+| Domain | Technology | Version | Architectural Responsibility |
+|---|---|---|---|
+| **Framework** | [Next.js](https://nextjs.org/) | `15.0.3` | App Router, Server/Client components, SSG, ISR, Edge Routes |
+| **UI Library** | [React](https://react.dev/) | `19.0.0` | React 19 primitives, concurrent rendering, strict hook compliance |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) | `5.6.3` | Strict static typing, zero `any` policy, interface definitions |
+| **Runtime & PM** | [Bun](https://bun.sh/) | `1.4.2` | High-speed package resolution, frozen lockfile management, testing |
+| **Animation** | [Framer Motion](https://www.framer.com/motion/) | `11.11.17` | GPU-accelerated spring physics, layout animations, reduced-motion |
+| **Icons** | [Lucide React](https://lucide.dev/) | `0.454.0` | Tree-shaken vector iconography typed with `LucideIcon` |
+| **Styles & Grid** | Bespoke Modern CSS | CSS3 | High-density drafting grid, onyx/jet dark mode theme, amber accents |
+| **Edge AI Inference** | [Groq API](https://groq.com/) | Llama 3.3 70B | Real-time streaming companion with deterministic fallback |
+| **Telemetry** | [GitHub REST API v3](https://docs.github.com/rest) | v3 | Live repo count, follower count, project star badges (ISR cached) |
+| **CI / CD Gate** | [GitHub Actions](https://github.com/features/actions) | v4 | Automated typecheck, ESLint flat config, build & artifact audit |
+| **Code Review** | [CodeRabbit AI](https://coderabbit.ai/) | Latest | Automated pull request static analysis & architectural reviews |
+| **Edge Deployment**| [Vercel](https://vercel.com/) | Edge Network | Global edge delivery, instant invalidation, custom domain routing |
 
 ---
 
-## Directory Structure
+## Repository Structure & Subsystems
 
 ```
 work/
 +-- .github/
 ¦   +-- workflows/
 ¦   ¦   +-- ci.yml                 # Automated CI quality gate (Typecheck, Lint, Build, PWA)
-¦   +-- PULL_REQUEST_TEMPLATE.md   # Standardized engineering contribution template
+¦   ¦   +-- pr-labeler.yml         # PR auto-labeler & triage bot workflow
+¦   +-- ISSUE_TEMPLATE/            # Standardized bug report and feature request forms
+¦   ¦   +-- bug_report.yml
+¦   ¦   +-- feature_request.yml
+¦   +-- labeler.yml                # Path-based auto-labeling rules for actions/labeler@v5
+¦   +-- PULL_REQUEST_TEMPLATE.md   # Standardized pull request quality checklist
 +-- app/
 ¦   +-- layout.tsx                 # Root layout, ambient grid, quiet creator mark & PWA bootstrap
 ¦   +-- page.tsx                   # Main systems overview, stats, and graph narrative
-¦   +-- not-found.tsx              # Escaped 404 error page shell
+¦   +-- not-found.tsx              # Clean, accessible 404 error boundary
+¦   +-- manifest.ts                # Dynamic Web App Manifest source
 ¦   +-- globals.css                # Polished design system stylesheet (pruned of dead rules)
-¦   +-- effects.css                # Architectural grid and specialized animation effects
+¦   +-- effects.css                # Architectural drafting grid & specialized animation effects
 ¦   +-- about/page.tsx             # Interactive journey timeline & GitHub contribution graph
 ¦   +-- projects/                  # Featured systems, compilers, and applications
 ¦   ¦   +-- legacy-exodus/         # Deep compiler modernization case study & interactive pipeline
@@ -213,7 +213,7 @@ work/
 ¦       +-- Magnetic.tsx           # Pointer-attracted CTAs with hook-safe lifecycle
 ¦       +-- CustomCursor.tsx       # Black & gold contextual cursor with multi-state inspection
 +-- docs/
-¦   +-- AUDIT_AND_REMEDIATION.md   # Exhaustive 15-point audit, verification, and benchmark log
+¦   +-- AUDIT_AND_REMEDIATION.md   # Exhaustive 15-point audit, verification, and benchmark report
 +-- lib/
 ¦   +-- ai/                        # Companion knowledge base, prompt synthesis & rate limiter
 ¦   +-- data.ts                    # Single source of truth for resume, projects, and education
@@ -221,17 +221,77 @@ work/
 ¦   +-- motion.ts                  # Coherent spring physics and motion language specification
 +-- public/
 ¦   +-- sw.js                      # PWA Service Worker with offline precaching (raitaskeen-v2)
-¦   +-- manifest.webmanifest       # Web app manifest for mobile installability
-+-- .gitattributes                 # Enforces LF line endings across platforms
+¦   +-- assets/                    # Resume PDF, project visual diagrams, and SVG milestones
++-- .gitattributes                 # Cross-platform LF line ending enforcement
 +-- eslint.config.mjs              # Non-interactive ESLint 9 flat configuration
 +-- implementation_plan.md         # Historical implementation design plan & completed status
 +-- LICENSE                        # MIT License
-+-- package.json                   # Project scripts and dependencies
++-- package.json                   # Project scripts, dependencies, and metadata
 ```
 
 ---
 
-## Local Development & Setup
+## Continuous Integration, Automation & CodeRabbit AI
+
+```
++-----------------------------------------------------------------------------+
+¦                       GITHUB ACTIONS CI / CD PIPELINE                       ¦
++-----------------------------------------------------------------------------¦
+¦                                                                             ¦
+¦  [ Git Push / PR ] --? [ Setup Bun v1.4.2 ] --? [ Cache Bun ~/.bun/cache ]   ¦
+¦                                                          ¦                  ¦
+¦                                                          ?                  ¦
+¦  [ Production Build ] ?-- [ ESLint Flat Config ] ?-- [ bun install frozen ] ¦
+¦           ¦                        ¦                         ¦              ¦
+¦           ?                        ?                         ?              ¦
+¦  [ Verify PWA / Manifest ]  [ TypeScript (tsc) ]     [ CodeRabbit AI Bot ]  ¦
+¦           ¦                        ¦                         ¦              ¦
+¦           +--------------------------------------------------+              ¦
+¦                                    ?                                        ¦
+¦                       SUCCESS: Zero-Downtime Deploy                         ¦
++-----------------------------------------------------------------------------+
+```
+
+The repository features enterprise-grade automation:
+
+1. **Automated CI Quality Gate ([`.github/workflows/ci.yml`](.github/workflows/ci.yml))**:
+   - Executes on every push and PR targeting `master`, `main`, and `post-production`.
+   - Provisions the official Bun runtime and restores dependencies from `~/.bun/install/cache`.
+   - Enforces deterministic installs with `bun install --frozen-lockfile`.
+   - Runs strict TypeScript compilation (`bun x tsc --noEmit`) with **0 tolerated errors**.
+   - Runs non-interactive ESLint 9 flat config linting (`bun run lint`).
+   - Builds production artifacts (`bun run build`) compiling all 11 routes in $< 3\text{s}$.
+   - Asserts integrity of `public/sw.js`, `app/manifest.ts`, and compiled webmanifest artifacts.
+
+2. **Automated PR Labeler & Triage ([`.github/workflows/pr-labeler.yml`](.github/workflows/pr-labeler.yml))**:
+   - Powered by `actions/labeler@v5` via [`.github/labeler.yml`](.github/labeler.yml).
+   - Automatically tags pull requests based on changed files: `area: compiler-engine`, `area: ai-companion`, `area: ui-and-motion`, `area: api-routes`, `area: pwa-and-cache`, `type: documentation`, `type: ci-cd`, `type: dependencies`.
+
+3. **CodeRabbit AI Automated Code Reviews**:
+   - Continuous PR analysis checking for security vulnerabilities, AST patterns, type safety, and architectural regressions.
+   - Enforces clean PR descriptions referencing the [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md).
+
+4. **Vercel Edge Deployment**:
+   - Production branch automatically deployed to Vercel's global edge network.
+   - Automatic preview deployments for PRs with instantaneous invalidation and custom domain routing ([`raitaskeen.me`](https://raitaskeen.me)).
+
+---
+
+## Audit & Remediation Summary
+
+An exhaustive 15-item hardening pass was conducted across the codebase. For full technical proofs, packet-level benchmarks, and root-cause analyses, see [`docs/AUDIT_AND_REMEDIATION.md`](docs/AUDIT_AND_REMEDIATION.md).
+
+### Key Hardening Results:
+- **Static Asset Pruning**: Removed `public/assets/images/my-avatar.png` (**-889.2 KB / 100% saved**).
+- **CSS Optimization**: Pruned 265 lines of unreferenced legacy `.testimonials*` and `.modal-*` CSS from `app/globals.css` (**-3.8 kB minified CSS** saved across every route).
+- **Packet-Fragmented SSE Streaming**: Zero dropped tokens or broken actions under throttled TCP networks.
+- **DDoS / Memory Leak Mitigation**: Multi-hop `x-forwarded-for` parser + FIFO hard-cap eviction (500 entries) preventing server memory leaks.
+- **Mobile WebKit Downloads**: Programmatic resume downloads verified on iOS Safari via synchronous DOM connection lifecycle.
+- **React Hook Order Bug**: Discovered and resolved conditional `useRef` call in `Magnetic.tsx`.
+
+---
+
+## Local Setup & Development Guide
 
 ### Prerequisites
 - **[Bun](https://bun.sh/)** v1.1 or higher (recommended) or **Node.js** v20+
@@ -244,7 +304,7 @@ work/
    cd portfolio
    ```
 
-2. **Install dependencies:**
+2. **Install dependencies with frozen lockfile:**
    ```bash
    bun install --frozen-lockfile
    ```
@@ -253,13 +313,18 @@ work/
    ```bash
    cp .env.example .env.local
    ```
-   *Note: `GROQ_API_KEY` is optional. If omitted, the companion bot automatically falls back to its deterministic offline reasoning engine.*
+   Add your optional credentials to `.env.local`:
+   ```env
+   # Optional: Powers live AI companion streaming via Groq
+   # If omitted, companion automatically falls back to deterministic rule engine
+   GROQ_API_KEY=your_groq_api_key_here
+   ```
 
-4. **Start the development server:**
+4. **Start the local development server:**
    ```bash
    bun dev
    ```
-   Open [http://localhost:3000](http://localhost:3000) to view the application.
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
@@ -271,25 +336,7 @@ work/
 | `bun run build` | Compiles optimized production bundle across all 11 routes |
 | `bun run start` | Serves compiled production build locally |
 | `bun run lint` | Executes non-interactive ESLint 9 flat config quality gate |
-| `bun x tsc --noEmit` | Executes strict TypeScript compiler typecheck |
-
----
-
-## CI / CD & Deployment Pipeline
-
-Every push and pull request to `master`, `main`, and `post-production` triggers the automated GitHub Actions pipeline (`.github/workflows/ci.yml`):
-
-1. **Dependency Integrity**: Fast Bun setup and `bun install --frozen-lockfile`.
-2. **Typecheck Gate**: Validates entire workspace against TypeScript compiler (`tsc --noEmit`).
-3. **Linting Gate**: Runs ESLint with zero tolerated errors.
-4. **Production Build**: Compiles all static and edge routes into production artifacts in `< 3s`.
-5. **PWA Validation**: Asserts existence and integrity of `public/sw.js` and `manifest.webmanifest`.
-
-### Vercel Deployment
-1. Connect the repository to [Vercel](https://vercel.com).
-2. Set Build Command to `bun run build`.
-3. Set Install Command to `bun install`.
-4. Point DNS for `raitaskeen.me` to Vercel edge nodes.
+| `bun x tsc --noEmit` | Executes strict TypeScript compiler typecheck (0 errors) |
 
 ---
 
@@ -297,13 +344,14 @@ Every push and pull request to `master`, `main`, and `post-production` triggers 
 
 <div align="left">
 
-**Taskeen Haider**  
-*Systems & Full-Stack Software Engineer*  
+### **Taskeen Haider**
+*Systems & Full-Stack Software Engineer*
 
-- **Portfolio & Systems Hub:** [raitaskeen.me](https://raitaskeen.me)
+- **Platform & Systems Hub:** [raitaskeen.me](https://raitaskeen.me)
 - **GitHub:** [@raitaskeen](https://github.com/raitaskeen)
 - **Email:** [raitaskeenhaider786@gmail.com](mailto:raitaskeenhaider786@gmail.com)
-- **Primary Focus:** Static Analysis (AST/CFG/DFG), Compiler Modernization, Distributed Systems, High-Performance Web Architectures.
+- **LinkedIn:** [Taskeen Haider](https://linkedin.com/in/taskeenhaider)
+- **Primary Disciplines:** Static Analysis (AST / CFG / DFG), Compiler Modernization, High-Performance Web Systems, Deterministic AI Workflows.
 
 </div>
 
@@ -311,4 +359,4 @@ Every push and pull request to `master`, `main`, and `post-production` triggers 
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the [MIT License](LICENSE) — see the LICENSE file for details.
