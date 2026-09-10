@@ -346,21 +346,27 @@ export default function PortfolioBot() {
       const assistantId = "assistant-" + Date.now();
       setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
 
+      let buffer = "";
+
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
 
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const dataStr = line.replace("data: ", "").trim();
-            if (dataStr === "[DONE]") continue;
+        for (const rawLine of lines) {
+          const line = rawLine.trim();
+          if (!line || !line.startsWith("data: ")) continue;
 
-            try {
-              const parsed = JSON.parse(dataStr);
-              const delta = parsed.choices?.[0]?.delta?.content || "";
+          const dataStr = line.slice(6).trim();
+          if (dataStr === "[DONE]") continue;
+
+          try {
+            const parsed = JSON.parse(dataStr);
+            const delta = parsed.choices?.[0]?.delta?.content || "";
+            if (delta) {
               assistantRaw += delta;
 
               const { cleanContent, actions } = extractActions(assistantRaw);
@@ -371,9 +377,32 @@ export default function PortfolioBot() {
                     : m
                 )
               );
-            } catch {
-              // Ignore partial JSON chunks
             }
+          } catch {
+            // Ignore genuinely malformed records
+          }
+        }
+      }
+
+      if (buffer.trim().startsWith("data: ")) {
+        const dataStr = buffer.trim().slice(6).trim();
+        if (dataStr !== "[DONE]") {
+          try {
+            const parsed = JSON.parse(dataStr);
+            const delta = parsed.choices?.[0]?.delta?.content || "";
+            if (delta) {
+              assistantRaw += delta;
+              const { cleanContent, actions } = extractActions(assistantRaw);
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === assistantId
+                    ? { ...m, content: cleanContent, actions }
+                    : m
+                )
+              );
+            }
+          } catch {
+            // Ignore malformed record
           }
         }
       }
