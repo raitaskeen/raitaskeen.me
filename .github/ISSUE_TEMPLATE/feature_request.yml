@@ -1,0 +1,25 @@
+name: ? Feature Request
+description: Propose an enhancement, new section, or performance idea
+title: "feat: "
+labels: ["type: enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to improve the portfolio or systems case studies? Suggest it here!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement / Context
+      description: Is your feature request related to a specific workflow or component?
+      placeholder: Describe the opportunity or limitation...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+      description: A clear and concise description of what you want to happen.
+      placeholder: Describe your solution...
+    validations:
+      required: true

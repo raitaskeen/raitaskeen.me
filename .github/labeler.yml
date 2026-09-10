@@ -1,0 +1,47 @@
+# Configuration for GitHub Actions Labeler (actions/labeler@v5)
+
+"area: compiler-engine":
+  - changed-files:
+      - any-glob-to-any-file: "app/projects/legacy-exodus/**"
+
+"area: ai-companion":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "components/motion/PortfolioBot.tsx"
+          - "lib/ai/**"
+          - "app/api/chat/**"
+
+"area: ui-and-motion":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "components/**"
+          - "app/globals.css"
+          - "app/effects.css"
+          - "lib/motion.ts"
+
+"area: api-routes":
+  - changed-files:
+      - any-glob-to-any-file: "app/api/**"
+
+"area: pwa-and-cache":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "public/sw.js"
+          - "app/manifest.ts"
+
+"type: documentation":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "docs/**"
+
+"type: ci-cd":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+
+"type: dependencies":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "bun.lock"
