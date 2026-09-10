@@ -10,7 +10,6 @@
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.11-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
 [![GitHub Actions CI](https://img.shields.io/badge/CI_Pipeline-Passing-2EA44F?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/raitaskeen/raitaskeen.me/actions)
 [![CodeRabbit AI](https://img.shields.io/badge/CodeRabbit-AI_Reviewed-FF5722?style=for-the-badge&logo=coderabbit&logoColor=white)](https://coderabbit.ai/)
-[![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/raitaskeen/raitaskeen.me?utm_source=oss&utm_medium=github&utm_campaign=raitaskeen%2Fraitaskeen.me&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
 [![PWA Ready](https://img.shields.io/badge/PWA-Precached_v2-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](public/sw.js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
