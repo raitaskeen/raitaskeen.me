@@ -62,11 +62,22 @@ export default function Typewriter({
   }, [text, deleting, wordIndex, words, typingSpeed, deletingSpeed, pause, reduce]);
 
   return (
-    <span aria-live="polite" style={{ display: "inline-flex", alignItems: "baseline", minHeight: "1.3em" }}>
-      <span>{text}</span>
+    <span
+      role="status"
+      aria-label={words[wordIndex % words.length]}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        minHeight: "1.3em",
+        lineHeight: 1.2,
+        whiteSpace: "nowrap",
+        verticalAlign: "middle",
+      }}
+    >
+      <span aria-hidden="true">{text || "\u00A0"}</span>
       {!reduce && (
         <span
-          aria-hidden
+          aria-hidden="true"
           className="typewriter-cursor"
           style={{
             display: "inline-block",
@@ -75,17 +86,10 @@ export default function Typewriter({
             marginLeft: 3,
             background: "var(--orange-yellow-crayola)",
             borderRadius: 1,
-            verticalAlign: "-2px",
             animation: "cursor-blink 1.05s step-start infinite",
           }}
         />
       )}
-      <style>{`
-        @keyframes cursor-blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-      `}</style>
     </span>
   );
 }
