@@ -8,18 +8,10 @@ import {
   AlertTriangle,
   Network,
   Layers,
-  Cpu,
-  Zap,
   ShieldCheck,
   CheckCircle2,
   FileCode2,
   ArrowRight,
-  GitBranch,
-  Box,
-  Binary,
-  Workflow,
-  Sparkles,
-  Bot,
 } from "lucide-react";
 
 export const metadata = {

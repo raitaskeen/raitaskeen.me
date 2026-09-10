@@ -1,15 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {
   motion,
   AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useTransform,
   useReducedMotion,
 } from "framer-motion";
-import { Github, ExternalLink, Star, ChevronDown, Layers, Terminal, Globe, Shield, Code2, ArrowUpRight } from "lucide-react";
+import { Github, ExternalLink, Star, ChevronDown, Layers, Globe, Shield, ArrowUpRight } from "lucide-react";
 import { spring } from "@/lib/motion";
 
 export type ShowcaseProject = {

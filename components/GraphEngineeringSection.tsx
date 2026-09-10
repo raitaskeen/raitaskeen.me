@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Network, Bot, Cpu, CheckCircle2, ArrowRight, Layers, FileCode, Database, Zap, AlertTriangle, ShieldCheck } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
+import { Network, Cpu, CheckCircle2, ArrowRight, AlertTriangle, ShieldCheck } from "lucide-react";
 
 interface GraphNodeData {
   id: string;
@@ -112,6 +112,7 @@ const AI_TOOLS_MAP = [
 export function GraphDependencySection({ hideThesisBanner = false }: { hideThesisBanner?: boolean } = {}) {
   const [selectedNodeId, setSelectedNodeId] = useState<string>("user.ts");
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
+  const reduce = useReducedMotion();
 
   const activeNode = DEPENDENCY_NODES[hoveredNodeId ?? selectedNodeId];
 
@@ -183,15 +184,15 @@ export function GraphDependencySection({ hideThesisBanner = false }: { hideThesi
 
             {/* Connecting Edges */}
             {/* auth.ts -> user.ts (imports) */}
-            <line x1="160" y1="80" x2="270" y2="80" stroke="url(#edgeTraverse)" strokeWidth="2" strokeDasharray="4,4" className="flow-edge-animated" />
+            <line x1="160" y1="80" x2="270" y2="80" stroke="url(#edgeTraverse)" strokeWidth="2" strokeDasharray="4,4" className={reduce ? undefined : "flow-edge-animated"} />
             <text x="215" y="70" fill="var(--orange-yellow-crayola)" fontSize="9" fontFamily="monospace" textAnchor="middle">imports</text>
 
             {/* user.ts -> database.ts (calls) */}
-            <line x1="390" y1="80" x2="460" y2="80" stroke="url(#edgeTraverse)" strokeWidth="2" strokeDasharray="4,4" className="flow-edge-animated" />
+            <line x1="390" y1="80" x2="460" y2="80" stroke="url(#edgeTraverse)" strokeWidth="2" strokeDasharray="4,4" className={reduce ? undefined : "flow-edge-animated"} />
             <text x="425" y="70" fill="var(--orange-yellow-crayola)" fontSize="9" fontFamily="monospace" textAnchor="middle">calls</text>
 
             {/* database.ts -> postgres.ts (depends-on) */}
-            <line x1="580" y1="80" x2="650" y2="80" stroke="url(#edgeTraverse)" strokeWidth="2" strokeDasharray="4,4" className="flow-edge-animated" />
+            <line x1="580" y1="80" x2="650" y2="80" stroke="url(#edgeTraverse)" strokeWidth="2" strokeDasharray="4,4" className={reduce ? undefined : "flow-edge-animated"} />
             <text x="615" y="70" fill="var(--orange-yellow-crayola)" fontSize="9" fontFamily="monospace" textAnchor="middle">depends-on</text>
 
             {/* Nodes */}

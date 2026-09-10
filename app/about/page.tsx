@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   experience,
   education,
@@ -21,9 +20,6 @@ import {
   GraduationCap,
   BookOpen,
   Globe,
-  Cpu,
-  GitCommit,
-  Sparkles,
 } from "lucide-react";
 
 export default function AboutPage() {

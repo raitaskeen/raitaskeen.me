@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Network, ArrowDown, Sparkles, Layers, BookOpen, ToggleLeft, ToggleRight, ArrowRight } from "lucide-react";
+import { Network, ToggleLeft, ToggleRight, ArrowRight } from "lucide-react";
 
 export type NodeKey =
   | "source"
