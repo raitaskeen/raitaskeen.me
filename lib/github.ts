@@ -16,7 +16,7 @@ export async function getGithubStats(username: string): Promise<GithubStats | nu
     const userRes = await fetch(`https://api.github.com/users/${username}`, {
       next: { revalidate: 3600 },
       headers: { Accept: "application/vnd.github+json" },
-      signal: AbortSignal.timeout(1200),
+      signal: AbortSignal.timeout(4000),
     });
     if (!userRes.ok) return null;
     const user = await userRes.json();
@@ -28,7 +28,7 @@ export async function getGithubStats(username: string): Promise<GithubStats | nu
           const res = await fetch(`https://api.github.com/repos/${username}/${repo}`, {
             next: { revalidate: 3600 },
             headers: { Accept: "application/vnd.github+json" },
-            signal: AbortSignal.timeout(1200),
+            signal: AbortSignal.timeout(4000),
           });
           if (res.ok) {
             const data = await res.json();
