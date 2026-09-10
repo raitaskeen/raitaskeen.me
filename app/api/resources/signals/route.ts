@@ -138,7 +138,7 @@ export async function GET() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2500);
 
-    const topRes = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json?limitToFirst=6", {
+    const topRes = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json", {
       signal: controller.signal,
       next: { revalidate: 300 },
     });
