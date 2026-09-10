@@ -58,6 +58,7 @@ jobs:
       - name: Verify static artifacts & PWA assets
         run: |
           test -f public/sw.js || { echo "Missing public/sw.js"; exit 1; }
-          test -f public/manifest.webmanifest || { echo "Missing public/manifest.webmanifest"; exit 1; }
+          test -f app/manifest.ts || { echo "Missing app/manifest.ts source"; exit 1; }
           test -d .next || { echo "Missing .next build directory"; exit 1; }
+          test -f .next/server/app/manifest.webmanifest.body || { echo "Missing compiled manifest.webmanifest"; exit 1; }
           echo "Production quality gate completed successfully."

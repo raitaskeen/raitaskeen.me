@@ -1,0 +1,36 @@
+name: ?? Bug Report
+description: Report a reproducible bug or defect in the portfolio platform
+title: "fix: "
+labels: ["type: bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a report! Please provide detailed context to help diagnose and resolve the issue quickly.
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe what happened...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to reproduce the issue.
+      placeholder: |
+        1. Navigate to `/...`
+        2. Interact with `...`
+        3. See unexpected behavior
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS version, device type.
+      placeholder: "e.g., Chrome 128 / macOS 14.6 / iPhone 15 Safari"
+    validations:
+      required: true
