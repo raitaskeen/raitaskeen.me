@@ -1,10 +1,11 @@
 // Service Worker for raitaskeen portfolio PWA
-const CACHE_NAME = "raitaskeen-v1";
+const CACHE_NAME = "raitaskeen-v2";
 
 const PRECACHE_ASSETS = [
   "/",
   "/about",
   "/projects",
+  "/projects/legacy-exodus",
   "/resources",
   "/contact",
   "/icon-192.png",
