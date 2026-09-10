@@ -431,7 +431,9 @@ export default function PortfolioBot() {
       const a = document.createElement("a");
       a.href = action.href;
       a.download = "Taskeen_Haider_Resume.pdf";
+      document.body.appendChild(a);
       a.click();
+      a.remove();
     } else {
       router.push(action.href);
       setIsOpen(false);
