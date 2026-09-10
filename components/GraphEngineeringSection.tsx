@@ -292,7 +292,6 @@ export function GraphDependencySection({ hideThesisBanner = false }: { hideThesi
 
 export function AiOrchestrationSection() {
   const [activeStageId, setActiveStageId] = useState<string>("analysis");
-  const reduce = useReducedMotion();
   const activeStage = ORCHESTRATION_STAGES.find((s) => s.id === activeStageId) ?? ORCHESTRATION_STAGES[1];
 
   return (
@@ -436,7 +435,7 @@ export function AiOrchestrationSection() {
                     {tool.name}
                   </span>
                   <span style={{ color: "var(--light-gray-70)", fontSize: 10, marginLeft: 8 }}>
-                    // {tool.role}
+                    {"//"} {tool.role}
                   </span>
                 </div>
                 <span style={{ color: "var(--light-gray)", fontSize: 10, textAlign: "right" }}>

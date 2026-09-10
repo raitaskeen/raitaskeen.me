@@ -10,6 +10,7 @@ import {
   Terminal,
   Cpu,
   Wrench,
+  type LucideIcon,
 } from "lucide-react";
 import { curatedResources } from "@/lib/data";
 import SectionHeading from "@/components/motion/SectionHeading";
@@ -23,7 +24,7 @@ type FilterCategory =
   | "AI Engineering"
   | "Developer Tools";
 
-const CATEGORIES: { label: FilterCategory; icon: any }[] = [
+const CATEGORIES: { label: FilterCategory; icon: LucideIcon }[] = [
   { label: "All", icon: Compass },
   { label: "Roadmaps", icon: BookMarked },
   { label: "Foundational Papers", icon: FileText },

@@ -1,7 +1,6 @@
 import {
   profile,
   experience,
-  focusAreas,
   featuredProjects,
   openSource,
   skills,

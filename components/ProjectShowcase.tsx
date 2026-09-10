@@ -198,7 +198,6 @@ function ProjectCard({
   const liveLink = project.links.find((l) =>
     l.label.toLowerCase().includes("live") || l.label.toLowerCase().includes("app") || l.label.toLowerCase().includes("demo")
   );
-  const isMultiRepo = project.links.length > 1;
   const singleRepo = !liveLink && project.links.length === 1 ? project.links[0] : null;
 
   function handleCardClick(e: React.MouseEvent<HTMLDivElement>) {

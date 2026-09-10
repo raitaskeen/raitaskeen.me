@@ -24,10 +24,9 @@ export default function Magnetic({
   const y = useMotionValue(0);
   const springX = useSpring(x, spring.magnetic);
   const springY = useSpring(y, spring.magnetic);
+  const rectRef = useRef<DOMRect | null>(null);
 
   if (reduce) return <div className={className}>{children}</div>;
-
-  const rectRef = useRef<DOMRect | null>(null);
 
   function handleEnter(e: React.MouseEvent<HTMLDivElement>) {
     rectRef.current = e.currentTarget.getBoundingClientRect();

@@ -199,7 +199,7 @@ export default function JourneyNarrative() {
                 fontWeight: 600,
               }}
             >
-              // {active.stage}
+              {"//"} {active.stage}
             </span>
           </div>
 

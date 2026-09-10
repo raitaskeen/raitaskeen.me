@@ -283,7 +283,7 @@ export default function LegacyExodusPage() {
               >
                 <div>
                   <span style={{ fontFamily: "monospace", fontSize: 11, color: "var(--orange-yellow-crayola)", fontWeight: 700 }}>
-                    {step.step} // PHASE
+                    {step.step} {"// PHASE"}
                   </span>
                   <h3 style={{ color: "var(--white-2)", fontSize: "var(--fs-5)", fontWeight: 600, margin: "6px 0 0" }}>
                     {step.name}
@@ -445,7 +445,7 @@ export default function LegacyExodusPage() {
                 }}
               >
                 <span style={{ fontFamily: "monospace", fontSize: 11, color: "var(--orange-yellow-crayola)", fontWeight: 600 }}>
-                  0{idx + 1} // PRINCIPLE
+                  0{idx + 1} {"// PRINCIPLE"}
                 </span>
                 <h3 style={{ color: "var(--white-2)", fontSize: "var(--fs-4)", fontWeight: 600, marginTop: 6 }}>
                   {p.title}

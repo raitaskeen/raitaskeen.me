@@ -9,11 +9,12 @@ import {
   useTransform,
   useReducedMotion,
   AnimatePresence,
+  type MotionValue,
 } from "framer-motion";
 import { Send, X, ArrowRight, Download, ExternalLink, RefreshCw } from "lucide-react";
 import { usePointerSystem } from "./PointerSystem";
 import { spring } from "@/lib/motion";
-import { classifyIntent, extractActions, getRandomStatus, CompanionAction, CompanionIntent } from "@/lib/ai";
+import { classifyIntent, extractActions, getRandomStatus, CompanionAction } from "@/lib/ai";
 
 type Message = {
   id: string;
@@ -50,8 +51,8 @@ function ComputationalEntity({
 }: {
   state: EntityState;
   blink: boolean;
-  springEyeX: any;
-  springEyeY: any;
+  springEyeX: MotionValue<number>;
+  springEyeY: MotionValue<number>;
   reduce: boolean | null;
   size?: number;
 }) {

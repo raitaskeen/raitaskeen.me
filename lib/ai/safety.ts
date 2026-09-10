@@ -64,11 +64,11 @@ export function sanitizeMessages(
 
   const valid = messages
     .filter(
-      (m): m is { role: string; content: string } =>
-        typeof m === "object" &&
-        m !== null &&
-        typeof (m as any).role === "string" &&
-        typeof (m as any).content === "string"
+      (m): m is { role: string; content: string } => {
+        if (typeof m !== "object" || m === null) return false;
+        const rec = m as Record<string, unknown>;
+        return typeof rec.role === "string" && typeof rec.content === "string";
+      }
     )
     .map((m) => ({
       role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
