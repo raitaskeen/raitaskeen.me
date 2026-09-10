@@ -81,8 +81,8 @@ function KineticChar({
       // Explicit rest state guarantees opacity is ALWAYS 1 and never reverts to 0 on hover exit
       animate={{
         opacity: 1,
-        scale: hovered && !reduce ? 1.08 : 1,
-        color: hovered && !reduce ? "var(--orange-yellow-crayola)" : "inherit",
+        scale: hovered && !reduce ? 1.05 : 1,
+        WebkitTextStroke: hovered && !reduce ? "1.6px hsla(45, 100%, 72%, 1)" : undefined,
       }}
     >
       {char}
@@ -140,12 +140,19 @@ export default function ContactSignature() {
       <div
         style={{
           fontSize: "clamp(38px, 11vw, 125px)",
-          fontWeight: 700,
-          fontFamily: "system-ui, -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif",
-          letterSpacing: isHovered ? "clamp(0.14em, 2vw, 0.24em)" : "clamp(0.12em, 1.6vw, 0.18em)",
+          fontWeight: 600,
+          fontFamily: "var(--font-poppins), 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
+          letterSpacing: isHovered ? "clamp(0.01em, 0.4vw, 0.03em)" : "clamp(-0.01em, 0.2vw, 0.01em)",
           lineHeight: 0.95,
-          color: isHovered ? "hsla(45, 100%, 72%, 0.35)" : "hsla(0, 0%, 100%, 0.12)",
-          transition: "color 0.35s ease, letter-spacing 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+          color: "transparent",
+          WebkitTextFillColor: "transparent",
+          WebkitTextStroke: isHovered ? "1.6px hsla(45, 100%, 72%, 0.98)" : "1.3px hsla(28, 100%, 56%, 0.9)",
+          maskImage: "linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 25%, rgba(0, 0, 0, 0.15) 60%, rgba(0, 0, 0, 0) 85%)",
+          WebkitMaskImage: "linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 25%, rgba(0, 0, 0, 0.15) 60%, rgba(0, 0, 0, 0) 85%)",
+          filter: isHovered
+            ? "drop-shadow(0 -2px 14px rgba(255, 207, 89, 0.65)) drop-shadow(0 0 1px rgba(255, 207, 89, 0.9))"
+            : "drop-shadow(0 -1px 8px rgba(232, 147, 74, 0.45))",
+          transition: "letter-spacing 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease, -webkit-text-stroke 0.35s ease",
           display: "inline-flex",
           justifyContent: "center",
           alignItems: "center",
@@ -168,24 +175,6 @@ export default function ContactSignature() {
             isLast={idx === LETTERS.length - 1}
           />
         ))}
-
-        {/* Subtle gold precision micro-dot */}
-        <span
-          style={{
-            width: "clamp(5px, 1vw, 10px)",
-            height: "clamp(5px, 1vw, 10px)",
-            borderRadius: "50%",
-            background: "var(--orange-yellow-crayola)",
-            marginLeft: "clamp(6px, 1.2vw, 14px)",
-            marginBottom: "clamp(3px, 0.8vw, 8px)",
-            opacity: isHovered ? 0.95 : 0.5,
-            transition: "opacity 0.3s ease",
-            display: "inline-block",
-            flexShrink: 0,
-            zIndex: 2,
-          }}
-          aria-hidden="true"
-        />
       </div>
     </section>
   );
