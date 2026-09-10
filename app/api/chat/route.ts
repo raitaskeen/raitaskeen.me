@@ -8,7 +8,8 @@ import {
 
 export async function POST(req: Request) {
   try {
-    const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "local";
+    const forwarded = req.headers.get("x-forwarded-for");
+    const ip = forwarded ? forwarded.split(",")[0].trim() : (req.headers.get("x-real-ip")?.trim() || "local");
     if (!isAllowedRate(ip)) {
       return NextResponse.json(
         { error: "Rate limit exceeded. Please wait a moment." },

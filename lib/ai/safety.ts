@@ -9,15 +9,32 @@ const DEFAULT_CONFIG: RateLimitConfig = {
 };
 
 const ipRequestMap = new Map<string, number[]>();
+let requestCounter = 0;
+const SWEEP_INTERVAL = 50;
+const MAX_MAP_SIZE = 500;
 
 /**
  * Checks whether an incoming client IP is allowed within the rate limit window.
  */
 export function isAllowedRate(ip: string, config: RateLimitConfig = DEFAULT_CONFIG): boolean {
   const now = Date.now();
-  const timestamps = (ipRequestMap.get(ip) || []).filter((t) => now - t < config.windowMs);
+  requestCounter++;
+
+  // Lazy global cleanup every SWEEP_INTERVAL requests or if map exceeds capacity
+  if (requestCounter >= SWEEP_INTERVAL || ipRequestMap.size > MAX_MAP_SIZE) {
+    requestCounter = 0;
+    for (const [key, timestamps] of ipRequestMap.entries()) {
+      if (timestamps.length === 0 || now - timestamps[timestamps.length - 1] >= config.windowMs) {
+        ipRequestMap.delete(key);
+      }
+    }
+  }
+
+  const existing = ipRequestMap.get(ip);
+  const timestamps = (existing || []).filter((t) => now - t < config.windowMs);
 
   if (timestamps.length >= config.maxRequests) {
+    ipRequestMap.set(ip, timestamps);
     return false;
   }
 
