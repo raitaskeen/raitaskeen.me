@@ -78,6 +78,7 @@ function validate(name: FieldName, value: string): string | null {
 function Field({
   name,
   type = "text",
+  label,
   placeholder,
   value,
   onChange,
@@ -90,7 +91,8 @@ function Field({
 }: {
   name: FieldName;
   type?: string;
-  placeholder: string;
+  label: string;
+  placeholder?: string;
   value: string;
   onChange: (v: string) => void;
   textarea?: boolean;
@@ -101,74 +103,84 @@ function Field({
   error: string | null;
 }) {
   const [focused, setFocused] = useState(false);
-  const active = focused || value.trim().length > 0;
   const showError = touched && !!error;
   const showValid = touched && !error && value.trim().length > 0;
   const Tag = textarea ? "textarea" : "input";
 
   return (
-    <div className={`field-group ${active ? "active" : ""}`}>
-      <span
+    <div className={`field-group ${focused ? "focused" : ""} ${showError ? "error" : ""}`}>
+      <label
+        htmlFor={name}
         className="field-label"
         style={{
           color: showError
             ? "var(--bittersweet-shimmer)"
-            : active
+            : focused
             ? "var(--orange-yellow-crayola)"
             : undefined,
         }}
       >
-        {placeholder}
-      </span>
+        {label}
+      </label>
 
-      {/* Subtle gold focus indicator dot */}
-      <AnimatePresence>
-        {focused && (
-          <motion.span
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            transition={spring.snap}
-            style={{
-              position: "absolute",
-              right: 14,
-              top: 14,
-              width: 6,
-              height: 6,
-              borderRadius: "50%",
-              background: "var(--orange-yellow-crayola)",
-              pointerEvents: "none",
-            }}
-          />
-        )}
-      </AnimatePresence>
+      <div style={{ position: "relative", width: "100%" }}>
+        {/* Subtle gold focus indicator dot */}
+        <AnimatePresence>
+          {focused && (
+            <motion.span
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              transition={spring.snap}
+              style={{
+                position: "absolute",
+                right: 14,
+                top: 15,
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                background: "var(--orange-yellow-crayola)",
+                pointerEvents: "none",
+                zIndex: 2,
+              }}
+            />
+          )}
+        </AnimatePresence>
 
-      <Tag
-        name={name}
-        type={textarea ? undefined : type}
-        required
-        disabled={disabled}
-        rows={textarea ? rows : undefined}
-        value={value}
-        onFocus={() => setFocused(true)}
-        onBlur={() => {
-          setFocused(false);
-          onTouch();
-        }}
-        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(e.target.value)}
-        style={{
-          ...inputStyle,
-          borderColor: showError
-            ? "var(--bittersweet-shimmer)"
-            : showValid
-            ? "hsla(45,100%,72%,0.4)"
-            : focused
-            ? "var(--orange-yellow-crayola)"
-            : "hsla(0,0%,100%,0.1)",
-          opacity: disabled ? 0.6 : 1,
-          cursor: disabled ? "not-allowed" : "text",
-        }}
-      />
+        <Tag
+          id={name}
+          name={name}
+          type={textarea ? undefined : type}
+          placeholder={placeholder}
+          required
+          disabled={disabled}
+          rows={textarea ? rows : undefined}
+          value={value}
+          onFocus={() => setFocused(true)}
+          onBlur={() => {
+            setFocused(false);
+            onTouch();
+          }}
+          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(e.target.value)}
+          style={{
+            ...inputStyle,
+            borderColor: showError
+              ? "var(--bittersweet-shimmer)"
+              : showValid
+              ? "hsla(45,100%,72%,0.4)"
+              : focused
+              ? "var(--orange-yellow-crayola)"
+              : "hsla(0,0%,100%,0.1)",
+            boxShadow: showError
+              ? "0 0 0 3px hsla(0, 43%, 51%, 0.15)"
+              : focused
+              ? "0 0 0 3px hsla(45, 100%, 72%, 0.15)"
+              : "none",
+            opacity: disabled ? 0.6 : 1,
+            cursor: disabled ? "not-allowed" : "text",
+          }}
+        />
+      </div>
 
       <AnimatePresence>
         {showError && (
@@ -180,7 +192,7 @@ function Field({
             style={{
               color: "var(--bittersweet-shimmer)",
               fontSize: "var(--fs-8)",
-              marginTop: 6,
+              marginTop: 2,
             }}
           >
             {error}
@@ -410,7 +422,8 @@ export default function ContactPage() {
               >
                 <Field
                   name="fullname"
-                  placeholder="Full name"
+                  label="Full name"
+                  placeholder="e.g. Taskeen Haider"
                   value={form.fullname}
                   onChange={(v) => setForm({ ...form, fullname: v })}
                   disabled={status !== "idle"}
@@ -421,7 +434,8 @@ export default function ContactPage() {
                 <Field
                   name="email"
                   type="email"
-                  placeholder="Email address"
+                  label="Email address"
+                  placeholder="e.g. taskeen@example.com"
                   value={form.email}
                   onChange={(v) => setForm({ ...form, email: v })}
                   disabled={status !== "idle"}
@@ -431,7 +445,8 @@ export default function ContactPage() {
                 />
                 <Field
                   name="message"
-                  placeholder="Your message"
+                  label="Your message"
+                  placeholder="Tell me about your project, timeline, or idea…"
                   textarea
                   rows={5}
                   value={form.message}
@@ -529,13 +544,17 @@ export default function ContactPage() {
 }
 
 const inputStyle: React.CSSProperties = {
-  background: "var(--eerie-black-1)",
-  border: "1px solid hsla(0,0%,100%,0.1)",
+  background: "hsla(0, 0%, 9%, 0.75)",
+  backdropFilter: "blur(12px)",
+  WebkitBackdropFilter: "blur(12px)",
+  border: "1px solid hsla(0, 0%, 100%, 0.1)",
   color: "var(--white-2)",
-  padding: "12px 14px",
-  borderRadius: 8,
+  padding: "12px 16px",
+  borderRadius: 10,
   fontSize: "var(--fs-6)",
   fontFamily: "inherit",
   width: "100%",
-  transition: "border-color 0.25s ease",
+  boxSizing: "border-box",
+  outline: "none",
+  transition: "border-color 0.2s ease, box-shadow 0.2s ease",
 };

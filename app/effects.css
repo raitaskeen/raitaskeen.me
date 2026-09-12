@@ -161,9 +161,13 @@
   background: hsla(45, 100%, 72%, 0.14);
 }
 
-/* ---------- Floating-label form fields (contact page) ---------- */
+/* ---------- Form fields (contact page) ---------- */
 .field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   position: relative;
+  width: 100%;
 }
 
 .field-group input,
@@ -172,22 +176,32 @@
 }
 
 .field-label {
-  position: absolute;
-  left: 14px;
-  top: 12px;
+  font-size: var(--fs-7);
+  font-weight: 500;
   color: var(--light-gray-70);
-  font-size: var(--fs-6);
-  pointer-events: none;
-  transform-origin: left top;
-  transition: transform var(--transition-1), color var(--transition-1), top var(--transition-1);
-  background: var(--eerie-black-1);
-  padding: 0 4px;
+  letter-spacing: 0.02em;
+  transition: color var(--transition-1);
+  background: transparent;
+  padding: 0;
+  user-select: none;
 }
 
-.field-group.active .field-label {
-  top: -8px;
-  transform: scale(0.78);
+.field-group.focused .field-label {
   color: var(--orange-yellow-crayola);
+}
+
+.field-group.error .field-label {
+  color: var(--bittersweet-shimmer);
+}
+
+.field-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.field-group input::placeholder,
+.field-group textarea::placeholder {
+  color: hsla(0, 0%, 100%, 0.25);
 }
 
 /* ---------- New-page layout helpers (site nav wasn't in the original single-page CSS) ---------- */
