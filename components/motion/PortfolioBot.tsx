@@ -13,7 +13,7 @@ import {
 } from "framer-motion";
 import { Send, X, ArrowRight, Download, ExternalLink, RefreshCw } from "lucide-react";
 import { usePointerSystem } from "./PointerSystem";
-import { spring } from "@/lib/motion";
+import { spring, ease } from "@/lib/motion";
 import { classifyIntent, extractActions, getRandomStatus, CompanionAction } from "@/lib/ai";
 
 type Message = {
@@ -450,7 +450,7 @@ export default function PortfolioBot() {
             initial={{ opacity: 0, y: 20, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.94 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.22, ease: ease.out }}
             className="portfolio-bot-panel"
             style={{
               position: "absolute",

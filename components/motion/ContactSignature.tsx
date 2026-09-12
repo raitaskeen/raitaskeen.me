@@ -10,6 +10,7 @@ import {
   useReducedMotion,
   MotionValue,
 } from "framer-motion";
+import { ease } from "@/lib/motion";
 
 const LETTERS = [
   { char: "r", scrollShift: [8, -8] as [number, number], delay: 0 },
@@ -65,7 +66,7 @@ function KineticChar({
       initial={reduce ? { opacity: 1 } : { opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-20px" }}
-      transition={{ duration: 0.5, delay: index * 0.03, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.5, delay: index * 0.03, ease: ease.out }}
       onPointerEnter={() => {
         if (!reduce) {
           pointerY.set(-8);

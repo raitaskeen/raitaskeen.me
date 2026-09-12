@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { revealVariants, spring, type RevealVariant } from "@/lib/motion";
+import { revealVariants, spring, ease, type RevealVariant } from "@/lib/motion";
 
 export default function Reveal({
   children,
@@ -30,7 +30,7 @@ export default function Reveal({
       whileInView={immediate ? undefined : "show"}
       viewport={immediate ? undefined : { once: true, margin: "-60px" }}
       variants={variants}
-      transition={duration ? { duration, delay, ease: [0.16, 1, 0.3, 1] } : { ...spring.gentle, delay }}
+      transition={duration ? { duration, delay, ease: ease.out } : { ...spring.gentle, delay }}
     >
       {children}
     </motion.div>

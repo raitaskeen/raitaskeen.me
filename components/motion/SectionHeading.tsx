@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { spring } from "@/lib/motion";
+import { spring, ease } from "@/lib/motion";
 
 export default function SectionHeading({
   index,
@@ -41,7 +41,7 @@ export default function SectionHeading({
         initial={reduce ? undefined : { scaleX: 0 }}
         whileInView={reduce ? undefined : { scaleX: 1 }}
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6, delay: 0.2, ease: ease.out }}
         style={{
           height: 2, width: 48, marginTop: 10, transformOrigin: "left",
           background: "linear-gradient(to right, var(--orange-yellow-crayola), transparent)",

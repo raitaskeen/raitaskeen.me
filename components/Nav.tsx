@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { spring } from "@/lib/motion";
+import { spring, ease } from "@/lib/motion";
 
 const links = [
   { href: "/", label: "Home" },
@@ -110,7 +110,7 @@ export default function Nav() {
         <motion.ul
           initial={reduce ? undefined : { opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.14, ease: ease.out }}
           className="nav-mobile-menu"
           style={{ display: "flex", flexDirection: "column", padding: "0 24px 16px", gap: 4 }}
         >

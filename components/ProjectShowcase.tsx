@@ -7,7 +7,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { Github, ExternalLink, Star, ChevronDown, Layers, Globe, Shield, ArrowUpRight } from "lucide-react";
-import { spring } from "@/lib/motion";
+import { spring, ease } from "@/lib/motion";
 
 export type ShowcaseProject = {
   title: string;
@@ -536,7 +536,7 @@ function ProjectCard({
               initial={reduce ? undefined : { opacity: 0, height: 0 }}
               animate={reduce ? undefined : { opacity: 1, height: "auto" }}
               exit={reduce ? undefined : { opacity: 0, height: 0 }}
-              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.22, ease: ease.out }}
               style={{ overflow: "hidden" }}
             >
               <div
