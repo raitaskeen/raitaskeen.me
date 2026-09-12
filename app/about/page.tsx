@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   experience,
   education,
@@ -401,10 +402,12 @@ export default function AboutPage() {
         {/* Inverted Live Activity Graph */}
         <Reveal delay={0.05}>
           <div className="gradient-border-hover" style={{ padding: 20, marginBottom: 16, overflowX: "auto", borderRadius: 14 }}>
-            <img
+            <Image
               src={`https://ghchart.rshah.org/E8934A/${profile.github}`}
               alt={`${profile.github} GitHub contribution graph`}
-              style={{ width: "100%", minWidth: 640, filter: "invert(0.05)" }}
+              width={663}
+              height={104}
+              style={{ width: "100%", minWidth: 640, height: "auto", filter: "invert(0.05)" }}
             />
           </div>
         </Reveal>
