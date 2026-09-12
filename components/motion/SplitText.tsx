@@ -28,12 +28,12 @@ export default function SplitText({
   return (
     <Tag style={{ ...style, display: "inline-block" }}>
       {words.map((word, i) => (
-        <span key={i} style={{ display: "inline-block", overflow: "hidden", verticalAlign: "top", marginRight: "0.28em" }}>
+        <span key={i} style={{ display: "inline-block", verticalAlign: "top", marginRight: "0.28em" }}>
           <motion.span
-            initial={{ y: "110%", filter: "blur(6px)" }}
-            animate={{ y: "0%", filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ ...spring.gentle, delay: delay + i * gap }}
-            style={{ display: "inline-block" }}
+            style={{ display: "inline-block", willChange: "transform, opacity" }}
           >
             {word}
           </motion.span>

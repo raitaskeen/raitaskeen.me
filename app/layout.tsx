@@ -13,7 +13,8 @@ import { profile } from "@/lib/data";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600"],
+  display: "swap",
   variable: "--font-poppins",
 });
 
@@ -33,7 +34,10 @@ export const metadata: Metadata = {
     title: "raitaskeen",
   },
   icons: {
-    icon: "/assets/images/logo.ico",
+    icon: [
+      { url: "/assets/images/logo.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico" },
+    ],
     apple: "/icon-192.png",
   },
 };
