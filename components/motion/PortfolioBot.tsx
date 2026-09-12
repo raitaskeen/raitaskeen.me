@@ -13,7 +13,7 @@ import {
 } from "framer-motion";
 import { Send, X, ArrowRight, Download, ExternalLink, RefreshCw } from "lucide-react";
 import { usePointerSystem } from "./PointerSystem";
-import { spring, ease } from "@/lib/motion";
+import { spring, ease, scaleToken } from "@/lib/motion";
 import { classifyIntent, extractActions, getRandomStatus, CompanionAction } from "@/lib/ai";
 
 type Message = {
@@ -447,9 +447,9 @@ export default function PortfolioBot() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.94 }}
+            initial={{ opacity: 0, y: 20, scale: scaleToken.reveal }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.94 }}
+            exit={{ opacity: 0, y: 20, scale: scaleToken.reveal }}
             transition={{ duration: 0.22, ease: ease.out }}
             className="portfolio-bot-panel"
             style={{

@@ -45,6 +45,12 @@ export const distance = {
   large: 64,  // hero/section-level travel
 } as const;
 
+export const scaleToken = {
+  press: 0.97,
+  hover: 1.02,
+  reveal: 0.94,
+} as const;
+
 // Reveal variants shared by <Reveal /> — see components/Reveal.tsx
 export const revealVariants = {
   "fade-up": {
@@ -68,7 +74,7 @@ export const revealVariants = {
     show: { opacity: 1, x: 0 },
   },
   "scale-in": {
-    hidden: { opacity: 0, scale: 0.94 },
+    hidden: { opacity: 0, scale: scaleToken.reveal },
     show: { opacity: 1, scale: 1 },
   },
 } as const;
@@ -86,12 +92,6 @@ export const blurToken = {
   subtle: "blur(4px)",
   medium: "blur(10px)",
   deep: "blur(20px)",
-};
-
-export const scaleToken = {
-  press: 0.97,
-  hover: 1.02,
-  reveal: 0.94,
 };
 
 // Motion hierarchy — see spec §65. Use these to sanity-check how loud a new

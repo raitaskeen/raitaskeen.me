@@ -7,7 +7,7 @@ import Reveal, { Stagger } from "@/components/Reveal";
 import Magnetic from "@/components/motion/Magnetic";
 import SplitText from "@/components/motion/SplitText";
 import ContactSignature from "@/components/motion/ContactSignature";
-import { spring } from "@/lib/motion";
+import { spring, scaleToken } from "@/lib/motion";
 import {
   Mail,
   Phone,
@@ -448,7 +448,7 @@ export default function ContactPage() {
                   disabled={status === "submitting"}
                   className="shimmer-btn"
                   whileHover={valid && status === "idle" && !reduce ? { y: -2 } : undefined}
-                  whileTap={valid && status === "idle" && !reduce ? { scale: 0.97 } : undefined}
+                  whileTap={valid && status === "idle" && !reduce ? { scale: scaleToken.press } : undefined}
                   transition={spring.snap}
                   style={{
                     background:
