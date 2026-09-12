@@ -141,6 +141,25 @@ function cleanProps<T extends Record<string, unknown>>(props: T): Omit<T, "node"
   return rest;
 }
 
+// Safely transforms standalone <br> / <br/> HTML nodes into standard markdown break nodes
+function remarkBr() {
+  function visit(node: { type?: string; value?: string; children?: unknown[] }) {
+    if (!node || !node.children || !Array.isArray(node.children)) return;
+    for (let i = 0; i < node.children.length; i++) {
+      const child = node.children[i] as { type?: string; value?: string; children?: unknown[] };
+      if (child.type === "html" && typeof child.value === "string" && /^\s*<br\s*\/?>\s*$/i.test(child.value)) {
+        node.children[i] = { type: "break" };
+      } else {
+        visit(child);
+      }
+    }
+  }
+
+  return (tree: { type?: string; children?: unknown[] }) => {
+    visit(tree);
+  };
+}
+
 interface BotMarkdownProps {
   content: string;
   isUser?: boolean;
@@ -152,7 +171,7 @@ export default function BotMarkdown({ content, isUser = false }: BotMarkdownProp
   return (
     <div className="bot-markdown-content" style={{ maxWidth: "100%" }}>
       <Markdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[remarkGfm, remarkBr]}
         components={{
           p: ({ children, ...props }) => (
             <p
@@ -345,12 +364,29 @@ export default function BotMarkdown({ content, isUser = false }: BotMarkdownProp
             />
           ),
           table: ({ children, ...props }) => (
-            <div style={{ overflowX: "auto", margin: "8px 0", maxWidth: "100%" }}>
+            <div
+              className="bot-table-wrapper"
+              style={{
+                overflowX: "auto",
+                margin: "10px 0",
+                maxWidth: "100%",
+                borderRadius: 8,
+                border: isUser
+                  ? "1px solid hsla(0, 0%, 0%, 0.15)"
+                  : "1px solid hsla(0, 0%, 100%, 0.1)",
+                background: isUser
+                  ? "hsla(0, 0%, 0%, 0.05)"
+                  : "hsla(0, 0%, 7%, 0.7)",
+              }}
+            >
               <table
+                className="bot-table"
                 style={{
                   borderCollapse: "collapse",
                   width: "100%",
+                  minWidth: "300px",
                   fontSize: "11.5px",
+                  lineHeight: 1.5,
                 }}
                 {...cleanProps(props)}
               >
@@ -364,10 +400,16 @@ export default function BotMarkdown({ content, isUser = false }: BotMarkdownProp
                 borderBottom: isUser
                   ? "1px solid hsla(0, 0%, 0%, 0.25)"
                   : "1px solid hsla(45, 100%, 72%, 0.3)",
-                padding: "4px 8px",
+                background: isUser ? "hsla(0, 0%, 0%, 0.08)" : "hsla(0, 0%, 12%, 0.8)",
+                padding: "6px 10px",
                 textAlign: "left",
                 color: isUser ? "inherit" : "var(--orange-yellow-crayola)",
                 fontWeight: 600,
+                fontSize: "10.5px",
+                letterSpacing: "0.04em",
+                textTransform: "uppercase",
+                verticalAlign: "top",
+                whiteSpace: "nowrap",
               }}
               {...cleanProps(props)}
             >
@@ -380,8 +422,10 @@ export default function BotMarkdown({ content, isUser = false }: BotMarkdownProp
                 borderBottom: isUser
                   ? "1px solid hsla(0, 0%, 0%, 0.1)"
                   : "1px solid hsla(0, 0%, 100%, 0.08)",
-                padding: "4px 8px",
+                padding: "7px 10px",
                 color: isUser ? "inherit" : "var(--white-2)",
+                verticalAlign: "top",
+                wordBreak: "normal",
               }}
               {...cleanProps(props)}
             >

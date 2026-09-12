@@ -658,4 +658,47 @@ textarea:focus-visible {
   background: transparent;
 }
 
+/* ---------- PortfolioBot Table Formatting ---------- */
+.bot-table-wrapper::-webkit-scrollbar {
+  height: 4px;
+}
+
+.bot-table-wrapper::-webkit-scrollbar-thumb {
+  background: hsla(45, 100%, 72%, 0.3);
+  border-radius: 2px;
+}
+
+.bot-table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bot-table {
+  border-collapse: collapse;
+}
+
+.bot-table th,
+.bot-table td {
+  vertical-align: top !important;
+  word-break: normal !important;
+}
+
+.bot-table tr th:first-child,
+.bot-table tr td:first-child {
+  font-weight: 600;
+  color: var(--orange-yellow-crayola);
+  white-space: nowrap;
+  min-width: 90px;
+  background: hsla(0, 0%, 0%, 0.2);
+  border-right: 1px solid hsla(0, 0%, 100%, 0.07);
+}
+
+.bot-table tr td:last-child {
+  min-width: 170px;
+}
+
+.bot-table tr:last-child td {
+  border-bottom: none;
+}
+
+
 

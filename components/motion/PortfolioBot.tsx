@@ -576,7 +576,7 @@ export default function PortfolioBot() {
                       borderBottomRightRadius: m.role === "user" ? 2 : 12,
                       borderBottomLeftRadius: m.role === "assistant" ? 2 : 12,
                       maxWidth: "100%",
-                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
                     }}
                   >
                     <BotMarkdown content={m.content} isUser={m.role === "user"} />
