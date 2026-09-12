@@ -6,7 +6,7 @@ import Nav from "@/components/Nav";
 import ScrollProgress from "@/components/motion/ScrollProgress";
 import PointerSystem from "@/components/motion/PointerSystem";
 import Background from "@/components/Background";
-import PortfolioBot from "@/components/motion/PortfolioBot";
+import PortfolioBot from "@/components/PortfolioBotClient";
 import CustomCursor from "@/components/motion/CustomCursor";
 import PwaRegister from "@/components/PwaRegister";
 import { profile } from "@/lib/data";
