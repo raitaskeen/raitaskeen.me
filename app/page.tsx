@@ -59,7 +59,7 @@ export default async function Home() {
 
           {/* Short Introduction */}
           <div style={{ maxWidth: "62ch", marginTop: 18 }}>
-            <Stagger gap={0.08} variant="fade-up" className="stagger-col">
+            <Stagger immediate gap={0.04} variant="fade-up" className="stagger-col">
               {profile.bio.map((p, i) => (
                 <p key={i} style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-5)", lineHeight: 1.7, marginBottom: 12 }}>{p}</p>
               ))}

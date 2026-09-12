@@ -15,26 +15,34 @@ export default function PwaRegister() {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
   useEffect(() => {
-    // 1. Register Service Worker
+    // 1. Register Service Worker (deferred until after window load to protect initial render)
     if (typeof window !== "undefined" && "serviceWorker" in navigator && process.env.NODE_ENV === "production") {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((reg) => {
-          // Check for sw update
-          reg.onupdatefound = () => {
-            const installing = reg.installing;
-            if (installing) {
-              installing.onstatechange = () => {
-                if (installing.state === "installed" && navigator.serviceWorker.controller) {
-                  // New update available
-                }
-              };
-            }
-          };
-        })
-        .catch(() => {
-          // Service worker registration ignored in environments that don't support it
-        });
+      const registerSw = () => {
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then((reg) => {
+            // Check for sw update
+            reg.onupdatefound = () => {
+              const installing = reg.installing;
+              if (installing) {
+                installing.onstatechange = () => {
+                  if (installing.state === "installed" && navigator.serviceWorker.controller) {
+                    // New update available
+                  }
+                };
+              }
+            };
+          })
+          .catch(() => {
+            // Service worker registration ignored in environments that don't support it
+          });
+      };
+
+      if (document.readyState === "complete") {
+        registerSw();
+      } else {
+        window.addEventListener("load", registerSw, { once: true });
+      }
     }
 
     // 2. Handle beforeinstallprompt event
