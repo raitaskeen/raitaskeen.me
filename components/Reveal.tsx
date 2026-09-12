@@ -47,11 +47,13 @@ export function Stagger({
   gap = stagger.normal,
   variant = "fade-up",
   className,
+  immediate = false,
 }: {
   children: React.ReactNode[];
   gap?: number;
   variant?: RevealVariant;
   className?: string;
+  immediate?: boolean;
 }) {
   const reduce = useReducedMotion();
   const variants = revealVariants[variant];
@@ -64,8 +66,9 @@ export function Stagger({
     <motion.div
       className={className}
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
+      animate={immediate ? "show" : undefined}
+      whileInView={immediate ? undefined : "show"}
+      viewport={immediate ? undefined : { once: true, margin: "-60px" }}
       variants={{ show: { transition: { staggerChildren: gap } } }}
     >
       {children.map((child, i) => (

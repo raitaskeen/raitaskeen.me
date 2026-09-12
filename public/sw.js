@@ -3,16 +3,8 @@ const CACHE_NAME = "raitaskeen-v2";
 
 const PRECACHE_ASSETS = [
   "/",
-  "/about",
-  "/projects",
-  "/projects/legacy-exodus",
-  "/resources",
-  "/contact",
-  "/icon-192.png",
-  "/icon-512.png",
-  "/icon-maskable.png",
   "/assets/images/logo.svg",
-  "/assets/Taskeen_Haider_Resume.pdf",
+  "/icon-192.png",
 ];
 
 // Install: Cache critical app shell assets
