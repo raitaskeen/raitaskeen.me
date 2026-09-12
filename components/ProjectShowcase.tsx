@@ -7,7 +7,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { Github, ExternalLink, Star, ChevronDown, Layers, Globe, Shield, ArrowUpRight } from "lucide-react";
-import { spring, ease } from "@/lib/motion";
+import { spring, ease, duration } from "@/lib/motion";
 
 export type ShowcaseProject = {
   title: string;
@@ -151,7 +151,7 @@ export default function ProjectShowcase({ projects }: { projects: ShowcaseProjec
       {/* Projects Interactive Grid */}
       <motion.div
         layout
-        transition={{ duration: 0.2, ease: "easeOut" }}
+        transition={{ duration: duration.fast, ease: "easeOut" }}
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
@@ -239,7 +239,7 @@ function ProjectCard({
       initial={reduce ? undefined : { opacity: 0, y: 16 }}
       animate={reduce ? undefined : { opacity: 1, y: 0 }}
       exit={reduce ? undefined : { opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: duration.fast }}
       whileHover={reduce ? undefined : { y: -3 }}
       onClick={handleCardClick}
       onKeyDown={handleKeyDown}
