@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { revealVariants, spring, ease, type RevealVariant } from "@/lib/motion";
+import { revealVariants, spring, ease, stagger, type RevealVariant } from "@/lib/motion";
 
 export default function Reveal({
   children,
@@ -44,7 +44,7 @@ export default function Reveal({
 // isn't reliable, so in practice we pass an array and render internally.
 export function Stagger({
   children,
-  gap = 0.07,
+  gap = stagger.normal,
   variant = "fade-up",
   className,
 }: {

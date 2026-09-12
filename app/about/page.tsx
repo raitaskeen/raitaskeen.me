@@ -16,6 +16,7 @@ import SkillBar from "@/components/SkillBar";
 import SectionHeading from "@/components/motion/SectionHeading";
 import JourneyNarrative from "@/components/JourneyNarrative";
 import QuietMark from "@/components/QuietMark";
+import { stagger } from "@/lib/motion";
 import {
   Briefcase,
   GraduationCap,
@@ -191,7 +192,7 @@ export default function AboutPage() {
           }}
         >
           {courses.map((course, idx) => (
-            <Reveal key={course.title} delay={idx * 0.04}>
+            <Reveal key={course.title} delay={idx * stagger.tight}>
               <div
                 className="gradient-border-hover"
                 style={{
