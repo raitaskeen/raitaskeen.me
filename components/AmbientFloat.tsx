@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { blurToken } from "@/lib/motion";
 
 // Ambient background light field. Each instance drifts on its own
 // asynchronous loop (different duration/offset) so multiple blobs never
@@ -36,7 +37,7 @@ export default function AmbientFloat({
         width: size, height: size,
         borderRadius: "50%",
         background: `radial-gradient(circle at 40% 40%, ${color}, transparent 70%)`,
-        filter: "blur(20px)",
+        filter: blurToken.deep,
         pointerEvents: "none",
         zIndex: 0,
         willChange: "transform",

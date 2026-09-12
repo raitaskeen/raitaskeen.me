@@ -51,6 +51,12 @@ export const scaleToken = {
   reveal: 0.94,
 } as const;
 
+export const blurToken = {
+  subtle: "blur(4px)",
+  medium: "blur(10px)",
+  deep: "blur(20px)",
+} as const;
+
 // Reveal variants shared by <Reveal /> — see components/Reveal.tsx
 export const revealVariants = {
   "fade-up": {
@@ -58,7 +64,7 @@ export const revealVariants = {
     show: { opacity: 1, y: 0 },
   },
   "fade-blur": {
-    hidden: { opacity: 0, y: 16, filter: "blur(10px)" },
+    hidden: { opacity: 0, y: 16, filter: blurToken.medium },
     show: { opacity: 1, y: 0, filter: "blur(0px)" },
   },
   "clip-up": {
@@ -86,12 +92,6 @@ export const stagger = {
   tight: 0.04,
   normal: 0.07,
   loose: 0.12,
-};
-
-export const blurToken = {
-  subtle: "blur(4px)",
-  medium: "blur(10px)",
-  deep: "blur(20px)",
 };
 
 // Motion hierarchy — see spec §65. Use these to sanity-check how loud a new
