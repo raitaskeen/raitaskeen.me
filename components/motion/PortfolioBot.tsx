@@ -13,8 +13,9 @@ import {
 } from "framer-motion";
 import { Send, X, ArrowRight, Download, ExternalLink, RefreshCw } from "lucide-react";
 import { usePointerSystem } from "./PointerSystem";
-import { spring } from "@/lib/motion";
+import { spring, ease, scaleToken } from "@/lib/motion";
 import { classifyIntent, extractActions, getRandomStatus, CompanionAction } from "@/lib/ai";
+import BotMarkdown from "./BotMarkdown";
 
 type Message = {
   id: string;
@@ -447,10 +448,10 @@ export default function PortfolioBot() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.94 }}
+            initial={{ opacity: 0, y: 20, scale: scaleToken.reveal }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.94 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, y: 20, scale: scaleToken.reveal }}
+            transition={{ duration: 0.22, ease: ease.out }}
             className="portfolio-bot-panel"
             style={{
               position: "absolute",
@@ -551,6 +552,7 @@ export default function PortfolioBot() {
                   style={{
                     alignSelf: m.role === "user" ? "flex-end" : "flex-start",
                     maxWidth: "85%",
+                    minWidth: 0,
                   }}
                 >
                   <div
@@ -573,10 +575,11 @@ export default function PortfolioBot() {
                           : "1px solid hsla(0, 0%, 100%, 0.08)",
                       borderBottomRightRadius: m.role === "user" ? 2 : 12,
                       borderBottomLeftRadius: m.role === "assistant" ? 2 : 12,
-                      whiteSpace: "pre-wrap",
+                      maxWidth: "100%",
+                      overflowWrap: "break-word",
                     }}
                   >
-                    {m.content}
+                    <BotMarkdown content={m.content} isUser={m.role === "user"} />
                   </div>
 
                   {/* Action Buttons */}

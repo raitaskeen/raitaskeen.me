@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   MotionValue,
   useMotionValue,
@@ -47,11 +47,26 @@ export default function PointerSystem({ children }: { children: React.ReactNode 
   const rawVelocityY = useVelocity(springY);
   const speed = useMotionValue(0);
   const active = useMotionValue(0);
-  const isFinePointer = useRef(true);
+  const [isFinePointer, setIsFinePointer] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(pointer: fine)").matches;
+  });
 
   useEffect(() => {
-    isFinePointer.current = window.matchMedia("(pointer: fine)").matches;
-    if (reduce || !isFinePointer.current) return;
+    const fineQuery = window.matchMedia("(pointer: fine)");
+    setIsFinePointer(fineQuery.matches);
+
+    const onQueryChange = (e: MediaQueryListEvent) => {
+      setIsFinePointer(e.matches);
+    };
+    fineQuery.addEventListener("change", onQueryChange);
+    return () => {
+      fineQuery.removeEventListener("change", onQueryChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (reduce || !isFinePointer) return;
 
     function onMove(e: PointerEvent) {
       x.set(e.clientX);
@@ -75,7 +90,7 @@ export default function PointerSystem({ children }: { children: React.ReactNode 
       window.removeEventListener("blur", onLeave);
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, [reduce, x, y, active]);
+  }, [reduce, isFinePointer, x, y, active]);
 
   useEffect(() => {
     if (reduce) return;
@@ -95,7 +110,7 @@ export default function PointerSystem({ children }: { children: React.ReactNode 
     velocityY: rawVelocityY,
     speed,
     active,
-    isFinePointer: isFinePointer.current,
+    isFinePointer,
   };
 
   return <PointerSystemContext.Provider value={value}>{children}</PointerSystemContext.Provider>;

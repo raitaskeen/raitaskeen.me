@@ -9,6 +9,7 @@ import {
   useTransform,
   useReducedMotion,
 } from "framer-motion";
+import { usePointerSystem } from "./PointerSystem";
 
 // A soft radial light that trails the cursor inside its parent, as if the
 // pointer is influencing a physical environment rather than being attached
@@ -21,6 +22,7 @@ import {
 // differently in a real room. Both layers gain a touch of extra bloom when
 // the pointer is moving fast, and fade out together when it leaves.
 export default function PointerLight({ size = 420, color = "hsla(45,100%,72%,0.10)" }: { size?: number; color?: string }) {
+  const pointer = usePointerSystem();
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const x = useMotionValue(-9999);
@@ -46,7 +48,7 @@ export default function PointerLight({ size = 420, color = "hsla(45,100%,72%,0.1
 
   const rectRef = useRef<DOMRect | null>(null);
 
-  if (reduce) return null;
+  if (reduce || (pointer && !pointer.isFinePointer)) return null;
 
   return (
     <div

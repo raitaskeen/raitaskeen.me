@@ -161,9 +161,13 @@
   background: hsla(45, 100%, 72%, 0.14);
 }
 
-/* ---------- Floating-label form fields (contact page) ---------- */
+/* ---------- Form fields (contact page) ---------- */
 .field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   position: relative;
+  width: 100%;
 }
 
 .field-group input,
@@ -172,22 +176,32 @@
 }
 
 .field-label {
-  position: absolute;
-  left: 14px;
-  top: 12px;
+  font-size: var(--fs-7);
+  font-weight: 500;
   color: var(--light-gray-70);
-  font-size: var(--fs-6);
-  pointer-events: none;
-  transform-origin: left top;
-  transition: transform var(--transition-1), color var(--transition-1), top var(--transition-1);
-  background: var(--eerie-black-1);
-  padding: 0 4px;
+  letter-spacing: 0.02em;
+  transition: color var(--transition-1);
+  background: transparent;
+  padding: 0;
+  user-select: none;
 }
 
-.field-group.active .field-label {
-  top: -8px;
-  transform: scale(0.78);
+.field-group.focused .field-label {
   color: var(--orange-yellow-crayola);
+}
+
+.field-group.error .field-label {
+  color: var(--bittersweet-shimmer);
+}
+
+.field-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.field-group input::placeholder,
+.field-group textarea::placeholder {
+  color: hsla(0, 0%, 100%, 0.25);
 }
 
 /* ---------- New-page layout helpers (site nav wasn't in the original single-page CSS) ---------- */
@@ -635,4 +649,70 @@ textarea:focus-visible {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+/* ---------- PortfolioBot Markdown & Code Block Formatting ---------- */
+.bot-markdown-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+.bot-markdown-content > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+.bot-code-block pre::-webkit-scrollbar {
+  height: 4px;
+}
+
+.bot-code-block pre::-webkit-scrollbar-thumb {
+  background: hsla(45, 100%, 72%, 0.3);
+  border-radius: 2px;
+}
+
+.bot-code-block pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- PortfolioBot Table Formatting ---------- */
+.bot-table-wrapper::-webkit-scrollbar {
+  height: 4px;
+}
+
+.bot-table-wrapper::-webkit-scrollbar-thumb {
+  background: hsla(45, 100%, 72%, 0.3);
+  border-radius: 2px;
+}
+
+.bot-table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bot-table {
+  border-collapse: collapse;
+}
+
+.bot-table th,
+.bot-table td {
+  vertical-align: top !important;
+  word-break: normal !important;
+}
+
+.bot-table tr th:first-child,
+.bot-table tr td:first-child {
+  font-weight: 600;
+  color: var(--orange-yellow-crayola);
+  white-space: nowrap;
+  min-width: 90px;
+  background: hsla(0, 0%, 0%, 0.2);
+  border-right: 1px solid hsla(0, 0%, 100%, 0.07);
+}
+
+.bot-table tr td:last-child {
+  min-width: 170px;
+}
+
+.bot-table tr:last-child td {
+  border-bottom: none;
+}
+
+
 

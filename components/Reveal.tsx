@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { revealVariants, spring, type RevealVariant } from "@/lib/motion";
+import { revealVariants, spring, ease, stagger, type RevealVariant } from "@/lib/motion";
 
 export default function Reveal({
   children,
@@ -30,7 +30,7 @@ export default function Reveal({
       whileInView={immediate ? undefined : "show"}
       viewport={immediate ? undefined : { once: true, margin: "-60px" }}
       variants={variants}
-      transition={duration ? { duration, delay, ease: [0.16, 1, 0.3, 1] } : { ...spring.gentle, delay }}
+      transition={duration ? { duration, delay, ease: ease.out } : { ...spring.gentle, delay }}
     >
       {children}
     </motion.div>
@@ -44,7 +44,7 @@ export default function Reveal({
 // isn't reliable, so in practice we pass an array and render internally.
 export function Stagger({
   children,
-  gap = 0.07,
+  gap = stagger.normal,
   variant = "fade-up",
   className,
 }: {
