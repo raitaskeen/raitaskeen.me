@@ -27,12 +27,12 @@ export default async function Home() {
           <SplitText
             text={profile.name}
             as="h1"
-            delay={0.1}
+            delay={0}
             style={{ fontSize: "clamp(34px, 6.5vw, 60px)", fontWeight: 600, color: "var(--white-2)", lineHeight: 1.1 }}
           />
 
           {/* Role / Typewriter */}
-          <Reveal variant="fade-blur" delay={0.25} immediate>
+          <Reveal variant="fade-up" delay={0.12} immediate>
             <div
               style={{
                 fontSize: "var(--fs-2)",
@@ -72,6 +72,7 @@ export default async function Home() {
               <Magnetic strength={0.3}>
                 <Link
                   href="/contact"
+                  prefetch={false}
                   className="shimmer-btn"
                   style={{
                     display: "inline-block",
@@ -156,6 +157,7 @@ export default async function Home() {
           <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 18, flexWrap: "wrap" }}>
             <Link
               href="/projects/legacy-exodus"
+              prefetch={false}
               className="link-draw"
               style={{
                 color: "var(--orange-yellow-crayola)",
@@ -170,6 +172,7 @@ export default async function Home() {
             </Link>
             <Link
               href="/projects"
+              prefetch={false}
               style={{
                 color: "var(--light-gray-70)",
                 fontSize: "var(--fs-7)",
@@ -213,6 +216,7 @@ export default async function Home() {
 
           <Link
             href="/about"
+            prefetch={false}
             className="link-draw"
             style={{
               color: "var(--white-2)",

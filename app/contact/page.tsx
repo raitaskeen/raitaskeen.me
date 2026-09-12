@@ -241,7 +241,7 @@ export default function ContactPage() {
   return (
     <div className="page-shell">
       {/* Editorial Header */}
-      <Reveal variant="fade-blur">
+      <Reveal variant="fade-up">
         <p style={{ color: "var(--orange-yellow-crayola)", fontFamily: "monospace", fontSize: "var(--fs-7)" }}>
           contact/
         </p>
