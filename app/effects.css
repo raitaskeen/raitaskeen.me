@@ -636,3 +636,26 @@ textarea:focus-visible {
   50% { opacity: 0; }
 }
 
+/* ---------- PortfolioBot Markdown & Code Block Formatting ---------- */
+.bot-markdown-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+.bot-markdown-content > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+.bot-code-block pre::-webkit-scrollbar {
+  height: 4px;
+}
+
+.bot-code-block pre::-webkit-scrollbar-thumb {
+  background: hsla(45, 100%, 72%, 0.3);
+  border-radius: 2px;
+}
+
+.bot-code-block pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+

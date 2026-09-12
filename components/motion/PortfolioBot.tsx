@@ -15,6 +15,7 @@ import { Send, X, ArrowRight, Download, ExternalLink, RefreshCw } from "lucide-r
 import { usePointerSystem } from "./PointerSystem";
 import { spring, ease, scaleToken } from "@/lib/motion";
 import { classifyIntent, extractActions, getRandomStatus, CompanionAction } from "@/lib/ai";
+import BotMarkdown from "./BotMarkdown";
 
 type Message = {
   id: string;
@@ -551,6 +552,7 @@ export default function PortfolioBot() {
                   style={{
                     alignSelf: m.role === "user" ? "flex-end" : "flex-start",
                     maxWidth: "85%",
+                    minWidth: 0,
                   }}
                 >
                   <div
@@ -573,10 +575,11 @@ export default function PortfolioBot() {
                           : "1px solid hsla(0, 0%, 100%, 0.08)",
                       borderBottomRightRadius: m.role === "user" ? 2 : 12,
                       borderBottomLeftRadius: m.role === "assistant" ? 2 : 12,
-                      whiteSpace: "pre-wrap",
+                      maxWidth: "100%",
+                      wordBreak: "break-word",
                     }}
                   >
-                    {m.content}
+                    <BotMarkdown content={m.content} isUser={m.role === "user"} />
                   </div>
 
                   {/* Action Buttons */}
