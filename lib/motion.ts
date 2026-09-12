@@ -36,10 +36,19 @@ export const ease = {
   inOut: [0.65, 0, 0.35, 1] as const,
 };
 
+// Conceptual tokens so every component reaches for the same vocabulary of
+// "how far", "how blurred", "how scaled" instead of picking new numbers.
+export const distance = {
+  micro: 2,   // text nudges, icon shifts
+  small: 8,   // chip/card lift, arrow travel
+  medium: 24, // reveal-on-scroll offset
+  large: 64,  // hero/section-level travel
+} as const;
+
 // Reveal variants shared by <Reveal /> — see components/Reveal.tsx
 export const revealVariants = {
   "fade-up": {
-    hidden: { opacity: 0, y: 24 },
+    hidden: { opacity: 0, y: distance.medium },
     show: { opacity: 1, y: 0 },
   },
   "fade-blur": {
@@ -71,15 +80,6 @@ export const stagger = {
   tight: 0.04,
   normal: 0.07,
   loose: 0.12,
-};
-
-// Conceptual tokens so every component reaches for the same vocabulary of
-// "how far", "how blurred", "how scaled" instead of picking new numbers.
-export const distance = {
-  micro: 2,   // text nudges, icon shifts
-  small: 8,   // chip/card lift, arrow travel
-  medium: 24, // reveal-on-scroll offset
-  large: 64,  // hero/section-level travel
 };
 
 export const blurToken = {
