@@ -423,7 +423,7 @@ export default function ContactPage() {
                 <Field
                   name="fullname"
                   label="Full name"
-                  placeholder="e.g. Taskeen Haider"
+                  placeholder="Enter Your Beutiful Name"
                   value={form.fullname}
                   onChange={(v) => setForm({ ...form, fullname: v })}
                   disabled={status !== "idle"}
@@ -435,7 +435,7 @@ export default function ContactPage() {
                   name="email"
                   type="email"
                   label="Email address"
-                  placeholder="e.g. taskeen@example.com"
+                  placeholder="Enter Your Email Address"
                   value={form.email}
                   onChange={(v) => setForm({ ...form, email: v })}
                   disabled={status !== "idle"}
