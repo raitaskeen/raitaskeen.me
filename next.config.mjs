@@ -6,6 +6,8 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     remotePatterns: [
       { protocol: "https", hostname: "ghchart.rshah.org" },
+      { protocol: "https", hostname: "streak-stats.demolab.com" },
+      { protocol: "https", hostname: "komarev.com" },
     ],
   },
   async headers() {

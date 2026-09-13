@@ -47,6 +47,13 @@ export default function EngineeringStats({ gh }: EngineeringStatsProps) {
       sub: "Verified Repos & Tooling",
       sparklinePath: "M 0 15 L 16 15 L 24 9 L 36 9 L 44 4 L 60 4",
     },
+    {
+      id: "contributions",
+      formattedNumber: "9.7K+",
+      label: "CODE CONTRIBUTIONS",
+      sub: "292-Day Streak · Live Commits",
+      sparklinePath: "M 0 16 L 12 14 L 24 11 L 36 7 L 48 4 L 60 2",
+    },
   ];
 
   return (
@@ -112,7 +119,7 @@ export default function EngineeringStats({ gh }: EngineeringStatsProps) {
                   />
                   <circle
                     cx="60"
-                    cy={stat.id === "exp" ? 3 : stat.id === "followers" ? 14 : 4}
+                    cy={stat.id === "exp" ? 3 : stat.id === "followers" ? 14 : stat.id === "contributions" ? 2 : 4}
                     r="2"
                     fill="var(--orange-yellow-crayola)"
                   />
