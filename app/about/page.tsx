@@ -377,7 +377,7 @@ export default function AboutPage() {
             }}
           >
             <Image
-              src={`https://komarev.com/ghpvc/?username=${profile.github}&label=Profile%20Views&color=1DA1F2&style=flat-square`}
+              src={`https://komarev.com/ghpvc/?username=${profile.github}&label=Profile%20Views&color=E8934A&style=flat-square`}
               alt="GitHub Profile Views"
               width={122}
               height={20}
@@ -511,7 +511,7 @@ export default function AboutPage() {
               style={{ display: "inline-block", maxWidth: "100%" }}
             >
               <Image
-                src={`https://streak-stats.demolab.com?user=${profile.github}&theme=transparent&hide_border=true&timezone=Asia%2FKarachi`}
+                src={`https://streak-stats.demolab.com?user=${profile.github}&theme=transparent&hide_border=true&timezone=Asia%2FKarachi&ring=FFDB70&fire=FFDB70&currStreakNum=FFDB70&sideNums=FFDB70&currStreakLabel=FFDB70&sideLabels=FFDB70&dates=9E9E9E&stroke=2A2A2A`}
                 alt={`${profile.github} GitHub Streak`}
                 width={495}
                 height={195}
