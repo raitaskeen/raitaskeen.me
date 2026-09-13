@@ -27,6 +27,14 @@ import {
 export default function AboutPage() {
   return (
     <div className="page-shell">
+      {/* External badge domain preconnect & DNS-prefetch */}
+      <link rel="preconnect" href="https://streak-stats.demolab.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://komarev.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://ghchart.rshah.org" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="https://streak-stats.demolab.com" />
+      <link rel="dns-prefetch" href="https://komarev.com" />
+      <link rel="dns-prefetch" href="https://ghchart.rshah.org" />
+
       {/* 1 — ABOUT / IDENTITY */}
       <Reveal>
         <div style={{ maxWidth: "68ch" }}>

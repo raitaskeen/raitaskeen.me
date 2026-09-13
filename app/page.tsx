@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { profile, experience } from "@/lib/data";
 import { getGithubStats } from "@/lib/github";
 import Reveal, { Stagger } from "@/components/Reveal";
@@ -11,8 +12,72 @@ import Magnetic from "@/components/motion/Magnetic";
 import PointerLight from "@/components/motion/PointerLight";
 import { Download, ArrowUpRight, ArrowRight } from "lucide-react";
 
-export default async function Home() {
+async function EngineeringStatsSection() {
   const gh = await getGithubStats(profile.github);
+  return <EngineeringStats gh={gh} />;
+}
+
+function EngineeringStatsSkeleton() {
+  return (
+    <div
+      aria-label="Loading Engineering Metrics"
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: 16,
+        marginTop: 32,
+      }}
+    >
+      {[1, 2, 3, 4].map((i) => (
+        <div
+          key={i}
+          className="gradient-border-hover"
+          style={{
+            padding: "20px 22px",
+            borderRadius: 12,
+            background: "hsla(0, 0%, 9%, 0.85)",
+            backdropFilter: "blur(12px)",
+            border: "1px solid hsla(45, 100%, 72%, 0.15)",
+            minHeight: 110,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            gap: 16,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
+            <div
+              style={{
+                width: 72,
+                height: 38,
+                borderRadius: 6,
+                background: "hsla(45, 100%, 72%, 0.15)",
+              }}
+            />
+            <div
+              style={{
+                width: 60,
+                height: 18,
+                borderRadius: 4,
+                background: "hsla(45, 100%, 72%, 0.08)",
+              }}
+            />
+          </div>
+          <div
+            style={{
+              width: "60%",
+              height: 14,
+              borderRadius: 4,
+              background: "hsla(0, 0%, 100%, 0.08)",
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default async function Home() {
   const latest = experience[0];
 
   return (
@@ -131,7 +196,9 @@ export default async function Home() {
 
       {/* 2 — ENGINEERING STATS */}
       <Reveal variant="fade-up" delay={0.1}>
-        <EngineeringStats gh={gh} />
+        <Suspense fallback={<EngineeringStatsSkeleton />}>
+          <EngineeringStatsSection />
+        </Suspense>
       </Reveal>
 
       {/* 3 — SELECTED WORK */}

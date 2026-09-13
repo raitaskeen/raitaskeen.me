@@ -3,6 +3,8 @@ const nextConfig = {
   // Turns off the floating Next.js dev-mode badge in the corner of the screen.
   devIndicators: false,
   images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 2678400,
     dangerouslyAllowSVG: true,
     remotePatterns: [
       { protocol: "https", hostname: "ghchart.rshah.org" },
@@ -30,6 +32,46 @@ const nextConfig = {
           {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
+          },
+        ],
+      },
+      {
+        source: "/sw.js",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+          {
+            key: "Service-Worker-Allowed",
+            value: "/",
+          },
+        ],
+      },
+      {
+        source: "/assets/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/:file(.*\\.(?:svg|png|jpg|jpeg|webp|avif|pdf|ico|woff|woff2|ttf|otf))",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/manifest.webmanifest",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
           },
         ],
       },
