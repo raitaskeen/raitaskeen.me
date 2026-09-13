@@ -6,6 +6,8 @@ import {
   sanitizeMessages,
 } from "@/lib/ai";
 
+export const runtime = "edge";
+
 export async function POST(req: Request) {
   try {
     const forwarded = req.headers.get("x-forwarded-for");

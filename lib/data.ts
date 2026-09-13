@@ -35,7 +35,11 @@ export const profile = {
   stats: {
     yearsCoding: 3,
     githubFollowers: 70,
-    publicRepos: 10,
+    publicRepos: 8,
+    totalContributions: "9,700+",
+    currentStreak: "50 Days",
+    longestStreak: "292 Days",
+    profileViews: "1,380+",
   },
 };
 

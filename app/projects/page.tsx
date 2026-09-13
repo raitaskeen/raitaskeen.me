@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { featuredProjects, openSource, upcomingProjects, profile } from "@/lib/data";
 import { getGithubStats } from "@/lib/github";
 import Reveal from "@/components/Reveal";
@@ -7,15 +8,56 @@ import LabIncubator from "@/components/LabIncubator";
 import QuietMark from "@/components/QuietMark";
 import { ArrowUpRight } from "lucide-react";
 
-export default async function ProjectsPage() {
+async function ShowcaseProjectsSection() {
   const gh = await getGithubStats(profile.github);
-
   const showcaseProjects = featuredProjects.map((p) => {
     const repoSlug = p.links.find((l) => l.url.includes("github.com"))?.url.split("/").slice(-1)[0];
     const stars = repoSlug ? gh?.starsByRepo[repoSlug] : undefined;
     return { ...p, stars };
   });
+  return <ProjectShowcase projects={showcaseProjects} />;
+}
 
+function ProjectShowcaseSkeleton() {
+  return (
+    <div style={{ marginTop: 32 }} aria-label="Loading Projects">
+      <div style={{ display: "flex", gap: 10, marginBottom: 28 }}>
+        {[70, 95, 85].map((w, i) => (
+          <div
+            key={i}
+            style={{
+              width: w,
+              height: 36,
+              borderRadius: 8,
+              background: "hsla(0, 0%, 9%, 0.88)",
+              border: "1px solid hsla(0, 0%, 100%, 0.08)",
+            }}
+          />
+        ))}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            style={{
+              padding: 24,
+              borderRadius: 14,
+              background: "hsla(0, 0%, 9%, 0.88)",
+              border: "1px solid hsla(0, 0%, 100%, 0.08)",
+              minHeight: 280,
+            }}
+          >
+            <div style={{ width: "100%", height: 160, borderRadius: 10, background: "hsla(0, 0%, 100%, 0.04)" }} />
+            <div style={{ width: "55%", height: 20, borderRadius: 4, background: "hsla(45, 100%, 72%, 0.12)", marginTop: 16 }} />
+            <div style={{ width: "85%", height: 14, borderRadius: 4, background: "hsla(0, 0%, 100%, 0.06)", marginTop: 10 }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default async function ProjectsPage() {
   return (
     <div className="page-shell">
       <Reveal>
@@ -88,7 +130,9 @@ export default async function ProjectsPage() {
         </div>
       </Reveal>
 
-      <ProjectShowcase projects={showcaseProjects} />
+      <Suspense fallback={<ProjectShowcaseSkeleton />}>
+        <ShowcaseProjectsSection />
+      </Suspense>
 
       <section style={{ marginTop: 56 }}>
         <Reveal>

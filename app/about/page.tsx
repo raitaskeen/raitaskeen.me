@@ -27,6 +27,14 @@ import {
 export default function AboutPage() {
   return (
     <div className="page-shell">
+      {/* External badge domain preconnect & DNS-prefetch */}
+      <link rel="preconnect" href="https://streak-stats.demolab.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://komarev.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://ghchart.rshah.org" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="https://streak-stats.demolab.com" />
+      <link rel="dns-prefetch" href="https://komarev.com" />
+      <link rel="dns-prefetch" href="https://ghchart.rshah.org" />
+
       {/* 1 — ABOUT / IDENTITY */}
       <Reveal>
         <div style={{ maxWidth: "68ch" }}>
@@ -352,7 +360,40 @@ export default function AboutPage() {
 
       {/* 06 — GITHUB STATS / OPEN SOURCE */}
       <section style={{ marginTop: 64 }}>
-        <SectionHeading index="06" title="GitHub Signal &amp; Contributions" />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 16,
+            marginBottom: 20,
+          }}
+        >
+          <SectionHeading index="06" title="GitHub Signal &amp; Contributions" style={{ marginBottom: 0 }} />
+          <div
+            className="gradient-border-hover"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "6px 14px",
+              background: "hsla(0, 0%, 9%, 0.88)",
+              borderRadius: 8,
+              border: "1px solid hsla(0, 0%, 100%, 0.08)",
+              alignSelf: "flex-start",
+            }}
+          >
+            <Image
+              src={`https://komarev.com/ghpvc/?username=${profile.github}&label=Profile%20Views&color=E8934A&style=flat-square`}
+              alt="GitHub Profile Views"
+              width={122}
+              height={20}
+              unoptimized
+              style={{ display: "block" }}
+            />
+          </div>
+        </div>
 
         {/* Stats Summary */}
         <div
@@ -392,11 +433,50 @@ export default function AboutPage() {
             }}
           >
             <span style={{ fontSize: 11, fontFamily: "monospace", color: "var(--orange-yellow-crayola)", textTransform: "uppercase" }}>
+              VERIFIED COMMITS
+            </span>
+            <p style={{ color: "var(--white-2)", fontSize: "var(--fs-2)", fontWeight: 700, margin: "6px 0 0" }}>
+              {profile.stats.totalContributions} Contributions
+            </p>
+          </div>
+
+          <div
+            className="gradient-border-hover"
+            style={{
+              padding: "18px 20px",
+              borderRadius: 12,
+              background: "hsla(0, 0%, 9%, 0.88)",
+              backdropFilter: "blur(14px)",
+              border: "1px solid hsla(0, 0%, 100%, 0.08)",
+            }}
+          >
+            <span style={{ fontSize: 11, fontFamily: "monospace", color: "var(--orange-yellow-crayola)", textTransform: "uppercase" }}>
               OPEN SOURCE ARTIFACTS
             </span>
             <p style={{ color: "var(--white-2)", fontSize: "var(--fs-2)", fontWeight: 700, margin: "6px 0 0" }}>
               {profile.stats.publicRepos}+ Repositories
             </p>
+          </div>
+
+          <div
+            className="gradient-border-hover"
+            style={{
+              padding: "18px 20px",
+              borderRadius: 12,
+              background: "hsla(0, 0%, 9%, 0.88)",
+              backdropFilter: "blur(14px)",
+              border: "1px solid hsla(0, 0%, 100%, 0.08)",
+            }}
+          >
+            <span style={{ fontSize: 11, fontFamily: "monospace", color: "var(--orange-yellow-crayola)", textTransform: "uppercase" }}>
+              STREAK MOMENTUM
+            </span>
+            <p style={{ color: "var(--white-2)", fontSize: "var(--fs-2)", fontWeight: 700, margin: "6px 0 0" }}>
+              {profile.stats.longestStreak} Peak
+            </p>
+            <span style={{ fontSize: 11, color: "var(--light-gray-70)", fontFamily: "monospace" }}>
+              {profile.stats.currentStreak} Current
+            </span>
           </div>
         </div>
 
@@ -410,6 +490,43 @@ export default function AboutPage() {
               height={104}
               style={{ width: "100%", minWidth: 640, height: "auto", filter: "invert(0.05)" }}
             />
+          </div>
+        </Reveal>
+
+        {/* Live GitHub Streak Stats */}
+        <Reveal delay={0.08}>
+          <div
+            className="gradient-border-hover"
+            style={{
+              padding: "20px 24px",
+              marginBottom: 20,
+              borderRadius: 14,
+              background: "hsla(0, 0%, 9%, 0.88)",
+              backdropFilter: "blur(14px)",
+              border: "1px solid hsla(0, 0%, 100%, 0.08)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              overflowX: "auto",
+            }}
+          >
+            <a
+              href={`https://github.com/${profile.github}`}
+              target="_blank"
+              rel="noreferrer"
+              title="View GitHub Streak Profile"
+              style={{ display: "inline-block", maxWidth: "100%" }}
+            >
+              <Image
+                src={`https://streak-stats.demolab.com?user=${profile.github}&theme=transparent&hide_border=true&timezone=Asia%2FKarachi&ring=FFDB70&fire=FFDB70&currStreakNum=FFDB70&sideNums=FFDB70&currStreakLabel=FFDB70&sideLabels=FFDB70&dates=9E9E9E&stroke=2A2A2A`}
+                alt={`${profile.github} GitHub Streak`}
+                width={495}
+                height={195}
+                unoptimized
+                style={{ width: "100%", maxWidth: 495, height: "auto", display: "block", margin: "0 auto" }}
+              />
+            </a>
           </div>
         </Reveal>
 
