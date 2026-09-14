@@ -2,17 +2,12 @@ import Image from "next/image";
 import {
   experience,
   education,
-  educationNote,
   courses,
   spokenLanguages,
-  focusAreas,
-  skills,
-  technicalSkills,
   githubAchievements,
   profile,
 } from "@/lib/data";
 import Reveal from "@/components/Reveal";
-import SkillBar from "@/components/SkillBar";
 import SectionHeading from "@/components/motion/SectionHeading";
 import JourneyNarrative from "@/components/JourneyNarrative";
 import QuietMark from "@/components/QuietMark";
@@ -22,7 +17,68 @@ import {
   GraduationCap,
   BookOpen,
   Globe,
+  ArrowUpRight,
 } from "lucide-react";
+
+const engineeringDisciplines = [
+  {
+    title: "Full-Stack & Backend",
+    label: "Core Development",
+    skills: [
+      "TypeScript",
+      "JavaScript",
+      "React",
+      "Next.js",
+      "Node.js",
+      "Express.js",
+      "Bun",
+      "REST APIs",
+      "JWT Authentication",
+      "PostgreSQL",
+      "MongoDB",
+      "MySQL",
+    ],
+  },
+  {
+    title: "Systems & Infrastructure",
+    label: "Systems",
+    skills: [
+      "Rust",
+      "Docker",
+      "Linux",
+      "GitHub Actions",
+      "Cloudflare",
+      "CI/CD",
+    ],
+  },
+  {
+    title: "Static Analysis & Developer Tooling",
+    label: "Compilers & Tools",
+    skills: [
+      "Tree-sitter",
+      "AST",
+      "CFG",
+      "DFG",
+      "Intermediate Representation",
+      "Dependency Analysis",
+      "Git",
+      "Postman",
+    ],
+  },
+  {
+    title: "AI & Automation",
+    label: "AI Engineering",
+    skills: [
+      "Claude Code",
+      "LLM Integrations",
+      "Tool-Using Agents",
+      "Structured Outputs",
+      "n8n",
+      "Workflow Automation",
+      "Verification Workflows",
+    ],
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -51,18 +107,21 @@ export default function AboutPage() {
             ENGINEERING IDENTITY // BACKGROUND
           </span>
           <h1 style={{ color: "var(--white-2)", fontSize: "clamp(32px, 5.5vw, 48px)", fontWeight: 600, marginTop: 10, lineHeight: 1.15 }}>
-            Systems, Compilers, &amp; Deterministic Architectures
+            Full-Stack Systems, Static Analysis &amp; AI Automation
           </h1>
           <p style={{ color: "var(--light-gray)", fontSize: "var(--fs-5)", marginTop: 14, lineHeight: 1.7 }}>
-            I am a full-stack and systems-oriented engineer based in Lahore, Pakistan. Over the past three years, my work has grown from building responsive frontend interfaces to engineering resilient backend systems, static code analysis engines (AST, CFG, DFG, IR), and agentic workflows.
+            I am a full-stack and systems-oriented Software Engineer based in Lahore, Pakistan, with 5+ years of experience across frontend, full-stack development, backend engineering, AI automation, developer tooling, and technical systems.
           </p>
           <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-6)", marginTop: 10, lineHeight: 1.7 }}>
-            My focus is engineering software that stays predictable under pressure. Rather than treating code as plain text or relying on stochastic AI outputs, I model codebases as deterministic mathematical graphs — enabling automated refactoring, verifiable AST transformations, and reproducible distributed backends.
+            My core engineering stack includes TypeScript, React, Node.js, Express.js, PostgreSQL, MongoDB, REST APIs, Docker, Git, and CI/CD.
+          </p>
+          <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-6)", marginTop: 10, lineHeight: 1.7 }}>
+            My work has progressively moved deeper into deterministic code intelligence — modeling software using ASTs, Control Flow Graphs, Data Flow Graphs, dependency analysis, and Intermediate Representation — with bounded AI automation layered on top of structured system outputs.
           </p>
         </div>
       </Reveal>
 
-      {/* 2 — JOURNEY (Chronological narrative spine 2022 -> 2026) */}
+      {/* 2 — JOURNEY (Chronological narrative spine 2021 -> 2026) */}
       <JourneyNarrative />
 
       {/* 3 — EXPERIENCE (Dedicated distinct section) */}
@@ -101,6 +160,23 @@ export default function AboutPage() {
                       >
                         {exp.org}
                       </span>
+                      {"badge" in exp && exp.badge && (
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontFamily: "monospace",
+                            color: "var(--orange-yellow-crayola)",
+                            background: "hsla(45, 100%, 72%, 0.18)",
+                            border: "1px solid hsla(45, 100%, 72%, 0.35)",
+                            padding: "2px 8px",
+                            borderRadius: 6,
+                            fontWeight: 600,
+                            letterSpacing: "0.04em",
+                          }}
+                        >
+                          {exp.badge}
+                        </span>
+                      )}
                     </div>
                     <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-7)", marginTop: 4, fontFamily: "monospace" }}>
                       {exp.location}
@@ -129,6 +205,16 @@ export default function AboutPage() {
                     </li>
                   ))}
                 </ul>
+
+                {"tech" in exp && Array.isArray(exp.tech) && exp.tech.length > 0 && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
+                    {exp.tech.map((t: string) => (
+                      <span key={t} className="chip" style={{ fontSize: "var(--fs-8)", padding: "2px 8px" }}>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </Reveal>
           ))}
@@ -158,8 +244,40 @@ export default function AboutPage() {
                       <h3 style={{ color: "var(--white-2)", fontSize: "var(--fs-3)", fontWeight: 600 }}>
                         {edu.title}
                       </h3>
+                      {"grade" in edu && edu.grade && (
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontFamily: "monospace",
+                            color: "var(--orange-yellow-crayola)",
+                            background: "hsla(45, 100%, 72%, 0.12)",
+                            border: "1px solid hsla(45, 100%, 72%, 0.25)",
+                            padding: "2px 8px",
+                            borderRadius: 6,
+                            fontWeight: 600,
+                          }}
+                        >
+                          Grade: {edu.grade}
+                        </span>
+                      )}
+                      {"expected" in edu && edu.expected && (
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontFamily: "monospace",
+                            color: "var(--orange-yellow-crayola)",
+                            background: "hsla(45, 100%, 72%, 0.18)",
+                            border: "1px solid hsla(45, 100%, 72%, 0.35)",
+                            padding: "2px 8px",
+                            borderRadius: 6,
+                            fontWeight: 600,
+                          }}
+                        >
+                          {edu.expected}
+                        </span>
+                      )}
                     </div>
-                    <p style={{ color: "var(--orange-yellow-crayola)", fontSize: "var(--fs-6)", marginTop: 4, fontFamily: "monospace" }}>
+                    <p style={{ color: "var(--orange-yellow-crayola)", fontSize: "var(--fs-6)", marginTop: 6, fontFamily: "monospace" }}>
                       {edu.place}
                     </p>
                   </div>
@@ -178,10 +296,19 @@ export default function AboutPage() {
                   </span>
                 </div>
 
-                {educationNote && (
-                  <p style={{ color: "var(--light-gray)", fontSize: "var(--fs-6)", lineHeight: 1.6, marginTop: 12 }}>
-                    {educationNote}
-                  </p>
+                {"coursework" in edu && Array.isArray(edu.coursework) && edu.coursework.length > 0 && (
+                  <div style={{ marginTop: 14 }}>
+                    <p style={{ color: "var(--light-gray-70)", fontSize: 11, fontFamily: "monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>
+                      Relevant Coursework
+                    </p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                      {edu.coursework.map((c: string) => (
+                        <span key={c} className="chip" style={{ fontSize: "var(--fs-8)", padding: "3px 10px" }}>
+                          {c}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
             </Reveal>
@@ -189,38 +316,133 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 5 — COURSES */}
+      {/* 5 — COURSES & CERTIFICATIONS */}
       <section style={{ marginTop: 64 }}>
         <SectionHeading index="03" title="Certifications &amp; Courses" />
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            alignItems: "stretch",
             gap: 16,
           }}
         >
-          {courses.map((course, idx) => (
-            <Reveal key={course.title} delay={idx * stagger.tight}>
+          {courses.filter((c) => c.isTechnical).map((course, idx) => {
+            const hasVerify = "url" in course && course.url;
+            return (
+              <Reveal key={course.title} delay={idx * stagger.tight}>
+                <div
+                  className="gradient-border-hover"
+                  style={{
+                    padding: "22px 24px",
+                    borderRadius: 12,
+                    background: "hsla(0, 0%, 9%, 0.88)",
+                    backdropFilter: "blur(14px)",
+                    border: "1px solid hsla(0, 0%, 100%, 0.08)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: 14,
+                    height: "100%",
+                  }}
+                >
+                  <div>
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <BookOpen size={16} color="var(--orange-yellow-crayola)" />
+                        <h4 style={{ color: "var(--white-2)", fontSize: "var(--fs-5)", fontWeight: 600, margin: 0 }}>
+                          {course.title}
+                        </h4>
+                      </div>
+                      {"period" in course && course.period && (
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontFamily: "monospace",
+                            color: "var(--light-gray-70)",
+                            background: "hsla(0, 0%, 100%, 0.05)",
+                            padding: "2px 8px",
+                            borderRadius: 4,
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {course.period}
+                        </span>
+                      )}
+                    </div>
+
+                    <p style={{ color: "var(--orange-yellow-crayola)", fontSize: "var(--fs-7)", fontFamily: "monospace", margin: "6px 0 0" }}>
+                      {course.place}
+                    </p>
+
+                    {"skills" in course && course.skills && (
+                      <p style={{ color: "var(--light-gray)", fontSize: "var(--fs-7)", margin: "8px 0 0", lineHeight: 1.5 }}>
+                        {course.skills}
+                      </p>
+                    )}
+
+                    {"credentialId" in course && course.credentialId && (
+                      <p style={{ color: "var(--light-gray-70)", fontSize: 11, fontFamily: "monospace", margin: "6px 0 0" }}>
+                        ID: {course.credentialId}
+                      </p>
+                    )}
+                  </div>
+
+                  {hasVerify && (
+                    <div style={{ marginTop: "auto", paddingTop: 8 }}>
+                      <a
+                        href={course.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-draw"
+                        style={{
+                          color: "var(--orange-yellow-crayola)",
+                          fontSize: "var(--fs-8)",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                          fontFamily: "monospace",
+                        }}
+                      >
+                        Verify credential <ArrowUpRight size={12} />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        {/* Supplementary Language Courses */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: 16,
+            marginTop: 16,
+          }}
+        >
+          {courses.filter((c) => !c.isTechnical).map((course, idx) => (
+            <Reveal key={course.title} delay={(idx + 3) * stagger.tight}>
               <div
                 className="gradient-border-hover"
                 style={{
-                  padding: "18px 20px",
+                  padding: "18px 22px",
                   borderRadius: 12,
-                  background: "hsla(0, 0%, 9%, 0.88)",
+                  background: "hsla(0, 0%, 9%, 0.7)",
                   backdropFilter: "blur(14px)",
-                  border: "1px solid hsla(0, 0%, 100%, 0.08)",
+                  border: "1px solid hsla(0, 0%, 100%, 0.06)",
                   display: "flex",
                   flexDirection: "column",
-                  gap: 6,
+                  justifyContent: "center",
+                  height: "100%",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <BookOpen size={16} color="var(--orange-yellow-crayola)" />
-                  <h4 style={{ color: "var(--white-2)", fontSize: "var(--fs-5)", fontWeight: 600, margin: 0 }}>
-                    {course.title}
-                  </h4>
-                </div>
-                <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-7)", fontFamily: "monospace", margin: 0 }}>
+                <h4 style={{ color: "var(--white-2)", fontSize: "var(--fs-5)", fontWeight: 600, margin: 0 }}>
+                  {course.title}
+                </h4>
+                <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-7)", fontFamily: "monospace", margin: "4px 0 0" }}>
                   {course.place}
                 </p>
               </div>
@@ -236,6 +458,7 @@ export default function AboutPage() {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            alignItems: "stretch",
             gap: 16,
           }}
         >
@@ -244,11 +467,15 @@ export default function AboutPage() {
               <div
                 className="gradient-border-hover"
                 style={{
-                  padding: "18px 20px",
+                  padding: "20px 22px",
                   borderRadius: 12,
                   background: "hsla(0, 0%, 9%, 0.88)",
                   backdropFilter: "blur(14px)",
                   border: "1px solid hsla(0, 0%, 100%, 0.08)",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -272,89 +499,76 @@ export default function AboutPage() {
                     {lang.level}
                   </span>
                 </div>
-                <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-7)", marginTop: 6, marginBottom: 10 }}>
+                <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-7)", margin: "8px 0 0" }}>
                   {lang.proficiency}
                 </p>
-                {/* Visual scale */}
-                <div style={{ width: "100%", height: 4, background: "hsla(0, 0%, 100%, 0.08)", borderRadius: 2, overflow: "hidden" }}>
-                  <div
-                    style={{
-                      width: `${lang.percentage}%`,
-                      height: "100%",
-                      background: "var(--orange-yellow-crayola)",
-                      borderRadius: 2,
-                    }}
-                  />
-                </div>
               </div>
             </Reveal>
           ))}
         </div>
       </section>
 
-      {/* 7 — TECHNICAL FOCUS AREAS & SKILLS */}
-      <section style={{ marginTop: 64 }}>
-        <SectionHeading index="05" title="Technical Focus Areas &amp; Skills" />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16, marginBottom: 32 }}>
-          {focusAreas.map((area, i) => (
-            <Reveal key={area.title} delay={i * 0.05}>
+      {/* 7 — ENGINEERING DISCIPLINES & TECHNICAL STACK (Single consolidated section 05) */}
+      <section style={{ marginTop: 64 }} aria-label="05 Engineering Disciplines & Technical Stack">
+        <SectionHeading index="05" title="Engineering Disciplines &amp; Technical Stack" />
+        <div style={{ marginTop: -14, marginBottom: 24 }}>
+          <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-7)", margin: 0 }}>
+            Core engineering domains, tooling, and systems I work with.
+          </p>
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: 16,
+          }}
+        >
+          {engineeringDisciplines.map((item, i) => (
+            <Reveal key={item.title} delay={i * 0.05}>
               <div
                 className="gradient-border-hover"
                 style={{
-                  padding: "20px 22px",
-                  borderRadius: 12,
+                  padding: "22px 24px",
+                  borderRadius: 14,
                   background: "hsla(0, 0%, 9%, 0.88)",
                   backdropFilter: "blur(14px)",
                   border: "1px solid hsla(0, 0%, 100%, 0.08)",
-                  height: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: 8,
+                  gap: 14,
+                  height: "100%",
                 }}
               >
-                <h4 style={{ color: "var(--orange-yellow-crayola)", fontSize: "var(--fs-6)", fontWeight: 600, fontFamily: "monospace", letterSpacing: "0.06em", textTransform: "uppercase", margin: 0 }}>
-                  {area.title}
-                </h4>
-                <p style={{ color: "var(--light-gray)", fontSize: "var(--fs-7)", lineHeight: 1.6, margin: 0 }}>
-                  {area.text}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* 8 & 9 — SKILL PROGRESSION & TECHNICAL TOOLING */}
-        <div className="about-skills-grid" style={{ marginTop: 24 }}>
-          {/* Skill Progression */}
-          <div>
-            <h4 style={{ color: "var(--white-2)", fontSize: "var(--fs-5)", fontWeight: 600, marginBottom: 14 }}>
-              Skill Progression
-            </h4>
-            {skills.map((s) => (
-              <SkillBar key={s.name} name={s.name} value={s.value} />
-            ))}
-          </div>
-
-          {/* Technical Tooling */}
-          <div>
-            <h4 style={{ color: "var(--white-2)", fontSize: "var(--fs-5)", fontWeight: 600, marginBottom: 14 }}>
-              Technical Tooling
-            </h4>
-            {Object.entries(technicalSkills).map(([category, items]) => (
-              <div key={category} style={{ marginBottom: 18 }}>
-                <p style={{ color: "var(--orange-yellow-crayola)", fontSize: "var(--fs-7)", fontFamily: "monospace", marginBottom: 6, fontWeight: 600 }}>
-                  {category}
-                </p>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                  <h4 style={{ color: "var(--white-2)", fontSize: "var(--fs-4)", fontWeight: 600, margin: 0 }}>
+                    {item.title}
+                  </h4>
+                  <span
+                    style={{
+                      fontFamily: "monospace",
+                      fontSize: 11,
+                      color: "var(--orange-yellow-crayola)",
+                      background: "hsla(45, 100%, 72%, 0.12)",
+                      border: "1px solid hsla(45, 100%, 72%, 0.25)",
+                      padding: "2px 8px",
+                      borderRadius: 4,
+                      letterSpacing: "0.04em",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {item.label}
+                  </span>
+                </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {items.map((it) => (
-                    <span className="chip" key={it}>
-                      {it}
+                  {item.skills.map((skill) => (
+                    <span key={skill} className="chip" style={{ fontSize: "var(--fs-8)", padding: "3px 9px" }}>
+                      {skill}
                     </span>
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
@@ -433,7 +647,7 @@ export default function AboutPage() {
             }}
           >
             <span style={{ fontSize: 11, fontFamily: "monospace", color: "var(--orange-yellow-crayola)", textTransform: "uppercase" }}>
-              VERIFIED COMMITS
+              GITHUB CONTRIBUTIONS
             </span>
             <p style={{ color: "var(--white-2)", fontSize: "var(--fs-2)", fontWeight: 700, margin: "6px 0 0" }}>
               {profile.stats.totalContributions} Contributions
@@ -451,7 +665,7 @@ export default function AboutPage() {
             }}
           >
             <span style={{ fontSize: 11, fontFamily: "monospace", color: "var(--orange-yellow-crayola)", textTransform: "uppercase" }}>
-              OPEN SOURCE ARTIFACTS
+              PUBLIC REPOSITORIES
             </span>
             <p style={{ color: "var(--white-2)", fontSize: "var(--fs-2)", fontWeight: 700, margin: "6px 0 0" }}>
               {profile.stats.publicRepos}+ Repositories
@@ -514,7 +728,7 @@ export default function AboutPage() {
             <a
               href={`https://github.com/${profile.github}`}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               title="View GitHub Streak Profile"
               style={{ display: "inline-block", maxWidth: "100%" }}
             >

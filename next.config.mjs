@@ -33,6 +33,10 @@ const nextConfig = {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
           },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
         ],
       },
       {
@@ -53,16 +57,34 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
+        source: "/assets/Taskeen_Haider_Resume.pdf",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600, stale-while-revalidate=86400",
+          },
+        ],
+      },
+      {
+        source: "/:file(.*\\.(?:woff|woff2|ttf|otf|ico))",
+        headers: [
+          {
+            key: "Cache-Control",
             value: "public, max-age=31536000, immutable",
           },
         ],
       },
       {
-        source: "/:file(.*\\.(?:svg|png|jpg|jpeg|webp|avif|pdf|ico|woff|woff2|ttf|otf))",
+        source: "/:file(.*\\.(?:svg|png|jpg|jpeg|webp|avif))",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
           },
         ],
       },

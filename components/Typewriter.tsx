@@ -1,70 +1,102 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useReducedMotion } from "framer-motion";
 
-export default function Typewriter({
-  words,
-  typingSpeed = 48,
-  deletingSpeed = 22,
-  pause = 1800,
-}: {
+interface TypewriterProps {
   words: string[];
   typingSpeed?: number;
   deletingSpeed?: number;
   pause?: number;
-}) {
-  const reduce = useReducedMotion();
-  const [wordIndex, setWordIndex] = useState(0);
-  const [text, setText] = useState(reduce ? words[0] : "");
-  const [deleting, setDeleting] = useState(false);
-  const isHiddenRef = useRef(false);
+}
 
-  useEffect(() => {
-    function onVisChange() {
-      isHiddenRef.current = document.hidden;
-    }
-    document.addEventListener("visibilitychange", onVisChange);
-    return () => document.removeEventListener("visibilitychange", onVisChange);
-  }, []);
+export default function Typewriter({
+  words,
+  typingSpeed = 48,
+  deletingSpeed = 24,
+  pause = 2000,
+}: TypewriterProps) {
+  const reduce = useReducedMotion();
+  const safeWords = useMemo(
+    () => (words && words.length > 0 ? words : ["Software Engineer"]),
+    [words]
+  );
+
+  // SSR & initial client render start deterministically with the first word
+  const [text, setText] = useState<string>(words?.[0] || "Software Engineer");
+  const [wordIndex, setWordIndex] = useState<number>(0);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isPaused, setIsPaused] = useState<boolean>(true);
+
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (reduce) return;
 
-    const currentWord = words[wordIndex % words.length];
+    const currentWord = safeWords[wordIndex % safeWords.length];
 
-    if (!deleting && text === currentWord) {
-      const timer = setTimeout(() => {
-        if (!isHiddenRef.current) setDeleting(true);
-      }, pause);
-      return () => clearTimeout(timer);
+    const clearTimer = () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+
+    const handleTick = () => {
+      if (isPaused) {
+        setIsPaused(false);
+        setIsDeleting(true);
+        return;
+      }
+
+      if (isDeleting) {
+        if (text.length > 0) {
+          setText(currentWord.slice(0, text.length - 1));
+        } else {
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % safeWords.length);
+          setIsPaused(false);
+        }
+      } else {
+        if (text.length < currentWord.length) {
+          setText(currentWord.slice(0, text.length + 1));
+        } else {
+          setIsPaused(true);
+        }
+      }
+    };
+
+    let delay = typingSpeed;
+    if (isPaused) {
+      delay = pause;
+    } else if (isDeleting) {
+      delay = text.length === 0 ? 120 : deletingSpeed;
+    } else {
+      const jitter = Math.floor(Math.random() * 16 - 8);
+      delay = Math.max(20, typingSpeed + jitter);
     }
 
-    if (deleting && text === "") {
-      setDeleting(false);
-      setWordIndex((prev) => (prev + 1) % words.length);
-      return;
-    }
+    clearTimer();
+    timerRef.current = setTimeout(handleTick, delay);
 
-    // Natural human typing rhythm (slight variance)
-    const jitter = deleting ? 0 : Math.floor(Math.random() * 20 - 10);
-    const delay = Math.max(15, (deleting ? deletingSpeed : typingSpeed) + jitter);
+    return clearTimer;
+  }, [text, isDeleting, isPaused, wordIndex, safeWords, typingSpeed, deletingSpeed, pause, reduce]);
 
-    const timer = setTimeout(() => {
-      if (isHiddenRef.current) return;
-      const nextText = deleting
-        ? currentWord.slice(0, text.length - 1)
-        : currentWord.slice(0, text.length + 1);
-      setText(nextText);
-    }, delay);
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, []);
 
-    return () => clearTimeout(timer);
-  }, [text, deleting, wordIndex, words, typingSpeed, deletingSpeed, pause, reduce]);
+  const currentWord = safeWords[wordIndex % safeWords.length];
 
   return (
     <span
       role="status"
-      aria-label={words[wordIndex % words.length]}
+      aria-label={currentWord}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -74,7 +106,7 @@ export default function Typewriter({
         verticalAlign: "middle",
       }}
     >
-      <span aria-hidden="true">{text || "\u00A0"}</span>
+      <span aria-hidden="true">{reduce ? safeWords[0] : (text || "\u00A0")}</span>
       {!reduce && (
         <span
           aria-hidden="true"

@@ -6,7 +6,8 @@ import {
   AnimatePresence,
   useReducedMotion,
 } from "framer-motion";
-import { Github, ExternalLink, Star, ChevronDown, Layers, Globe, Shield, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Star, ChevronDown, Layers, Globe, Shield, ArrowUpRight } from "lucide-react";
+import { Github } from "@/components/icons/BrandIcons";
 import { spring, ease, duration } from "@/lib/motion";
 
 export type ShowcaseProject = {
@@ -19,20 +20,50 @@ export type ShowcaseProject = {
   stars?: number;
 };
 
-const CATEGORIES = ["All", "Full Stack", "Backend"] as const;
+const CATEGORIES = ["All", "Developer Tooling", "Systems", "Full Stack", "Backend"] as const;
 type Category = (typeof CATEGORIES)[number];
 
 const TECH_ROLES: Record<string, string> = {
+  "TypeScript": "Strongly-Typed Program Graphs",
+  "Tree-sitter": "Incremental AST Parser",
+  "AST": "Abstract Syntax Tree Grammar",
+  "CFG": "Control Flow Graph Branches",
+  "DFG": "Data Flow Lifecycle Analysis",
+  "IR": "Intermediate Representation",
+  "Graph Analysis": "Topological Dependency Sorting",
+  "Automated Testing": "Regression & Verification Suites",
+  "Verification Workflows": "Compile-Time Type & AST Audits",
+  "Bounded AI Automation": "Constrained Model Orchestration",
+  "Rust": "Memory-Safe Systems Infrastructure",
+  "Local-First Infrastructure": "Client-Side Persistent State",
+  "Deterministic Compute": "Reproducible Execution Engine",
+  "Data Systems": "Structured Query & Storage Engines",
+  "Verification": "Invariant Proofs & Assertions",
+  "Bounded LLM Reasoning": "Constrained Synthesis Over Structured Data",
   "React": "UI State & Component Graph",
+  "Vite": "Fast ESM Bundler Runtime",
   "Node.js": "Async I/O Runtime",
   "Express": "REST Routing & Middleware",
+  "Express.js": "REST Routing & Middleware",
   "MongoDB": "NoSQL Document Schema",
   "Tailwind": "Utility Design System",
+  "Tailwind CSS": "Utility Design System",
+  "REST APIs": "HTTP Service Contracts",
   "JWT": "Stateless Auth & Claims",
   "Syncfusion": "Interactive Visualizations",
 };
 
 const PROJECT_STORIES: Record<string, { challenge: string; approach: string; architecture: string }> = {
+  "LegacyExodus": {
+    challenge: "Analyzing monolithic legacy codebases without regression risk or subjective stochastic hallucination.",
+    approach: "Constructed deterministic four-layer code-intelligence pipeline spanning AST, CFG, DFG, and Intermediate Representation with automated verification.",
+    architecture: "Deterministic compiler-based transformation engine separating formal structural truth from bounded AI orchestration.",
+  },
+  "AxiomExodus": {
+    challenge: "Balancing local-first data processing with safe, bounded LLM reasoning on resource-constrained systems.",
+    approach: "Engineered Rust-native compute engines where deterministic calculations remain isolated from generative orchestration loops.",
+    architecture: "Local-first data systems architecture with strict boundary isolation and bounded LLM interfaces.",
+  },
   "Cine Vault": {
     challenge: "Managing extensive movie dataset queries with responsive client-side filtering without bottlenecking the database.",
     approach: "Decoupled the Express API from the Vite client, implemented MongoDB index strategies, and layered modular React state.",
@@ -67,7 +98,7 @@ export default function ProjectShowcase({ projects }: { projects: ShowcaseProjec
 
   const filteredProjects = projects.filter((p) => {
     if (selectedCategory === "All") return true;
-    return p.tag.toLowerCase() === selectedCategory.toLowerCase();
+    return p.tag.toLowerCase().includes(selectedCategory.toLowerCase());
   });
 
   function toggleExpand(title: string) {
@@ -120,14 +151,9 @@ export default function ProjectShowcase({ projects }: { projects: ShowcaseProjec
               {active && !reduce && (
                 <motion.span
                   layoutId="project-category-pill"
+                  className="project-category-pill"
+                  initial={false}
                   transition={spring.snap}
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    borderRadius: 999,
-                    border: "1px solid var(--orange-yellow-crayola)",
-                    pointerEvents: "none",
-                  }}
                 />
               )}
               <span>{cat}</span>
@@ -198,16 +224,18 @@ function ProjectCard({
   const liveLink = project.links.find((l) =>
     l.label.toLowerCase().includes("live") || l.label.toLowerCase().includes("app") || l.label.toLowerCase().includes("demo")
   );
+  const clientRepo = project.links.find((l) =>
+    l.label.toLowerCase().includes("client") || l.label.toLowerCase().includes("frontend")
+  );
   const singleRepo = !liveLink && project.links.length === 1 ? project.links[0] : null;
+  const primaryLink = liveLink ?? clientRepo ?? singleRepo;
 
   function handleCardClick(e: React.MouseEvent<HTMLDivElement>) {
     const target = e.target as HTMLElement;
     if (target.closest("a, button")) return;
 
-    if (liveLink) {
-      window.open(liveLink.url, "_blank", "noreferrer");
-    } else if (singleRepo) {
-      window.open(singleRepo.url, "_blank", "noreferrer");
+    if (primaryLink) {
+      window.open(primaryLink.url, "_blank", "noreferrer");
     } else {
       onToggle();
     }
@@ -217,10 +245,8 @@ function ProjectCard({
     if (e.target !== e.currentTarget) return;
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      if (liveLink) {
-        window.open(liveLink.url, "_blank", "noreferrer");
-      } else if (singleRepo) {
-        window.open(singleRepo.url, "_blank", "noreferrer");
+      if (primaryLink) {
+        window.open(primaryLink.url, "_blank", "noreferrer");
       } else {
         onToggle();
       }
@@ -236,7 +262,7 @@ function ProjectCard({
   return (
     <motion.div
       layout
-      initial={reduce ? undefined : { opacity: 0, y: 16 }}
+      initial={false}
       animate={reduce ? undefined : { opacity: 1, y: 0 }}
       exit={reduce ? undefined : { opacity: 0, scale: 0.96 }}
       transition={{ duration: duration.fast }}
@@ -245,7 +271,7 @@ function ProjectCard({
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="region"
-      aria-label={`${project.title} - ${liveLink ? "click to open live app" : singleRepo ? "click to view repository" : "click to inspect architecture"}`}
+      aria-label={`${project.title} - ${primaryLink ? `click to open ${primaryLink.label}` : "click to inspect architecture"}`}
       style={{
         cursor: "pointer",
         outline: "none",
@@ -333,30 +359,11 @@ function ProjectCard({
             lineHeight: 1.3,
           }}
         >
-          {liveLink ? (
+          {primaryLink ? (
             <a
-              href={liveLink.url}
+              href={primaryLink.url}
               target="_blank"
-              rel="noreferrer"
-              style={{
-                color: "var(--white-2)",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                transition: "color 0.15s ease",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--orange-yellow-crayola)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--white-2)")}
-            >
-              <span>{project.title}</span>
-              <ArrowUpRight size={16} color="var(--orange-yellow-crayola)" />
-            </a>
-          ) : singleRepo ? (
-            <a
-              href={singleRepo.url}
-              target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               style={{
                 color: "var(--white-2)",
                 textDecoration: "none",
@@ -507,7 +514,7 @@ function ProjectCard({
                 key={l.url}
                 href={l.url}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="project-link"
                 title={l.label}
                 aria-label={l.label}
@@ -597,7 +604,7 @@ function ProjectCard({
                         key={l.url}
                         href={l.url}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="shimmer-btn"
                         style={{
                           display: "inline-flex",

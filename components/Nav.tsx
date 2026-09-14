@@ -48,7 +48,6 @@ export default function Nav() {
         >
           <Link
             href="/"
-            prefetch={false}
             aria-label="raitaskeen home"
             style={{
               color: "var(--orange-yellow-crayola)",
@@ -73,7 +72,6 @@ export default function Nav() {
               <li key={l.href} style={{ position: "relative" }}>
                 <Link
                   href={l.href}
-                  prefetch={false}
                   className="site-nav-link"
                   style={{ position: "relative", color: active ? "var(--smoky-black)" : undefined }}
                 >
@@ -119,7 +117,6 @@ export default function Nav() {
             <li key={l.href}>
               <Link
                 href={l.href}
-                prefetch={false}
                 onClick={() => setOpen(false)}
                 className={`site-nav-link ${pathname === l.href ? "active" : ""}`}
                 style={{ display: "block" }}

@@ -26,9 +26,9 @@ export default function SplitText({
   }
 
   return (
-    <Tag style={{ ...style, display: "inline-block" }}>
+    <Tag style={{ ...style, display: "inline-block" }} aria-label={text}>
       {words.map((word, i) => (
-        <span key={i} style={{ display: "inline-block", verticalAlign: "top", marginRight: "0.28em" }}>
+        <span key={i} style={{ display: "inline-block", verticalAlign: "top", marginRight: i < words.length - 1 ? "0.28em" : 0 }}>
           <motion.span
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -37,6 +37,7 @@ export default function SplitText({
           >
             {word}
           </motion.span>
+          {i < words.length - 1 ? <span style={{ position: "absolute", opacity: 0, pointerEvents: "none", width: 0, height: 0, overflow: "hidden" }}> </span> : null}
         </span>
       ))}
     </Tag>

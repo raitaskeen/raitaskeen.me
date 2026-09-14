@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { usePointerSystem } from "./PointerSystem";
 
 type CursorMode = "default" | "interactive" | "inspect" | "text";
@@ -19,21 +19,23 @@ type CursorMode = "default" | "interactive" | "inspect" | "text";
  */
 export default function CustomCursor() {
   const pointer = usePointerSystem();
-  const reduce = useReducedMotion();
-  const [isFine, setIsFine] = useState(false);
   const [mode, setMode] = useState<CursorMode>("default");
   const [isMouseDown, setIsMouseDown] = useState(false);
 
   const ringScale = useMotionValue(1);
   const smoothRingScale = useSpring(ringScale, { stiffness: 380, damping: 28 });
 
+  // Deterministic fallbacks if pointer system context is resolving or absent
+  const fallbackPos = useMotionValue(-9999);
+  const fallbackActive = useMotionValue(0);
+
+  const x = pointer?.x ?? fallbackPos;
+  const y = pointer?.y ?? fallbackPos;
+  const springX = pointer?.springX ?? fallbackPos;
+  const springY = pointer?.springY ?? fallbackPos;
+  const active = pointer?.active ?? fallbackActive;
+
   useEffect(() => {
-    const fineQuery = window.matchMedia("(pointer: fine)");
-    setIsFine(fineQuery.matches);
-
-    const onQueryChange = (e: MediaQueryListEvent) => setIsFine(e.matches);
-    fineQuery.addEventListener("change", onQueryChange);
-
     function onPointerOver(e: MouseEvent) {
       const target = e.target as HTMLElement | null;
       if (!target) return;
@@ -83,22 +85,18 @@ export default function CustomCursor() {
     window.addEventListener("mouseup", onMouseUp, { passive: true });
 
     return () => {
-      fineQuery.removeEventListener("change", onQueryChange);
       window.removeEventListener("mouseover", onPointerOver);
       window.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
     };
   }, [ringScale, mode]);
 
-  if (!isFine || reduce || !pointer) {
-    return null;
-  }
-
   return (
-    <>
+    <div className="custom-cursor-layer" aria-hidden="true">
       {/* Secondary Soft Gold Interaction Ring (Trailing spring physics) */}
       <motion.div
         aria-hidden="true"
+        className="custom-cursor-ring"
         style={{
           position: "fixed",
           top: 0,
@@ -108,12 +106,12 @@ export default function CustomCursor() {
           borderRadius: mode === "inspect" ? "3px" : "50%",
           pointerEvents: "none",
           zIndex: 99998,
-          x: pointer.springX,
-          y: pointer.springY,
+          x: springX,
+          y: springY,
           translateX: "-50%",
           translateY: "-50%",
           scale: smoothRingScale,
-          opacity: pointer.active,
+          opacity: active,
           border:
             mode === "inspect"
               ? "1px dashed var(--orange-yellow-crayola)"
@@ -183,6 +181,7 @@ export default function CustomCursor() {
       {/* Primary Black Core + Gold Contour (Instantaneous zero-lag center pointer) */}
       <motion.div
         aria-hidden="true"
+        className="custom-cursor-core"
         style={{
           position: "fixed",
           top: 0,
@@ -192,11 +191,11 @@ export default function CustomCursor() {
           borderRadius: mode === "text" ? 1 : mode === "inspect" ? 1 : "50%",
           pointerEvents: "none",
           zIndex: 99999,
-          x: pointer.x,
-          y: pointer.y,
+          x,
+          y,
           translateX: "-50%",
           translateY: "-50%",
-          opacity: pointer.active,
+          opacity: active,
           background: mode === "text" ? "var(--orange-yellow-crayola)" : "#0c0d10",
           border: mode === "text" ? "none" : "1.2px solid var(--orange-yellow-crayola)",
           boxShadow: "0 0 6px hsla(45, 100%, 72%, 0.35)",
@@ -204,6 +203,6 @@ export default function CustomCursor() {
           transition: "width 0.12s ease, height 0.12s ease, border-radius 0.12s ease, scale 0.1s ease",
         }}
       />
-    </>
+    </div>
   );
 }

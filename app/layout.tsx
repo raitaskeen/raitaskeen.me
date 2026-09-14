@@ -9,7 +9,7 @@ import Background from "@/components/Background";
 import PortfolioBot from "@/components/PortfolioBotClient";
 import CustomCursor from "@/components/motion/CustomCursor";
 import PwaRegister from "@/components/PwaRegister";
-import { profile } from "@/lib/data";
+import RouteScrollReset from "@/components/RouteScrollReset";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,8 +25,23 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: `${profile.name} — ${profile.title}`,
-  description: profile.bio[0],
+  title: "Taskeen Haider | Software Engineer · Full-Stack · Backend · AI Automation",
+  description:
+    "Software Engineer with 5+ years of experience building full-stack applications, backend systems, AI automation, developer tooling, and deterministic static-analysis infrastructure.",
+  keywords: [
+    "Software Engineer",
+    "Full-Stack Engineer",
+    "Backend Engineer",
+    "AI Automation Engineer",
+    "TypeScript",
+    "React",
+    "Node.js",
+    "PostgreSQL",
+    "Developer Tooling",
+    "Static Analysis",
+    "Systems Engineering",
+    "LLM Automation",
+  ],
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
@@ -48,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Background />
         <PointerSystem>
+          <RouteScrollReset />
           <CustomCursor />
           <ScrollProgress />
           <Nav />

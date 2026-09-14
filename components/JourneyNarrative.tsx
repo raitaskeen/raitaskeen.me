@@ -16,49 +16,49 @@ interface JourneyYear {
 
 const JOURNEY_MILESTONES: JourneyYear[] = [
   {
-    year: "2022",
-    stage: "BUILDING",
-    roleContext: "Frontend Engineer (Apprentice)",
+    year: "2021",
+    stage: "FRONTEND ENGINEERING",
+    roleContext: "Frontend Engineer - Apprentice",
     organization: "Iridium Soft · Lahore",
     details:
-      "Began engineering interfaces with React, JavaScript, and modern CSS. Studied browser rendering lifecycles, DOM reconciliation, and how reactive state machines propagate updates across component hierarchies.",
+      "Developed reusable React and JavaScript components for responsive, maintainable, cross-browser web applications. Contributed to code reviews, Agile delivery, technical documentation, and collaborative frontend development.",
     keyInsight: "UIs are reactive state machines. Reliable frontend engineering starts with understanding the underlying state graph.",
   },
   {
     year: "2023",
-    stage: "DEEPENING",
-    roleContext: "Frontend Specialist & Open Source Contributor",
-    organization: "Independent Practice · Lahore",
+    stage: "FULL-STACK ENGINEERING",
+    roleContext: "Full-Stack Web Developer",
+    organization: "Tech Vertex · Remote",
     details:
-      "Deepened architectural practices: component modularity, client performance, and API data hydration. Contributed to freeCodeCamp (PR #69385) and MDN Web Docs, hardening cross-browser frontend foundations.",
-    keyInsight: "Clean abstractions prevent UI drift. Systematic code reviews and documentation protect interface longevity.",
-  },
-  {
-    year: "2024",
-    stage: "SYSTEMS",
-    roleContext: "Full-Stack Web Developer & BS Software Engineering",
-    organization: "Tech Vertex & UMT Lahore",
-    details:
-      "Stepped into end-to-end production backends: architecting Node.js, Express, MongoDB, and PostgreSQL services with hardened JWT security and third-party APIs. Enrolled in BS Software Engineering at UMT Lahore.",
+      "Optimized React/TypeScript and Node.js/Express applications, reducing latency by up to 50% while maintaining 99.9% uptime. Designed JWT-secured REST APIs and integrated Stripe and Appwrite services across delivery workflows.",
     keyInsight: "Systems fail at network boundaries. Data serialization, authentication lifecycles, and database pools demand strict contractual guarantees.",
   },
   {
-    year: "2025",
-    stage: "ENGINEERING",
-    roleContext: "Technical Support Specialist (L3 Escalations)",
-    organization: "Ibex Global · On-site",
+    year: "2024",
+    stage: "ADVANCED TECHNICAL SYSTEMS",
+    roleContext: "Technical Support Specialist - Advanced Escalations",
+    organization: "ibex · Lahore",
     details:
-      "Handled mission-critical escalations for a Fortune 100 enterprise client. Diagnosed failure cascades across distributed smart home hardware, IoT device fleets, authentication tokens, and network synchronization bottlenecks.",
+      "Resolved 500+ escalated technical cases for a Fortune 100 technology client across connected devices, accounts, subscriptions, and digital services. Progressed from Level 1 to Level 3 within 6 months while handling increasingly complex technical and systems escalations.",
     keyInsight: "In production, abstractions leak. High-reliability engineering requires understanding memory limits, timeouts, and distributed failure states.",
   },
   {
-    year: "2026",
-    stage: "AI / ORCHESTRATION",
-    roleContext: "Founder & Lead Developer",
-    organization: "LegacyExodus · Systems & AI Practice",
+    year: "2024–2026",
+    stage: "FULL-STACK & AI AUTOMATION",
+    roleContext: "Full-Stack & AI Automation Engineer",
+    organization: "ibex · Internal Promotion",
     details:
-      "Focused on static analysis, parsing codebases with Tree-sitter into ASTs, Control Flow Graphs (CFG), and Data Flow Graphs (DFG). LegacyExodus became a natural extension of this interest in static analysis, dependency modeling, and deterministic transformation.",
-    keyInsight: "System Understanding (Graph) + Deterministic Task Decomposition (AI) = Predictable, Scalable Software Modernization.",
+      "Promoted internally to build React/TypeScript dashboards, Node.js/PostgreSQL tools, REST APIs, and bounded LLM automation workflows supporting technical operations, diagnostics, and structured triage.",
+    keyInsight: "Operational tools and runbooks compound across teams. Bounded automation over structured telemetry eliminates manual diagnostic toil.",
+  },
+  {
+    year: "2026",
+    stage: "STATIC ANALYSIS / SOFTWARE MODERNIZATION",
+    roleContext: "Founder & Lead Developer",
+    organization: "LegacyExodus · Remote",
+    details:
+      "Designed a four-layer code-intelligence pipeline across AST, CFG, DFG, and Intermediate Representation for deterministic software analysis, accompanied by bounded AI-assisted reasoning for verifiable modernization workflows.",
+    keyInsight: "Deterministic systems establish structural truth; AI handles bounded reasoning, orchestration, and synthesis.",
     link: { label: "View LegacyExodus architecture", href: "/projects/legacy-exodus" },
   },
 ];

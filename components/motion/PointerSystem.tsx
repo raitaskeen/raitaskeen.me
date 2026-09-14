@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useSyncExternalStore } from "react";
 import {
   MotionValue,
   useMotionValue,
@@ -8,6 +8,20 @@ import {
   useVelocity,
   useReducedMotion,
 } from "framer-motion";
+
+function subscribePointerFine(callback: () => void) {
+  const query = window.matchMedia("(pointer: fine)");
+  query.addEventListener("change", callback);
+  return () => query.removeEventListener("change", callback);
+}
+
+function getPointerFineSnapshot() {
+  return window.matchMedia("(pointer: fine)").matches;
+}
+
+function getPointerFineServerSnapshot() {
+  return false;
+}
 
 // One shared pointer environment for the whole site (spec §10). Every effect
 // that wants to react to the cursor — the pointer light, the dot field,
@@ -47,23 +61,11 @@ export default function PointerSystem({ children }: { children: React.ReactNode 
   const rawVelocityY = useVelocity(springY);
   const speed = useMotionValue(0);
   const active = useMotionValue(0);
-  const [isFinePointer, setIsFinePointer] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(pointer: fine)").matches;
-  });
-
-  useEffect(() => {
-    const fineQuery = window.matchMedia("(pointer: fine)");
-    setIsFinePointer(fineQuery.matches);
-
-    const onQueryChange = (e: MediaQueryListEvent) => {
-      setIsFinePointer(e.matches);
-    };
-    fineQuery.addEventListener("change", onQueryChange);
-    return () => {
-      fineQuery.removeEventListener("change", onQueryChange);
-    };
-  }, []);
+  const isFinePointer = useSyncExternalStore(
+    subscribePointerFine,
+    getPointerFineSnapshot,
+    getPointerFineServerSnapshot
+  );
 
   useEffect(() => {
     if (reduce || !isFinePointer) return;

@@ -28,9 +28,9 @@ export default function EngineeringStats({ gh }: EngineeringStatsProps) {
   const stats: StatItem[] = [
     {
       id: "exp",
-      formattedNumber: `${String(yearsCount).padStart(2, "0")}+`,
-      label: "YEARS BUILDING",
-      sub: "Full-Stack · Systems · Rust",
+      formattedNumber: `${yearsCount}+`,
+      label: "YEARS ENGINEERING",
+      sub: "Full-Stack · Backend · AI",
       sparklinePath: "M 0 16 L 15 16 L 28 11 L 42 7 L 60 3",
     },
     {
@@ -43,15 +43,15 @@ export default function EngineeringStats({ gh }: EngineeringStatsProps) {
     {
       id: "repos",
       formattedNumber: `${reposCount}+`,
-      label: "OPEN SOURCE ARTIFACTS",
+      label: "PUBLIC REPOSITORIES",
       sub: "Verified Repos & Tooling",
       sparklinePath: "M 0 15 L 16 15 L 24 9 L 36 9 L 44 4 L 60 4",
     },
     {
       id: "contributions",
       formattedNumber: "9.7K+",
-      label: "CODE CONTRIBUTIONS",
-      sub: "292-Day Streak · Live Commits",
+      label: "GITHUB CONTRIBUTIONS",
+      sub: "292-Day Streak · Live Activity",
       sparklinePath: "M 0 16 L 12 14 L 24 11 L 36 7 L 48 4 L 60 2",
     },
   ];

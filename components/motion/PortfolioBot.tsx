@@ -1,7 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { usePathname, useRouter } from "next/navigation";
+
+function subscribeCoarse(callback: () => void) {
+  const query = window.matchMedia("(pointer: coarse)");
+  query.addEventListener("change", callback);
+  return () => query.removeEventListener("change", callback);
+}
+
+function getCoarseSnapshot() {
+  return window.matchMedia("(pointer: coarse)").matches;
+}
+
+function getCoarseServerSnapshot() {
+  return false;
+}
 import {
   motion,
   useMotionValue,
@@ -197,7 +211,12 @@ export default function PortfolioBot() {
   const [isHovered, setIsHovered] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [blink, setBlink] = useState(false);
-  const [isTouch, setIsTouch] = useState(false);
+  const isTouch = useSyncExternalStore(
+    subscribeCoarse,
+    getCoarseSnapshot,
+    getCoarseServerSnapshot
+  );
+  const msgCounterRef = useRef(0);
   const [isHidden, setIsHidden] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -247,10 +266,6 @@ export default function PortfolioBot() {
     const id = window.setInterval(scheduleBlink, 4800);
     return () => window.clearInterval(id);
   }, [reduce]);
-
-  useEffect(() => {
-    setIsTouch(!window.matchMedia("(pointer: fine)").matches);
-  }, []);
 
   // Focus input when opened
   useEffect(() => {
@@ -306,7 +321,7 @@ export default function PortfolioBot() {
 
     setInput("");
     const userMsg: Message = {
-      id: "user-" + Date.now(),
+      id: "user-" + ++msgCounterRef.current,
       role: "user",
       content: textToSend,
     };
@@ -345,7 +360,7 @@ export default function PortfolioBot() {
       const decoder = new TextDecoder();
       let assistantRaw = "";
 
-      const assistantId = "assistant-" + Date.now();
+      const assistantId = "assistant-" + ++msgCounterRef.current;
       setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
 
       let buffer = "";
@@ -417,7 +432,7 @@ export default function PortfolioBot() {
           id: "err-" + Date.now(),
           role: "assistant",
           content:
-            "I ran into a temporary network bottleneck. Feel free to inspect the systems architecture directly, browse the builds, or reach out to Taskeen at raitaskeenhaider786@gmail.com!",
+            "I ran into a temporary network bottleneck. Feel free to inspect the systems architecture directly, browse the builds, or reach out to Taskeen at raitaskeen.dev@gmail.com!",
           actions: [{ label: "Contact Taskeen", href: "/contact", isExternal: false }],
         },
       ]);

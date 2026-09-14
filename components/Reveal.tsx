@@ -9,23 +9,33 @@ export default function Reveal({
   variant = "fade-up",
   duration,
   immediate = false,
+  className,
+  style,
 }: {
   children: React.ReactNode;
   delay?: number;
   variant?: RevealVariant;
   duration?: number;
   immediate?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
 }) {
   const reduce = useReducedMotion();
   const variants = revealVariants[variant];
 
   if (reduce) {
-    return <div>{children}</div>;
+    return (
+      <div className={className} style={style}>
+        {children}
+      </div>
+    );
   }
 
   return (
     <motion.div
-      initial="hidden"
+      className={className}
+      style={style}
+      initial={immediate ? false : "hidden"}
       animate={immediate ? "show" : undefined}
       whileInView={immediate ? undefined : "show"}
       viewport={immediate ? undefined : { once: true, margin: "-60px" }}
@@ -65,7 +75,7 @@ export function Stagger({
   return (
     <motion.div
       className={className}
-      initial="hidden"
+      initial={immediate ? false : "hidden"}
       animate={immediate ? "show" : undefined}
       whileInView={immediate ? undefined : "show"}
       viewport={immediate ? undefined : { once: true, margin: "-60px" }}
