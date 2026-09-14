@@ -91,8 +91,12 @@ export default function Typewriter({
     };
   }, []);
 
+  const currentWord = safeWords[wordIndex % safeWords.length];
+
   return (
     <span
+      role="status"
+      aria-label={currentWord}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -102,7 +106,6 @@ export default function Typewriter({
         verticalAlign: "middle",
       }}
     >
-      <span className="sr-only">{safeWords[0]}</span>
       <span aria-hidden="true">{reduce ? safeWords[0] : (text || "\u00A0")}</span>
       {!reduce && (
         <span
