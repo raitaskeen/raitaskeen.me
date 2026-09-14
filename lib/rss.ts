@@ -23,16 +23,31 @@ function decodeXmlEntities(text: string): string {
     .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
 }
 
-function stripHtml(text: string): string {
-  return text.replace(/<[^>]*>?/gm, "").replace(/\s+/g, " ").trim();
+export const MAX_RSS_TEXT_LENGTH = 10_000;
+
+export function stripHtml(text: string): string {
+  let current = text.slice(0, MAX_RSS_TEXT_LENGTH);
+  let previous: string;
+
+  do {
+    previous = current;
+    current = current.replace(/<[^>]*>?/gm, "");
+  } while (current !== previous);
+
+  return current
+    .replace(/[<>]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-function cleanText(raw: string): string {
+export function cleanText(raw: string): string {
   if (!raw) return "";
-  // Check CDATA first
-  const cdataMatch = raw.match(/<!\[CDATA\[([\s\S]*?)\]\]>/i);
-  const content = cdataMatch ? cdataMatch[1] : raw;
-  return stripHtml(decodeXmlEntities(content));
+  // 1. Remove CDATA wrapper
+  const withoutCdata = raw.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, "$1");
+  // 2. Decode XML/HTML entities before stripping HTML
+  const decoded = decodeXmlEntities(withoutCdata);
+  // 3. Repeatedly strip markup, remove residual < and >, normalize whitespace
+  return stripHtml(decoded);
 }
 
 function extractTag(block: string, tagName: string): string {
