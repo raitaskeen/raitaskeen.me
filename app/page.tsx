@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import { profile, experience } from "@/lib/data";
-import { getGithubStats } from "@/lib/github";
 import Reveal, { Stagger } from "@/components/Reveal";
 import Typewriter from "@/components/Typewriter";
 import EngineeringStats from "@/components/EngineeringStats";
@@ -11,71 +9,6 @@ import SplitText from "@/components/motion/SplitText";
 import Magnetic from "@/components/motion/Magnetic";
 import PointerLight from "@/components/motion/PointerLight";
 import { Download, ArrowUpRight, ArrowRight } from "lucide-react";
-
-async function EngineeringStatsSection() {
-  const gh = await getGithubStats(profile.github);
-  return <EngineeringStats gh={gh} />;
-}
-
-function EngineeringStatsSkeleton() {
-  return (
-    <div
-      aria-label="Loading Engineering Metrics"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-        gap: 16,
-        marginTop: 32,
-      }}
-    >
-      {[1, 2, 3, 4].map((i) => (
-        <div
-          key={i}
-          className="gradient-border-hover"
-          style={{
-            padding: "20px 22px",
-            borderRadius: 12,
-            background: "hsla(0, 0%, 9%, 0.85)",
-            backdropFilter: "blur(12px)",
-            border: "1px solid hsla(45, 100%, 72%, 0.15)",
-            minHeight: 110,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            gap: 16,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-            <div
-              style={{
-                width: 72,
-                height: 38,
-                borderRadius: 6,
-                background: "hsla(45, 100%, 72%, 0.15)",
-              }}
-            />
-            <div
-              style={{
-                width: 60,
-                height: 18,
-                borderRadius: 4,
-                background: "hsla(45, 100%, 72%, 0.08)",
-              }}
-            />
-          </div>
-          <div
-            style={{
-              width: "60%",
-              height: 14,
-              borderRadius: 4,
-              background: "hsla(0, 0%, 100%, 0.08)",
-            }}
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
 
 export default async function Home() {
   const latest = experience[0];
@@ -114,10 +47,10 @@ export default async function Home() {
               }}
             >
               <Typewriter words={[
-                "Full-Stack Engineer",
-                "Systems Architecture Builder",
+                "Software Engineer",
+                "Full-Stack · Backend · AI Automation",
+                "Developer Tooling · Static Analysis",
                 "Building LegacyExodus",
-                "Agentic AI Orchestrator",
               ]} />
             </div>
           </Reveal>
@@ -157,7 +90,7 @@ export default async function Home() {
                 <a
                   href={profile.scheduleUrl}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   style={{
                     display: "inline-block",
                     border: "1px solid hsla(0,0%,100%,0.15)",
@@ -195,10 +128,8 @@ export default async function Home() {
       </section>
 
       {/* 2 — ENGINEERING STATS */}
-      <Reveal variant="fade-up" delay={0.1}>
-        <Suspense fallback={<EngineeringStatsSkeleton />}>
-          <EngineeringStatsSection />
-        </Suspense>
+      <Reveal variant="fade-up" immediate delay={0}>
+        <EngineeringStats />
       </Reveal>
 
       {/* 3 — SELECTED WORK */}
@@ -219,6 +150,10 @@ export default async function Home() {
 
           <p style={{ color: "var(--light-gray)", fontSize: "var(--fs-6)", marginTop: 10, lineHeight: 1.7, maxWidth: "68ch" }}>
             {latest.bullets[0]}
+          </p>
+
+          <p style={{ color: "var(--orange-yellow-crayola)", fontSize: "var(--fs-7)", fontFamily: "monospace", marginTop: 8, letterSpacing: "0.02em" }}>
+            AST · CFG · DFG · IR · Deterministic Verification · Bounded AI
           </p>
 
           <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 18, flexWrap: "wrap" }}>
@@ -277,7 +212,7 @@ export default async function Home() {
               ENGINEERING THESIS
             </p>
             <p style={{ color: "var(--light-gray)", fontSize: "var(--fs-6)", lineHeight: 1.7, margin: 0 }}>
-              Building modern software requires bridging user experience with deep systems predictability. From reactive frontends and hardened backend APIs to static AST analysis and agentic orchestration, every system is designed to stay deterministic under load.
+              Modern software requires both product velocity and systems predictability. My work spans full-stack applications, backend services, AI automation, static analysis, and deterministic code intelligence — with correctness-critical behavior kept testable and verifiable.
             </p>
           </div>
 

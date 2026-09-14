@@ -17,7 +17,7 @@ import {
 export const metadata = {
   title: "LegacyExodus — Architecture & Migration Engine",
   description:
-    "An automated migration-intelligence engine that parses legacy codebases into AST, CFG, DFG, and Intermediate Representation (IR) for deterministic modernization.",
+    "Deterministic static analysis and software modernization using AST, CFG, DFG, and IR-based code intelligence.",
 };
 
 const STATIC_ANALYSIS_STEPS = [
@@ -120,11 +120,11 @@ export default function LegacyExodusPage() {
               lineHeight: 1.4,
             }}
           >
-            Automated migration-intelligence engine for legacy enterprise codebases.
+            Deterministic static analysis and software modernization using AST, CFG, DFG, and IR-based code intelligence.
           </p>
 
           <p style={{ color: "var(--light-gray)", fontSize: "var(--fs-5)", marginTop: 16, lineHeight: 1.7 }}>
-            LegacyExodus is an engineering system designed to analyze monolithic, high-debt enterprise codebases (such as legacy PHP, procedural JavaScript, and un-typed backends) and automate their modernization into memory-safe Rust services and clean TypeScript architectures through deterministic static compiler analysis.
+            LegacyExodus analyzes legacy codebases through deterministic program representations before producing verifiable modernization artifacts. Bounded AI orchestration operates over structured analysis outputs instead of defining structural truth.
           </p>
         </section>
       </Reveal>
@@ -536,6 +536,12 @@ export default function LegacyExodusPage() {
                 <CheckCircle2 size={16} color="var(--orange-yellow-crayola)" style={{ marginTop: 3, flexShrink: 0 }} />
                 <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-6)", margin: 0 }}>
                   <strong>IR Specification &amp; Schema:</strong> Establishing a strongly-typed JSON intermediate format for control flow DAGs.
+                </p>
+              </div>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                <CheckCircle2 size={16} color="var(--orange-yellow-crayola)" style={{ marginTop: 3, flexShrink: 0 }} />
+                <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-6)", margin: 0 }}>
+                  <strong>Deterministic Verification:</strong> Automated AST equivalence suites and invariant proofs ensuring structural correctness and type safety.
                 </p>
               </div>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>

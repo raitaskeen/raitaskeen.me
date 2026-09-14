@@ -1,70 +1,19 @@
 import Link from "next/link";
-import { Suspense } from "react";
-import { featuredProjects, openSource, upcomingProjects, profile } from "@/lib/data";
-import { getGithubStats } from "@/lib/github";
+import { featuredProjects, openSource } from "@/lib/data";
 import Reveal from "@/components/Reveal";
 import ProjectShowcase from "@/components/ProjectShowcase";
-import LabIncubator from "@/components/LabIncubator";
+import DeveloperQuotes from "@/components/DeveloperQuotes";
 import QuietMark from "@/components/QuietMark";
 import { ArrowUpRight } from "lucide-react";
 
-async function ShowcaseProjectsSection() {
-  const gh = await getGithubStats(profile.github);
-  const showcaseProjects = featuredProjects.map((p) => {
-    const repoSlug = p.links.find((l) => l.url.includes("github.com"))?.url.split("/").slice(-1)[0];
-    const stars = repoSlug ? gh?.starsByRepo[repoSlug] : undefined;
-    return { ...p, stars };
-  });
-  return <ProjectShowcase projects={showcaseProjects} />;
-}
-
-function ProjectShowcaseSkeleton() {
-  return (
-    <div style={{ marginTop: 32 }} aria-label="Loading Projects">
-      <div style={{ display: "flex", gap: 10, marginBottom: 28 }}>
-        {[70, 95, 85].map((w, i) => (
-          <div
-            key={i}
-            style={{
-              width: w,
-              height: 36,
-              borderRadius: 8,
-              background: "hsla(0, 0%, 9%, 0.88)",
-              border: "1px solid hsla(0, 0%, 100%, 0.08)",
-            }}
-          />
-        ))}
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            style={{
-              padding: 24,
-              borderRadius: 14,
-              background: "hsla(0, 0%, 9%, 0.88)",
-              border: "1px solid hsla(0, 0%, 100%, 0.08)",
-              minHeight: 280,
-            }}
-          >
-            <div style={{ width: "100%", height: 160, borderRadius: 10, background: "hsla(0, 0%, 100%, 0.04)" }} />
-            <div style={{ width: "55%", height: 20, borderRadius: 4, background: "hsla(45, 100%, 72%, 0.12)", marginTop: 16 }} />
-            <div style={{ width: "85%", height: 14, borderRadius: 4, background: "hsla(0, 0%, 100%, 0.06)", marginTop: 10 }} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default async function ProjectsPage() {
+export default function ProjectsPage() {
   return (
     <div className="page-shell">
       <Reveal>
         <h1 style={{ color: "var(--white-2)", fontSize: "var(--fs-1)" }}>Projects</h1>
         <p style={{ color: "var(--light-gray-70)", marginTop: 8, maxWidth: "60ch" }}>
-          The five I&apos;d actually walk you through in an interview — what problem each one solves,
-          and what I&apos;d change if I rebuilt it today.
+          Selected systems and applications I&apos;d walk you through in an interview — what each solves,
+          how it works, and what I&apos;d improve next.
         </p>
       </Reveal>
 
@@ -107,7 +56,7 @@ export default async function ProjectsPage() {
               </h3>
             </div>
             <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-7)", margin: 0, maxWidth: "60ch" }}>
-              Automated legacy codebase modernization engine using AST parsing, control flow DAGs, and unified Intermediate Representation.
+              Deterministic static analysis and software modernization using AST, CFG, DFG, and IR-based code intelligence.
             </p>
           </div>
           <Link
@@ -130,9 +79,8 @@ export default async function ProjectsPage() {
         </div>
       </Reveal>
 
-      <Suspense fallback={<ProjectShowcaseSkeleton />}>
-        <ShowcaseProjectsSection />
-      </Suspense>
+      {/* Immediate Project Catalog Rendering */}
+      <ProjectShowcase projects={featuredProjects} />
 
       <section style={{ marginTop: 56 }}>
         <Reveal>
@@ -140,18 +88,20 @@ export default async function ProjectsPage() {
             Open source contributions
           </h2>
         </Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
+        <div className="opensource-grid">
           {openSource.map((o, i) => (
-            <Reveal key={o.title} delay={i * 0.05}>
+            <Reveal key={o.title} delay={i * 0.05} style={{ height: "100%" }}>
               <a
                 href={o.url}
                 target="_blank"
-                rel="noreferrer"
-                className="gradient-border-hover"
-                style={{ display: "block", padding: 20 }}
+                rel="noopener noreferrer"
+                className="gradient-border-hover opensource-card"
               >
-                <h3 style={{ color: "var(--white-2)", fontSize: "var(--fs-4)" }}>{o.title}</h3>
-                <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-7)", marginTop: 6, lineHeight: 1.6 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                  <h3 style={{ color: "var(--white-2)", fontSize: "var(--fs-4)", fontWeight: 600 }}>{o.title}</h3>
+                  <ArrowUpRight size={14} color="var(--orange-yellow-crayola)" />
+                </div>
+                <p style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-7)", lineHeight: 1.6, flexGrow: 1, margin: 0 }}>
                   {o.text}
                 </p>
               </a>
@@ -160,8 +110,8 @@ export default async function ProjectsPage() {
         </div>
       </section>
 
-      {/* In The Lab (Building Toward) */}
-      <LabIncubator projects={upcomingProjects} />
+      {/* Developer Wisdom // Runtime Humor */}
+      <DeveloperQuotes />
 
       <QuietMark />
     </div>

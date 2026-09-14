@@ -62,6 +62,7 @@ function KineticChar({
         // Remove trailing letter-spacing expansion on last character so 'n' never pushes past boundaries
         marginRight: isLast ? 0 : undefined,
         overflow: "visible",
+        WebkitTextStroke: hovered && !reduce ? "1.6px hsla(45, 100%, 72%, 1)" : undefined,
       }}
       initial={reduce ? { opacity: 1 } : { opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -83,7 +84,6 @@ function KineticChar({
       animate={{
         opacity: 1,
         scale: hovered && !reduce ? 1.05 : 1,
-        WebkitTextStroke: hovered && !reduce ? "1.6px hsla(45, 100%, 72%, 1)" : undefined,
       }}
     >
       {char}

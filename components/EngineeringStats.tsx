@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { profile } from "@/lib/data";
 
 interface EngineeringStatsProps {
@@ -20,17 +20,41 @@ interface StatItem {
 
 export default function EngineeringStats({ gh }: EngineeringStatsProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [liveGh, setLiveGh] = useState<{ publicRepos: number; followers: number } | null>(gh ?? null);
 
-  const reposCount = gh?.publicRepos ?? profile.stats.publicRepos;
-  const followersCount = gh?.followers ?? profile.stats.githubFollowers;
+  useEffect(() => {
+    if (gh) return;
+    let active = true;
+    fetch(`https://api.github.com/users/${profile.github}`, {
+      headers: { Accept: "application/vnd.github+json" },
+      signal: AbortSignal.timeout(3000),
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (active && data) {
+          setLiveGh({
+            publicRepos: data.public_repos ?? profile.stats.publicRepos,
+            followers: data.followers ?? profile.stats.githubFollowers,
+          });
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [gh]);
+
+  const activeGh = gh ?? liveGh;
+  const reposCount = activeGh?.publicRepos ?? profile.stats.publicRepos;
+  const followersCount = activeGh?.followers ?? profile.stats.githubFollowers;
   const yearsCount = profile.stats.yearsCoding;
 
   const stats: StatItem[] = [
     {
       id: "exp",
-      formattedNumber: `${String(yearsCount).padStart(2, "0")}+`,
-      label: "YEARS BUILDING",
-      sub: "Full-Stack · Systems · Rust",
+      formattedNumber: `${yearsCount}+`,
+      label: "YEARS ENGINEERING",
+      sub: "Full-Stack · Backend · AI",
       sparklinePath: "M 0 16 L 15 16 L 28 11 L 42 7 L 60 3",
     },
     {
@@ -43,15 +67,15 @@ export default function EngineeringStats({ gh }: EngineeringStatsProps) {
     {
       id: "repos",
       formattedNumber: `${reposCount}+`,
-      label: "OPEN SOURCE ARTIFACTS",
+      label: "PUBLIC REPOSITORIES",
       sub: "Verified Repos & Tooling",
       sparklinePath: "M 0 15 L 16 15 L 24 9 L 36 9 L 44 4 L 60 4",
     },
     {
       id: "contributions",
       formattedNumber: "9.7K+",
-      label: "CODE CONTRIBUTIONS",
-      sub: "292-Day Streak · Live Commits",
+      label: "GITHUB CONTRIBUTIONS",
+      sub: "292-Day Streak · Live Activity",
       sparklinePath: "M 0 16 L 12 14 L 24 11 L 36 7 L 48 4 L 60 2",
     },
   ];

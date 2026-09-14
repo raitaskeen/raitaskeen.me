@@ -12,9 +12,6 @@ import {
   Mail,
   Phone,
   MapPin,
-  Github,
-  Linkedin,
-  Twitter,
   MessageCircle,
   Download,
   Check,
@@ -22,6 +19,7 @@ import {
   ArrowRight,
   CalendarDays,
 } from "lucide-react";
+import { Github, Linkedin, Twitter } from "@/components/icons/BrandIcons";
 
 // lucide-react has no native Bluesky glyph — small inline butterfly mark
 function BlueskyIcon({ size = 20, color = "var(--light-gray-70)" }: { size?: number; color?: string }) {
@@ -32,10 +30,29 @@ function BlueskyIcon({ size = 20, color = "var(--light-gray-70)" }: { size?: num
   );
 }
 
+function HuggingFaceIcon({ size = 20, color = "var(--light-gray-70)" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color} aria-hidden>
+      <path d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10c0-5.523-4.477-10-10-10zm-3.5 6.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-7.6 6.8c.8 1.4 2.3 2.2 4.1 2.2 1.8 0 3.3-.8 4.1-2.2.3-.5-.1-1-.6-.8-1 .4-2.2.6-3.5.6-1.3 0-2.5-.2-3.5-.6-.5-.2-.9.3-.6.8z" />
+    </svg>
+  );
+}
+
+function HackerRankIcon({ size = 20, color = "var(--light-gray-70)" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color} aria-hidden>
+      <path d="M12 0a12 12 0 1 0 12 12A12 12 0 0 0 12 0zm2.2 16.8h-1.5v-3.7h-1.4v3.7H9.8V7.2h1.5v3.7h1.4V7.2h1.5z" />
+    </svg>
+  );
+}
+
 const socialLinks = [
   { href: () => profile.socials.github, label: "GitHub", icon: Github },
   { href: () => profile.socials.linkedin, label: "LinkedIn", icon: Linkedin },
-  { href: () => profile.socials.twitter, label: "X / Twitter", icon: Twitter },
+  { href: () => profile.socials.twitter, label: "X", icon: Twitter },
+  { href: () => profile.socials.huggingface, label: "Hugging Face", icon: HuggingFaceIcon },
+  { href: () => profile.socials.hackerrank, label: "HackerRank", icon: HackerRankIcon },
+  { href: () => profile.scheduleUrl, label: "Cal.com", icon: CalendarDays },
   { href: () => profile.socials.bluesky, label: "Bluesky", icon: BlueskyIcon },
   { href: () => profile.socials.reddit, label: "Reddit", icon: MessageCircle },
 ];
@@ -45,7 +62,7 @@ function SocialIcon({ href, label, Icon }: { href: string; label: string; Icon: 
     <a
       href={href}
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
       aria-label={label}
       className="social-icon-item"
     >
@@ -263,7 +280,7 @@ export default function ContactPage() {
 
       <Reveal variant="fade-up" delay={0.25}>
         <p style={{ color: "var(--light-gray-70)", marginTop: 14, maxWidth: "62ch", lineHeight: 1.65 }}>
-          Have a role, project, or question in mind? Send a message and I&apos;ll reply directly from {profile.email} — or schedule a technical conversation below.
+          Have a role, project, or technical problem in mind? Send a message and I&apos;ll reply directly from {profile.email} — or schedule a technical conversation below.
         </p>
       </Reveal>
 
@@ -348,7 +365,7 @@ export default function ContactPage() {
               <a
                 href={profile.scheduleUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="project-link"
                 style={{
                   display: "inline-flex",

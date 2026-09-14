@@ -349,13 +349,13 @@ An exhaustive 15-item hardening pass was conducted across the codebase. For full
 <div align="left">
 
 ### **Taskeen Haider**
-*Systems & Full-Stack Software Engineer*
+*Software Engineer · Full-Stack · Backend · AI Automation*
 
 - **Platform & Systems Hub:** [raitaskeen.me](https://raitaskeen.me)
 - **GitHub:** [@raitaskeen](https://github.com/raitaskeen)
-- **Email:** [raitaskeenhaider786@gmail.com](mailto:raitaskeenhaider786@gmail.com)
-- **LinkedIn:** [Taskeen Haider](https://linkedin.com/in/taskeenhaider)
-- **Primary Disciplines:** Static Analysis (AST / CFG / DFG), Compiler Modernization, High-Performance Web Systems, Deterministic AI Workflows.
+- **Email:** [raitaskeen.dev@gmail.com](mailto:raitaskeen.dev@gmail.com)
+- **LinkedIn:** [Taskeen Haider](https://linkedin.com/in/raitaskeen)
+- **Primary Disciplines:** Full-Stack Systems, Backend Architecture, Static Analysis (AST / CFG / DFG), Deterministic AI Automation.
 
 </div>
 

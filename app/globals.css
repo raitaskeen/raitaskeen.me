@@ -1941,3 +1941,85 @@ textarea:-webkit-autofill:focus {
     padding-bottom: 20px !important;
   }
 }
+
+/* ========================================================
+   PROJECTS & OPEN SOURCE STYLES
+   ======================================================== */
+
+.project-category-pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1px solid var(--orange-yellow-crayola);
+  pointer-events: none;
+}
+
+.opensource-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .opensource-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.opensource-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 14px;
+  background: hsla(0, 0%, 9%, 0.88);
+  border: 1px solid hsla(0, 0%, 100%, 0.08);
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.signal-item-link {
+  background: hsla(0, 0%, 100%, 0.02);
+  border: 1px solid hsla(0, 0%, 100%, 0.04);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.signal-item-link:hover {
+  background: hsla(45, 100%, 72%, 0.06) !important;
+  border-color: hsla(45, 100%, 72%, 0.2) !important;
+}
+
+/* ========================================================
+   CUSTOM CURSOR & POINTER LIGHT LAYER STYLES
+   SSR-safe: DOM is always rendered identically on server and
+   client; coarse pointers / touch / reduced-motion are hidden via CSS
+   ======================================================== */
+
+.custom-cursor-layer {
+  display: block;
+  pointer-events: none;
+}
+
+.custom-cursor-ring {
+  pointer-events: none;
+}
+
+.custom-cursor-core {
+  pointer-events: none;
+}
+
+.pointer-light-layer {
+  display: block;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .custom-cursor-layer,
+  .custom-cursor-ring,
+  .custom-cursor-core,
+  .pointer-light-layer {
+    display: none !important;
+  }
+}
+
+

@@ -41,9 +41,11 @@ export default function Typewriter({
     }
 
     if (deleting && text === "") {
-      setDeleting(false);
-      setWordIndex((prev) => (prev + 1) % words.length);
-      return;
+      const timer = setTimeout(() => {
+        setDeleting(false);
+        setWordIndex((prev) => (prev + 1) % words.length);
+      }, 30);
+      return () => clearTimeout(timer);
     }
 
     // Natural human typing rhythm (slight variance)
