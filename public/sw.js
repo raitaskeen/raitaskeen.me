@@ -1,5 +1,5 @@
 // Service Worker for raitaskeen portfolio PWA
-const CACHE_NAME = "raitaskeen-v2";
+const CACHE_NAME = "raitaskeen-v3";
 
 const PRECACHE_ASSETS = [
   "/",
@@ -44,6 +44,11 @@ self.addEventListener("fetch", (event) => {
 
   // Skip cross-origin requests except same origin and fonts
   if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  // Always bypass Service Worker for API routes and PDF files (e.g. fresh resume)
+  if (url.pathname.startsWith("/api/") || url.pathname.endsWith(".pdf")) {
     return;
   }
 

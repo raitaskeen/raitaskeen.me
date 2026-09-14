@@ -163,7 +163,7 @@ textarea {
 
 html {
   font-family: var(--ff-poppins);
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
@@ -1737,10 +1737,6 @@ textarea.form-input::-webkit-resizer {
 /* ========================================================
    FINAL CUSTOM FIXES (Spacing, Layout, Buttons, Clock)
    ======================================================== */
-
-html {
-  scroll-behavior: smooth;
-}
 
 /* Fix extra spacing at the bottom below footer */
 main {

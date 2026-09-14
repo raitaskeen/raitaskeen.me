@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { profile } from "@/lib/data";
 
 interface EngineeringStatsProps {
@@ -20,33 +20,9 @@ interface StatItem {
 
 export default function EngineeringStats({ gh }: EngineeringStatsProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [liveGh, setLiveGh] = useState<{ publicRepos: number; followers: number } | null>(gh ?? null);
 
-  useEffect(() => {
-    if (gh) return;
-    let active = true;
-    fetch(`https://api.github.com/users/${profile.github}`, {
-      headers: { Accept: "application/vnd.github+json" },
-      signal: AbortSignal.timeout(3000),
-    })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (active && data) {
-          setLiveGh({
-            publicRepos: data.public_repos ?? profile.stats.publicRepos,
-            followers: data.followers ?? profile.stats.githubFollowers,
-          });
-        }
-      })
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
-  }, [gh]);
-
-  const activeGh = gh ?? liveGh;
-  const reposCount = activeGh?.publicRepos ?? profile.stats.publicRepos;
-  const followersCount = activeGh?.followers ?? profile.stats.githubFollowers;
+  const reposCount = gh?.publicRepos ?? profile.stats.publicRepos;
+  const followersCount = gh?.followers ?? profile.stats.githubFollowers;
   const yearsCount = profile.stats.yearsCoding;
 
   const stats: StatItem[] = [

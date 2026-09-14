@@ -10,6 +10,8 @@ import {
   education,
   educationNote,
   githubAchievements,
+  courses,
+  spokenLanguages,
 } from "@/lib/data";
 
 export interface KnowledgeBase {
@@ -55,6 +57,8 @@ export interface KnowledgeBase {
   technicalSkills: typeof technicalSkills;
   githubAchievements: typeof githubAchievements;
   curatedResources: typeof curatedResources;
+  courses: typeof courses;
+  spokenLanguages: typeof spokenLanguages;
 }
 
 export const taskeenKnowledge: KnowledgeBase = {
@@ -101,4 +105,6 @@ export const taskeenKnowledge: KnowledgeBase = {
   technicalSkills,
   githubAchievements,
   curatedResources,
+  courses,
+  spokenLanguages,
 };

@@ -9,6 +9,7 @@ import Background from "@/components/Background";
 import PortfolioBot from "@/components/PortfolioBotClient";
 import CustomCursor from "@/components/motion/CustomCursor";
 import PwaRegister from "@/components/PwaRegister";
+import RouteScrollReset from "@/components/RouteScrollReset";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Background />
         <PointerSystem>
+          <RouteScrollReset />
           <CustomCursor />
           <ScrollProgress />
           <Nav />

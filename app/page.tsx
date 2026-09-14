@@ -70,7 +70,6 @@ export default async function Home() {
               <Magnetic strength={0.3}>
                 <Link
                   href="/contact"
-                  prefetch={false}
                   className="shimmer-btn"
                   style={{
                     display: "inline-block",
@@ -159,7 +158,6 @@ export default async function Home() {
           <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 18, flexWrap: "wrap" }}>
             <Link
               href="/projects/legacy-exodus"
-              prefetch={false}
               className="link-draw"
               style={{
                 color: "var(--orange-yellow-crayola)",
@@ -174,7 +172,6 @@ export default async function Home() {
             </Link>
             <Link
               href="/projects"
-              prefetch={false}
               style={{
                 color: "var(--light-gray-70)",
                 fontSize: "var(--fs-7)",
@@ -218,7 +215,6 @@ export default async function Home() {
 
           <Link
             href="/about"
-            prefetch={false}
             className="link-draw"
             style={{
               color: "var(--white-2)",
