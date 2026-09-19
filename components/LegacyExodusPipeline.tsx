@@ -128,7 +128,7 @@ export default function LegacyExodusPipeline() {
         aria-label="LegacyExodus Architecture Stages"
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))",
           gap: 12,
           position: "relative",
           marginBottom: 20,

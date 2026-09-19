@@ -61,7 +61,7 @@ export default function EngineeringStats({ gh }: EngineeringStatsProps) {
       aria-label="Verified Engineering Metrics"
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))",
         gap: 16,
         marginTop: 32,
       }}

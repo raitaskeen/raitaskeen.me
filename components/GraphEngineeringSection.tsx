@@ -254,7 +254,7 @@ export function GraphDependencySection({ hideThesisBanner = false }: { hideThesi
             border: "1px solid hsla(0,0%,100%,0.08)",
             borderLeft: "3px solid var(--orange-yellow-crayola)",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))",
             gap: 14,
           }}
         >
@@ -359,7 +359,7 @@ export function AiOrchestrationSection() {
             backdropFilter: "blur(12px)",
             border: "1px solid hsla(0, 0%, 100%, 0.08)",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))",
             gap: 16,
           }}
         >
@@ -393,7 +393,7 @@ export function AiOrchestrationSection() {
       </div>
 
       {/* 4. AI Tool Orchestration Visual (Spec §14) & Token Discipline (Spec §15) */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))", gap: 16 }}>
         {/* Tool Orchestration Workflow */}
         <div
           className="gradient-border-hover"

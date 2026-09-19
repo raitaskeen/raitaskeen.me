@@ -96,7 +96,7 @@ export default function JourneyNarrative() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 130px), 1fr))",
             gap: 10,
             alignItems: "stretch",
           }}

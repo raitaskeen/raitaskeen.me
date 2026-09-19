@@ -19,8 +19,20 @@ import {
   ArrowRight,
   CalendarDays,
   AlertCircle,
+  Copy,
 } from "lucide-react";
 import { Github, Linkedin, Twitter } from "@/components/icons/BrandIcons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Alert,
+  AlertTitle,
+  AlertDescription,
+} from "@/components/ui/alert";
 
 // lucide-react has no native Bluesky glyph — small inline butterfly mark
 function BlueskyIcon({ size = 20, color = "var(--light-gray-70)" }: { size?: number; color?: string }) {
@@ -70,6 +82,56 @@ function SocialIcon({ href, label, Icon }: { href: string; label: string; Icon: 
       <Icon size={20} color="var(--light-gray-70)" />
       <span className="social-tooltip" aria-hidden>{label}</span>
     </a>
+  );
+}
+
+function CopyEmailButton({ email }: { email: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = email;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          onClick={handleCopy}
+          aria-label={copied ? "Email copied to clipboard" : "Copy email address"}
+          style={{
+            background: "none",
+            border: "none",
+            color: copied ? "var(--orange-yellow-crayola)" : "var(--light-gray-70)",
+            cursor: "pointer",
+            padding: 4,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 4,
+            transition: "color var(--dur-hover) var(--ease-out-standard)",
+          }}
+        >
+          {copied ? <Check size={14} /> : <Copy size={14} />}
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <span>{copied ? "Copied to clipboard!" : "Copy email"}</span>
+      </TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -306,51 +368,60 @@ export default function ContactPage() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
           gap: 40,
           marginTop: 40,
         }}
       >
         {/* Left Column: Direct contact channels & metadata */}
         <Reveal variant="slide-right">
-          <div role="list">
-            <Stagger gap={0.06} variant="fade-up">
-              {[
-                <div
-                  key="email"
-                  role="listitem"
-                  style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--light-gray)", marginBottom: 16 }}
-                >
-                  <Mail size={16} color="var(--orange-yellow-crayola)" /> {profile.email}
-                </div>,
-                <div
-                  key="phone"
-                  role="listitem"
-                  style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--light-gray)", marginBottom: 16 }}
-                >
-                  <Phone size={16} color="var(--orange-yellow-crayola)" /> {profile.phone}
-                </div>,
-                <div
-                  key="loc"
-                  role="listitem"
-                  style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--light-gray)", marginBottom: 16 }}
-                >
-                  <MapPin size={16} color="var(--orange-yellow-crayola)" /> {profile.location}
-                </div>,
-                <div
-                  key="avail"
-                  role="listitem"
-                  style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--light-gray-70)", fontSize: "var(--fs-7)" }}
-                >
-                  <span
-                    aria-hidden
-                    style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--orange-yellow-crayola)" }}
-                  />
-                  Available for selected work
-                </div>,
-              ]}
-            </Stagger>
-          </div>
+          <TooltipProvider>
+            <div role="list">
+              <Stagger gap={0.06} variant="fade-up">
+                {[
+                  <div
+                    key="email"
+                    role="listitem"
+                    style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--light-gray)", marginBottom: 16, flexWrap: "wrap" }}
+                  >
+                    <Mail size={16} color="var(--orange-yellow-crayola)" />
+                    <a
+                      href={`mailto:${profile.email}`}
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      {profile.email}
+                    </a>
+                    <CopyEmailButton email={profile.email} />
+                  </div>,
+                  <div
+                    key="phone"
+                    role="listitem"
+                    style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--light-gray)", marginBottom: 16 }}
+                  >
+                    <Phone size={16} color="var(--orange-yellow-crayola)" /> {profile.phone}
+                  </div>,
+                  <div
+                    key="loc"
+                    role="listitem"
+                    style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--light-gray)", marginBottom: 16 }}
+                  >
+                    <MapPin size={16} color="var(--orange-yellow-crayola)" /> {profile.location}
+                  </div>,
+                  <div
+                    key="avail"
+                    role="listitem"
+                    style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--light-gray-70)", fontSize: "var(--fs-7)" }}
+                  >
+                    <span
+                      aria-hidden
+                      style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--orange-yellow-crayola)" }}
+                    />
+                    Available for selected work
+                  </div>,
+                ]}
+              </Stagger>
+            </div>
+          </TooltipProvider>
 
           <div style={{ display: "flex", gap: 20, marginTop: 24, flexWrap: "wrap" }}>
             {socialLinks.map((s) => (
@@ -504,57 +575,44 @@ export default function ContactPage() {
                 />
 
                 {status === "error" && (
-                  <div
-                    role="alert"
-                    style={{
-                      padding: "12px 16px",
-                      borderRadius: 8,
-                      background: "hsla(0, 50%, 15%, 0.6)",
-                      border: "1px solid var(--bittersweet-shimmer)",
-                      color: "var(--white-2)",
-                      fontSize: "var(--fs-7)",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 6,
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <AlertCircle size={16} color="var(--bittersweet-shimmer)" />
-                      <span style={{ fontWeight: 600 }}>Message delivery failed</span>
-                    </div>
-                    <p style={{ margin: 0, color: "var(--light-gray)" }}>
-                      {errorMessage || "Unable to deliver your message. Please try again or email directly."}
-                    </p>
-                    <div style={{ display: "flex", gap: 12, marginTop: 4, alignItems: "center" }}>
-                      <button
-                        type="button"
-                        onClick={() => setStatus("idle")}
-                        style={{
-                          background: "transparent",
-                          border: "none",
-                          color: "var(--orange-yellow-crayola)",
-                          fontSize: "var(--fs-7)",
-                          fontWeight: 600,
-                          cursor: "pointer",
-                          padding: 0,
-                          textDecoration: "underline",
-                        }}
-                      >
-                        Try again
-                      </button>
-                      <span style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-8)" }}>•</span>
-                      <a
-                        href="mailto:taitaskeenhaider@gmail.com"
-                        style={{
-                          color: "var(--light-gray-70)",
-                          fontSize: "var(--fs-7)",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        Email directly
-                      </a>
-                    </div>
-                  </div>
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Message delivery failed</AlertTitle>
+                    <AlertDescription className="flex flex-col gap-2 mt-1">
+                      <p className="m-0 text-sm">
+                        {errorMessage || "Unable to deliver your message. Please try again or email directly."}
+                      </p>
+                      <div className="flex gap-3 items-center mt-1">
+                        <button
+                          type="button"
+                          onClick={() => setStatus("idle")}
+                          style={{
+                            background: "transparent",
+                            border: "none",
+                            color: "var(--orange-yellow-crayola)",
+                            fontSize: "var(--fs-7)",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                            padding: 0,
+                            textDecoration: "underline",
+                          }}
+                        >
+                          Try again
+                        </button>
+                        <span style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-8)" }}>•</span>
+                        <a
+                          href={`mailto:${profile.email}`}
+                          style={{
+                            color: "var(--light-gray-70)",
+                            fontSize: "var(--fs-7)",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          Email directly
+                        </a>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
                 )}
 
                 <motion.button

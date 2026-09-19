@@ -13,7 +13,7 @@ export function LiveSignalsSkeleton() {
       {/* 02 Skeleton */}
       <div style={{ marginBottom: 52 }}>
         <div style={{ width: 280, height: 28, background: "hsla(0, 0%, 100%, 0.05)", borderRadius: 6, marginBottom: 20 }} />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 24 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))", gap: 24 }}>
           <div
             style={{
               padding: 24,
@@ -38,7 +38,7 @@ export function LiveSignalsSkeleton() {
       {/* 03 Skeleton */}
       <div>
         <div style={{ width: 180, height: 28, background: "hsla(0, 0%, 100%, 0.05)", borderRadius: 6, marginBottom: 20 }} />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))", gap: 14 }}>
           {[1, 2, 3].map((i) => (
             <div
               key={i}
@@ -100,7 +100,7 @@ export function LiveSignalsView({ data }: { data: LiveSignalsPayload }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
             gap: 24,
           }}
         >
@@ -319,7 +319,7 @@ export function LiveSignalsView({ data }: { data: LiveSignalsPayload }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))",
             gap: 14,
           }}
         >

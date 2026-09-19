@@ -1,20 +1,46 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 /**
  * Architectural Contact Signature Wordmark
- * - 3-stage sequence (~1.3s total, plays once per entry):
+ * - 3-stage sequence (~1.3s total, plays once when scrolled into view):
  *   1. Restrained architectural framing brackets appear (0–250ms)
  *   2. Letter borders draw smoothly across "raitaskeen" (200–900ms)
  *   3. Complete wordmark settles permanently into crisp gold contour and subtle fill (900–1300ms)
- * - Zero bottom-clipping, fully responsive on mobile, and instantaneous with prefers-reduced-motion
+ * - Viewport intersection trigger: only plays when scrolled into view, never offscreen
+ * - Zero bottom-clipping, fully responsive on 320px+ mobile, and instantaneous with prefers-reduced-motion
  */
 export default function ContactSignature() {
   const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const [hasEnteredView, setHasEnteredView] = useState(false);
+
+  useEffect(() => {
+    if (reduce) return;
+
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
+          setHasEnteredView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [reduce]);
 
   return (
     <section
+      ref={sectionRef}
       aria-label="raitaskeen Signature Wordmark"
       style={{
         marginTop: 52,
@@ -24,10 +50,12 @@ export default function ContactSignature() {
         position: "relative",
         userSelect: "none",
         width: "100%",
+        maxWidth: "100%",
         boxSizing: "border-box",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        overflow: "hidden",
       }}
     >
       <svg
@@ -38,7 +66,7 @@ export default function ContactSignature() {
         aria-label="raitaskeen"
         style={{
           width: "100%",
-          maxWidth: 960,
+          maxWidth: 920,
           height: "auto",
           display: "block",
           overflow: "visible",
@@ -51,9 +79,14 @@ export default function ContactSignature() {
             stroke-width: 1.5px;
             stroke-linecap: square;
             ${
-              reduce
+              reduce || hasEnteredView
                 ? "opacity: 0.8;"
-                : "opacity: 0; animation: sig-frame-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;"
+                : "opacity: 0;"
+            }
+            ${
+              !reduce && hasEnteredView
+                ? "animation: sig-frame-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;"
+                : ""
             }
           }
 
@@ -80,13 +113,13 @@ export default function ContactSignature() {
             stroke: hsla(45, 100%, 72%, 0.85);
             stroke-width: 1.8px;
             stroke-dasharray: 1400;
-            stroke-dashoffset: ${reduce ? 0 : "1400"};
+            stroke-dashoffset: ${reduce || hasEnteredView ? "0" : "1400"};
             fill: hsla(45, 100%, 72%, 0.18);
-            fill-opacity: ${reduce ? 1 : 0};
+            fill-opacity: ${reduce ? 0.28 : hasEnteredView ? 0.28 : 0};
             ${
-              reduce
-                ? ""
-                : `animation: signature-draw 1.35s cubic-bezier(0.16, 1, 0.3, 1) 0.18s forwards;`
+              !reduce && hasEnteredView
+                ? "animation: signature-draw 1.35s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;"
+                : ""
             }
           }
 

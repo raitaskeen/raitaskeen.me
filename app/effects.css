@@ -249,7 +249,20 @@
 .page-shell {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 48px 24px 96px;
+  padding: 36px 20px 80px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .page-shell {
+    padding: 48px 24px 96px;
+  }
+}
+
+@media (max-width: 380px) {
+  .page-shell {
+    padding: 24px 14px 64px;
+  }
 }
 
 /* ---------- Global atmosphere — Phase 4 fluid background (spec §3-11) ---------- */

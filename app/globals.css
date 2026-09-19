@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /*-----------------------------------*\
   #style.css
 \*-----------------------------------*/
@@ -11,6 +15,28 @@
 \*-----------------------------------*/
 
 :root {
+  /* shadcn/ui semantic tokens (HSL channels) */
+  --background: 0 0% 7%;
+  --foreground: 0 0% 98%;
+  --card: 240 2% 13%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 8%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 45 100% 72%;
+  --primary-foreground: 0 0% 7%;
+  --secondary: 240 1% 17%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 70%;
+  --accent: 45 100% 72%;
+  --accent-foreground: 0 0% 7%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 100% / 0.1;
+  --input: 0 0% 100% / 0.12;
+  --ring: 45 100% 72%;
+  --radius: 0.5rem;
+
   /**
    * colors
    */

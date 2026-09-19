@@ -1,12 +1,16 @@
 // Service Worker for raitaskeen portfolio PWA
-const CACHE_NAME = "raitaskeen-v4";
+const CACHE_NAME = "raitaskeen-v5";
 const CACHE_PREFIX = "raitaskeen-";
 const MAX_DYNAMIC_ITEMS = 60;
 
 const PRECACHE_ASSETS = [
   "/",
+  "/manifest.webmanifest",
   "/assets/images/logo.svg",
   "/icon-192.png",
+  "/icon-192-maskable.png",
+  "/icon-512.png",
+  "/icon-maskable.png",
 ];
 
 const OFFLINE_FALLBACK_HTML = `<!DOCTYPE html>
@@ -187,7 +191,8 @@ self.addEventListener("fetch", (event) => {
   // 3. Public static assets & fonts: Stale-While-Revalidate with bounded dynamic cache
   const isPublicAsset =
     url.pathname.startsWith("/assets/") ||
-    url.pathname.match(/\.(js|css|svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)$/);
+    url.pathname.startsWith("/manifest.") ||
+    url.pathname.match(/\.(js|css|svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|webmanifest|json)$/);
 
   if (isPublicAsset) {
     event.respondWith(

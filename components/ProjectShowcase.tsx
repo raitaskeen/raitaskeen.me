@@ -7,9 +7,16 @@ import {
   AnimatePresence,
   useReducedMotion,
 } from "framer-motion";
-import { ExternalLink, Star, ChevronDown, Layers, Globe, Shield, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Star, ChevronDown, Layers, Globe, Shield, ArrowUpRight, RotateCcw, SearchX } from "lucide-react";
 import { Github } from "@/components/icons/BrandIcons";
 import { spring, ease, duration } from "@/lib/motion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 
 export type ShowcaseProject = {
   title: string;
@@ -129,103 +136,149 @@ export default function ProjectShowcase({ projects }: { projects: ShowcaseProjec
   }
 
   return (
-    <div className="project-index-container" style={{ marginTop: 32 }}>
-      {/* Category Filter Bar */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          marginBottom: 28,
-          flexWrap: "wrap",
-        }}
-        role="tablist"
-        aria-label="Project category filter"
-      >
-        {CATEGORIES.map((cat) => {
-          const active = selectedCategory === cat;
-          const count =
-            cat === "All"
-              ? projects.length
-              : projects.filter((p) => p.tag.toLowerCase() === cat.toLowerCase()).length;
-
-          return (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              role="tab"
-              aria-selected={active}
-              style={{
-                position: "relative",
-                padding: "8px 18px",
-                borderRadius: 999,
-                border: active ? "1px solid var(--orange-yellow-crayola)" : "1px solid hsla(0, 0%, 100%, 0.1)",
-                background: active ? "hsla(45, 100%, 72%, 0.12)" : "hsla(240, 2%, 13%, 0.6)",
-                color: active ? "var(--orange-yellow-crayola)" : "var(--light-gray-70)",
-                fontSize: "var(--fs-7)",
-                fontWeight: active ? 600 : 400,
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                transition: "border-color var(--dur-hover) var(--ease-out-standard), color var(--dur-hover) var(--ease-out-standard), background var(--dur-hover) var(--ease-out-standard)",
-              }}
-            >
-              {active && !reduce && (
-                <motion.span
-                  layoutId="project-category-pill"
-                  className="project-category-pill"
-                  initial={false}
-                  transition={{ duration: 0.18, ease: ease.out }}
-                />
-              )}
-              <span>{cat}</span>
-              <span
-                style={{
-                  fontSize: 11,
-                  fontFamily: "monospace",
-                  opacity: 0.8,
-                  padding: "1px 6px",
-                  borderRadius: 999,
-                  background: active ? "hsla(45, 100%, 72%, 0.2)" : "hsla(0, 0%, 100%, 0.08)",
-                }}
-              >
-                {count}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Projects Interactive Grid */}
-      <motion.div
-        layout
-        transition={{ duration: duration.fast, ease: "easeOut" }}
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: 20,
-        }}
-      >
-        <AnimatePresence mode="popLayout">
-          {filteredProjects.map((p, index) => {
-            const originalIndex = projects.findIndex((orig) => orig.title === p.title);
-            const isExpanded = expandedId === p.title;
+    <TooltipProvider delayDuration={120}>
+      <div className="project-index-container" style={{ marginTop: 32 }}>
+        {/* Category Filter Bar */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            marginBottom: 28,
+            flexWrap: "wrap",
+          }}
+          role="tablist"
+          aria-label="Project category filter"
+        >
+          {CATEGORIES.map((cat) => {
+            const active = selectedCategory === cat;
+            const count =
+              cat === "All"
+                ? projects.length
+                : projects.filter((p) => p.tag.toLowerCase() === cat.toLowerCase()).length;
 
             return (
-              <ProjectCard
-                key={p.title}
-                project={p}
-                index={originalIndex >= 0 ? originalIndex : index}
-                isExpanded={isExpanded}
-                onToggle={() => toggleExpand(p.title)}
-                reduce={!!reduce}
-              />
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                role="tab"
+                aria-selected={active}
+                style={{
+                  position: "relative",
+                  padding: "8px 16px",
+                  borderRadius: 999,
+                  border: active ? "1px solid var(--orange-yellow-crayola)" : "1px solid hsla(0, 0%, 100%, 0.1)",
+                  background: active ? "hsla(45, 100%, 72%, 0.12)" : "hsla(240, 2%, 13%, 0.6)",
+                  color: active ? "var(--orange-yellow-crayola)" : "var(--light-gray-70)",
+                  fontSize: "var(--fs-7)",
+                  fontWeight: active ? 600 : 400,
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  minHeight: 38,
+                  transition: "border-color var(--dur-hover) var(--ease-out-standard), color var(--dur-hover) var(--ease-out-standard), background var(--dur-hover) var(--ease-out-standard)",
+                }}
+              >
+                {active && !reduce && (
+                  <motion.span
+                    layoutId="project-category-pill"
+                    className="project-category-pill"
+                    initial={false}
+                    transition={{ duration: 0.18, ease: ease.out }}
+                  />
+                )}
+                <span>{cat}</span>
+                <span
+                  style={{
+                    fontSize: 11,
+                    fontFamily: "monospace",
+                    opacity: 0.8,
+                    padding: "1px 6px",
+                    borderRadius: 999,
+                    background: active ? "hsla(45, 100%, 72%, 0.2)" : "hsla(0, 0%, 100%, 0.08)",
+                  }}
+                >
+                  {count}
+                </span>
+              </button>
             );
           })}
-        </AnimatePresence>
-      </motion.div>
-    </div>
+
+          {selectedCategory !== "All" && (
+            <button
+              onClick={() => setSelectedCategory("All")}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono text-[var(--light-gray-70)] hover:text-[var(--white-2)] bg-[hsla(0,0%,100%,0.04)] border border-[hsla(0,0%,100%,0.08)] transition-colors ml-auto"
+              aria-label="Reset category filter"
+            >
+              <RotateCcw size={11} />
+              <span>Reset</span>
+            </button>
+          )}
+        </div>
+
+        {/* Empty State when category filter returns 0 projects */}
+        {filteredProjects.length === 0 ? (
+          <div
+            className="bracket-card flex flex-col items-center justify-center p-12 text-center my-8"
+            style={{
+              background: "hsla(0,0%,9%,0.8)",
+              border: "1px solid hsla(0,0%,100%,0.08)",
+              borderRadius: 14,
+            }}
+          >
+            <span className="corner-tick corner-tick-tl" aria-hidden="true" />
+            <span className="corner-tick corner-tick-tr" aria-hidden="true" />
+            <span className="corner-tick corner-tick-bl" aria-hidden="true" />
+            <span className="corner-tick corner-tick-br" aria-hidden="true" />
+
+            <SearchX size={32} className="text-[var(--orange-yellow-crayola)] mb-3" />
+            <h4 className="text-base font-semibold text-[var(--white-2)]">No matching projects found</h4>
+            <p className="text-xs text-[var(--light-gray-70)] max-w-sm mt-1 mb-4">
+              There are currently no featured case studies categorized under &ldquo;{selectedCategory}&rdquo;.
+            </p>
+            <Button
+              onClick={() => setSelectedCategory("All")}
+              variant="outline"
+              size="sm"
+              className="gap-2 font-mono text-xs"
+            >
+              <RotateCcw size={12} />
+              <span>Show all projects</span>
+            </Button>
+          </div>
+        ) : (
+          /* Projects Interactive Grid — Responsive minmax */
+          <motion.div
+            layout
+            transition={{ duration: duration.fast, ease: "easeOut" }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
+              gap: 20,
+            }}
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredProjects.map((p, index) => {
+                const originalIndex = projects.findIndex((orig) => orig.title === p.title);
+                const isExpanded = expandedId === p.title;
+
+                return (
+                  <ProjectCard
+                    key={p.title}
+                    project={p}
+                    index={originalIndex >= 0 ? originalIndex : index}
+                    isExpanded={isExpanded}
+                    onToggle={() => toggleExpand(p.title)}
+                    reduce={!!reduce}
+                  />
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </div>
+    </TooltipProvider>
   );
 }
 
@@ -242,9 +295,6 @@ function ProjectCard({
   onToggle: () => void;
   reduce: boolean;
 }) {
-  const [hoveredTech, setHoveredTech] = useState<string | null>(null);
-
-  const isInternal = project.links.some((l) => l.url.startsWith("/"));
   const internalLink = project.links.find((l) => l.url.startsWith("/"));
 
   const story: ProjectStory = PROJECT_STORIES[project.title] ?? {
@@ -274,7 +324,7 @@ function ProjectCard({
         className="bracket-card gradient-border-hover"
         style={{
           position: "relative",
-          padding: 24,
+          padding: 22,
           height: "100%",
           display: "flex",
           flexDirection: "column",
@@ -303,7 +353,7 @@ function ProjectCard({
             gap: 8,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span
               style={{
                 fontFamily: "monospace",
@@ -519,8 +569,8 @@ function ProjectCard({
           </div>
         </div>
 
-        {/* Tech Stack Chips with Interactive Architectural Role Inspection */}
-        <div style={{ marginTop: "auto", marginBottom: 16 }}>
+        {/* Tech Stack Chips with Accessible Tooltip Explanations */}
+        <div style={{ marginTop: "auto", marginBottom: 14 }}>
           <div
             style={{
               display: "flex",
@@ -546,59 +596,69 @@ function ProjectCard({
             style={{
               display: "flex",
               flexWrap: "wrap",
-              gap: 6,
+              gap: 5,
             }}
           >
-            {project.stack.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onMouseEnter={() => setHoveredTech(s)}
-                onMouseLeave={() => setHoveredTech(null)}
-                style={{
-                  fontSize: 11,
-                  padding: "3px 9px",
-                  borderRadius: 4,
-                  background: hoveredTech === s ? "hsla(45, 100%, 72%, 0.15)" : "hsla(0, 0%, 100%, 0.04)",
-                  borderColor: hoveredTech === s ? "var(--orange-yellow-crayola)" : "hsla(0, 0%, 100%, 0.1)",
-                  borderWidth: 1,
-                  borderStyle: "solid",
-                  color: hoveredTech === s ? "var(--orange-yellow-crayola)" : "var(--light-gray)",
-                  cursor: "default",
-                  transition: "all var(--dur-hover) var(--ease-out-standard)",
-                }}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
+            {project.stack.map((s) => {
+              const role = TECH_ROLES[s];
+              if (!role) {
+                return (
+                  <span
+                    key={s}
+                    style={{
+                      fontSize: 11,
+                      padding: "2px 8px",
+                      borderRadius: 4,
+                      background: "hsla(0, 0%, 100%, 0.04)",
+                      borderColor: "hsla(0, 0%, 100%, 0.1)",
+                      borderWidth: 1,
+                      borderStyle: "solid",
+                      color: "var(--light-gray)",
+                    }}
+                  >
+                    {s}
+                  </span>
+                );
+              }
 
-          {/* Contextual Stack Connection Callout */}
-          <div style={{ minHeight: 20, marginTop: 6 }}>
-            {hoveredTech && TECH_ROLES[hoveredTech] && (
-              <motion.p
-                initial={{ opacity: 0, y: 2 }}
-                animate={{ opacity: 1, y: 0 }}
-                style={{
-                  fontSize: 10,
-                  fontFamily: "monospace",
-                  color: "var(--orange-yellow-crayola)",
-                  margin: 0,
-                }}
-              >
-                ↳ {hoveredTech}: {TECH_ROLES[hoveredTech]}
-              </motion.p>
-            )}
+              return (
+                <Tooltip key={s}>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      style={{
+                        fontSize: 11,
+                        padding: "2px 8px",
+                        borderRadius: 4,
+                        background: "hsla(0, 0%, 100%, 0.04)",
+                        borderColor: "hsla(0, 0%, 100%, 0.1)",
+                        borderWidth: 1,
+                        borderStyle: "solid",
+                        color: "var(--light-gray)",
+                        cursor: "pointer",
+                        transition: "all var(--dur-hover) var(--ease-out-standard)",
+                      }}
+                      className="hover:border-[var(--orange-yellow-crayola)] hover:text-[var(--orange-yellow-crayola)] focus:outline-none focus:ring-1 focus:ring-[var(--orange-yellow-crayola)]"
+                    >
+                      {s}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{role}</p>
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
           </div>
         </div>
 
-        {/* Card Footer: Deep Inspection + Quick links */}
+        {/* Card Footer: System Specs Toggle + Direct Action Links */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            paddingTop: 14,
+            paddingTop: 12,
             borderTop: "1px solid hsla(0, 0%, 100%, 0.06)",
           }}
         >
@@ -619,7 +679,7 @@ function ProjectCard({
               transition: "color var(--dur-hover) var(--ease-out-standard)",
             }}
           >
-            <span>{isExpanded ? "Close Specs" : "System Specs"}</span>
+            <span>{isExpanded ? "Hide Specs" : "System Specs"}</span>
             <motion.span
               animate={{ rotate: isExpanded ? 180 : 0 }}
               transition={{ duration: 0.18, ease: ease.out }}
@@ -693,14 +753,14 @@ function ProjectCard({
             >
               <div
                 style={{
-                  marginTop: 16,
+                  marginTop: 14,
                   padding: "16px",
                   borderRadius: 8,
                   background: "hsla(0, 0%, 5%, 0.9)",
                   border: "1px solid hsla(45, 100%, 72%, 0.25)",
                   display: "flex",
                   flexDirection: "column",
-                  gap: 14,
+                  gap: 12,
                 }}
               >
                 {/* 1. Architecture */}
@@ -723,8 +783,8 @@ function ProjectCard({
                       display: "flex",
                       flexWrap: "wrap",
                       gap: 8,
-                      marginTop: 4,
-                      paddingTop: 12,
+                      marginTop: 2,
+                      paddingTop: 10,
                       borderTop: "1px solid hsla(0, 0%, 100%, 0.08)",
                     }}
                   >
