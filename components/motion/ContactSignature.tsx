@@ -3,11 +3,12 @@
 import { useReducedMotion } from "framer-motion";
 
 /**
- * Rebuilt Contact Signature Wordmark
- * - Lightweight responsive SVG/CSS letter outline drawing animation
- * - Plays once per page entry; transitions into a permanently visible, crisp wordmark
- * - Never cut off (zero clipping masks) and responsive on all viewports
- * - Honors prefers-reduced-motion with instantaneous completion
+ * Architectural Contact Signature Wordmark
+ * - 3-stage sequence (~1.3s total, plays once per entry):
+ *   1. Restrained architectural framing brackets appear (0–250ms)
+ *   2. Letter borders draw smoothly across "raitaskeen" (200–900ms)
+ *   3. Complete wordmark settles permanently into crisp gold contour and subtle fill (900–1300ms)
+ * - Zero bottom-clipping, fully responsive on mobile, and instantaneous with prefers-reduced-motion
  */
 export default function ContactSignature() {
   const reduce = useReducedMotion();
@@ -16,9 +17,9 @@ export default function ContactSignature() {
     <section
       aria-label="raitaskeen Signature Wordmark"
       style={{
-        marginTop: 56,
-        paddingTop: 24,
-        paddingBottom: 24,
+        marginTop: 52,
+        paddingTop: 28,
+        paddingBottom: 28,
         textAlign: "center",
         position: "relative",
         userSelect: "none",
@@ -44,6 +45,32 @@ export default function ContactSignature() {
         }}
       >
         <style>{`
+          /* Stage 1: Framing Brackets */
+          .sig-frame-bracket {
+            stroke: hsla(45, 100%, 72%, 0.45);
+            stroke-width: 1.5px;
+            stroke-linecap: square;
+            ${
+              reduce
+                ? "opacity: 0.8;"
+                : "opacity: 0; animation: sig-frame-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;"
+            }
+          }
+
+          @keyframes sig-frame-in {
+            0% {
+              opacity: 0;
+              transform: scale(0.97);
+              transform-origin: center;
+            }
+            100% {
+              opacity: 0.8;
+              transform: scale(1);
+              transform-origin: center;
+            }
+          }
+
+          /* Stage 2 & 3: Wordmark Stroke Drawing & Fill Settlement */
           .signature-text-outline {
             font-family: var(--font-poppins), 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
             font-size: 154px;
@@ -59,7 +86,7 @@ export default function ContactSignature() {
             ${
               reduce
                 ? ""
-                : `animation: signature-draw 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;`
+                : `animation: signature-draw 1.35s cubic-bezier(0.16, 1, 0.3, 1) 0.18s forwards;`
             }
           }
 
@@ -68,9 +95,9 @@ export default function ContactSignature() {
               stroke-dashoffset: 1400;
               fill-opacity: 0;
             }
-            60% {
+            65% {
               stroke-dashoffset: 0;
-              fill-opacity: 0.15;
+              fill-opacity: 0.12;
             }
             100% {
               stroke-dashoffset: 0;
@@ -79,6 +106,10 @@ export default function ContactSignature() {
           }
 
           @media (prefers-reduced-motion: reduce) {
+            .sig-frame-bracket {
+              animation: none !important;
+              opacity: 0.8 !important;
+            }
             .signature-text-outline {
               animation: none !important;
               stroke-dashoffset: 0 !important;
@@ -86,6 +117,20 @@ export default function ContactSignature() {
             }
           }
         `}</style>
+
+        {/* Stage 1: Architectural Drafting Corner Brackets */}
+        <g className="sig-frame-bracket">
+          {/* Top-Left Bracket */}
+          <path d="M 28 32 L 28 14 L 46 14" />
+          {/* Top-Right Bracket */}
+          <path d="M 972 32 L 972 14 L 954 14" />
+          {/* Bottom-Left Bracket */}
+          <path d="M 28 148 L 28 166 L 46 166" />
+          {/* Bottom-Right Bracket */}
+          <path d="M 972 148 L 972 166 L 954 166" />
+        </g>
+
+        {/* Stage 2 & 3: Wordmark Text Outline Drawing into Crisp Gold Permanent State */}
         <text
           x="50%"
           y="56%"

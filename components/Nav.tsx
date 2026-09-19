@@ -41,11 +41,7 @@ export default function Nav() {
       }}
     >
       <div className="site-nav-inner">
-        <motion.div
-          animate={reduce ? undefined : { scale: compact ? 0.94 : 1 }}
-          transition={spring.snap}
-          style={{ transformOrigin: "left center" }}
-        >
+        <div>
           <Link
             href="/"
             aria-label="raitaskeen home"
@@ -58,12 +54,12 @@ export default function Nav() {
               fontFamily: "ui-monospace, 'JetBrains Mono', 'Space Mono', 'SF Mono', 'Roboto Mono', 'Fira Code', Menlo, Consolas, monospace",
               display: "inline-flex",
               alignItems: "center",
-              transition: "color 0.2s ease, opacity 0.2s ease",
+              transition: "color var(--dur-hover) var(--ease-out-standard), opacity var(--dur-hover) var(--ease-out-standard)",
             }}
           >
             <span>raitaskeen</span>
           </Link>
-        </motion.div>
+        </div>
 
         <ul className="site-nav-links" style={{ display: "none", position: "relative" }} id="desktop-nav">
           {links.map((l) => {
@@ -78,7 +74,7 @@ export default function Nav() {
                   {active && !reduce && (
                     <motion.span
                       layoutId="nav-active-pill"
-                      transition={spring.lively}
+                      transition={{ duration: 0.18, ease: ease.out }}
                       style={{
                         position: "absolute", inset: 0, borderRadius: 999,
                         background: "var(--orange-yellow-crayola)", zIndex: -1,

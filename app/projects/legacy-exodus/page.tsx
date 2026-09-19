@@ -2,6 +2,7 @@ import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import QuietMark from "@/components/QuietMark";
 import SystemsMap from "@/components/SystemsMap";
+import LegacyExodusPipeline from "@/components/LegacyExodusPipeline";
 import { GraphDependencySection, AiOrchestrationSection } from "@/components/GraphEngineeringSection";
 import {
   ArrowLeft,
@@ -301,6 +302,13 @@ export default function LegacyExodusPage() {
               </div>
             ))}
           </div>
+        </Reveal>
+      </section>
+
+      {/* 5B — INTERACTIVE THREE-STAGE PIPELINE: Understand → Transform → Verify */}
+      <section style={{ marginTop: 56 }}>
+        <Reveal>
+          <LegacyExodusPipeline />
         </Reveal>
       </section>
 
