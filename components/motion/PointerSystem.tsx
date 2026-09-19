@@ -94,14 +94,7 @@ export default function PointerSystem({ children }: { children: React.ReactNode 
     };
   }, [reduce, isFinePointer, x, y, active]);
 
-  useEffect(() => {
-    if (reduce) return;
-    const unsubX = rawVelocityX.on("change", (vx) => {
-      const vy = rawVelocityY.get();
-      speed.set(Math.min(1, Math.hypot(vx, vy) / 1400));
-    });
-    return () => unsubX();
-  }, [rawVelocityX, rawVelocityY, speed, reduce]);
+  // Retain speed MotionValue for interface compatibility without per-frame event listener overhead
 
   const value: PointerSystemValue = {
     x,

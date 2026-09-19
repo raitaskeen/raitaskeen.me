@@ -8,28 +8,85 @@ import {
 
 export const runtime = "nodejs";
 
+const MAX_PAYLOAD_BYTES = 32_768; // 32KB max request body
+
+const SECURITY_HEADERS = {
+  "Cache-Control": "private, no-cache, no-store, must-revalidate",
+  "X-Content-Type-Options": "nosniff",
+};
+
 export async function POST(req: Request) {
   try {
-    const forwarded = req.headers.get("x-forwarded-for");
-    const ip = forwarded ? forwarded.split(",")[0].trim() : (req.headers.get("x-real-ip")?.trim() || "local");
-    if (!isAllowedRate(ip)) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded. Please wait a moment." },
-        { status: 429 }
+    // 1. Enforce payload size limit prior to full memory allocation
+    const contentLength = req.headers.get("content-length");
+    if (contentLength && parseInt(contentLength, 10) > MAX_PAYLOAD_BYTES) {
+      return new NextResponse(
+        JSON.stringify({ error: "Payload too large. Maximum body size is 32KB." }),
+        {
+          status: 413,
+          headers: {
+            "Content-Type": "application/json",
+            ...SECURITY_HEADERS,
+          },
+        }
       );
     }
 
-    const body = await req.json();
-    const rawMessages = body?.messages || [];
-    const sanitizedMessages = sanitizeMessages(rawMessages, 10);
+    // 2. Client IP extraction prioritizing Vercel's trusted edge proxy header
+    const vercelIp = req.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim();
+    const realIp = req.headers.get("x-real-ip")?.trim();
+    const forwarded = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+    const ip = vercelIp || realIp || forwarded || "127.0.0.1";
+
+    if (!isAllowedRate(ip)) {
+      return new NextResponse(
+        JSON.stringify({ error: "Rate limit exceeded. Please wait a moment before sending more messages." }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            ...SECURITY_HEADERS,
+          },
+        }
+      );
+    }
+
+    // 3. Safe JSON parsing with graceful syntax error rejection
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return new NextResponse(
+        JSON.stringify({ error: "Malformed JSON payload in request body." }),
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+            ...SECURITY_HEADERS,
+          },
+        }
+      );
+    }
+
+    const rawMessages = (body as Record<string, unknown>)?.messages;
+    const sanitizedMessages = sanitizeMessages(Array.isArray(rawMessages) ? rawMessages : [], 10);
 
     if (sanitizedMessages.length === 0) {
-      return NextResponse.json({ error: "Valid messages array required" }, { status: 400 });
+      return new NextResponse(
+        JSON.stringify({ error: "A valid non-empty messages array is required." }),
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+            ...SECURITY_HEADERS,
+          },
+        }
+      );
     }
 
     const groqApiKey = process.env.GROQ_API_KEY;
 
-    // 1. If GROQ_API_KEY is available, stream from Groq
+    // 4. If GROQ_API_KEY is available, stream from Groq with abort signal & timeout
     if (groqApiKey) {
       try {
         const systemPrompt = getSystemPrompt();
@@ -38,7 +95,6 @@ export async function POST(req: Request) {
           ...sanitizedMessages,
         ];
 
-        // Candidate models in order of priority: user-defined or modern Groq production models
         const candidateModels = [
           process.env.GROQ_MODEL,
           "openai/gpt-oss-120b",
@@ -49,6 +105,11 @@ export async function POST(req: Request) {
 
         for (const model of candidateModels) {
           try {
+            const timeoutSignal = AbortSignal.timeout(8000);
+            const combinedSignal = req.signal
+              ? AbortSignal.any([req.signal, timeoutSignal])
+              : timeoutSignal;
+
             const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
               method: "POST",
               headers: {
@@ -62,62 +123,104 @@ export async function POST(req: Request) {
                 max_tokens: 600,
                 stream: true,
               }),
+              signal: combinedSignal,
             });
 
             if (response.ok && response.body) {
               return new Response(response.body, {
                 headers: {
-                  "Content-Type": "text/event-stream",
-                  "Cache-Control": "no-cache",
+                  "Content-Type": "text/event-stream; charset=utf-8",
                   "Connection": "keep-alive",
+                  ...SECURITY_HEADERS,
                 },
               });
             } else {
-              const errText = await response.text().catch(() => "");
-              console.warn(`[Groq API] Model "${model}" failed (${response.status}): ${errText}`);
-              // If model not found or invalid, continue to next candidate
               if (response.status === 404 || response.status === 400) {
                 continue;
               }
             }
-          } catch (modelErr) {
-            console.warn(`[Groq API] Error requesting model "${model}":`, modelErr);
+          } catch (modelErr: unknown) {
+            const isAbort = modelErr instanceof Error && modelErr.name === "AbortError";
+            if (isAbort && req.signal?.aborted) {
+              // Client disconnected, stop trying candidate models
+              break;
+            }
           }
         }
-      } catch (err) {
-        console.error("[Groq API] Unexpected error in chat route:", err);
+      } catch {
+        // Fall back gracefully to local deterministic response generator
       }
     }
 
-    // 2. Intelligent local streaming fallback with turn awareness & intent matching
+    // 5. Intelligent local streaming fallback with disconnect-aware ReadableStream
     const answerText = generateDeterministicResponse(sanitizedMessages);
     const encoder = new TextEncoder();
+    let isCancelled = false;
 
     const stream = new ReadableStream({
       async start(controller) {
         const words = answerText.split(" ");
         for (let i = 0; i < words.length; i++) {
+          if (isCancelled) break;
           const chunk = (i === 0 ? "" : " ") + words[i];
           const sseData = `data: ${JSON.stringify({
             choices: [{ delta: { content: chunk } }],
           })}\n\n`;
-          controller.enqueue(encoder.encode(sseData));
+
+          try {
+            controller.enqueue(encoder.encode(sseData));
+          } catch {
+            break;
+          }
+
           await new Promise((r) => setTimeout(r, 14));
         }
-        controller.enqueue(encoder.encode("data: [DONE]\n\n"));
-        controller.close();
+
+        if (!isCancelled) {
+          try {
+            controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+            controller.close();
+          } catch {
+            // Stream was closed externally
+          }
+        }
+      },
+      cancel() {
+        isCancelled = true;
       },
     });
 
     return new Response(stream, {
       headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
+        "Content-Type": "text/event-stream; charset=utf-8",
         "Connection": "keep-alive",
+        ...SECURITY_HEADERS,
       },
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Internal error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const isAbort = err instanceof Error && err.name === "AbortError";
+    if (isAbort) {
+      return new NextResponse(
+        JSON.stringify({ error: "Request timed out or was cancelled by the client." }),
+        {
+          status: 504,
+          headers: {
+            "Content-Type": "application/json",
+            ...SECURITY_HEADERS,
+          },
+        }
+      );
+    }
+
+    return new NextResponse(
+      JSON.stringify({ error: "An unexpected error occurred while processing your request." }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+          ...SECURITY_HEADERS,
+        },
+      }
+    );
   }
 }

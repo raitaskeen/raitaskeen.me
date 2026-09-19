@@ -6,6 +6,8 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 2678400,
     dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       { protocol: "https", hostname: "ghchart.rshah.org" },
       { protocol: "https", hostname: "streak-stats.demolab.com" },

@@ -18,6 +18,7 @@ import {
   Loader2,
   ArrowRight,
   CalendarDays,
+  AlertCircle,
 } from "lucide-react";
 import { Github, Linkedin, Twitter } from "@/components/icons/BrandIcons";
 
@@ -105,6 +106,7 @@ function Field({
   touched,
   onTouch,
   error,
+  autoComplete,
 }: {
   name: FieldName;
   type?: string;
@@ -118,6 +120,7 @@ function Field({
   touched: boolean;
   onTouch: () => void;
   error: string | null;
+  autoComplete?: string;
 }) {
   const [focused, setFocused] = useState(false);
   const showError = touched && !!error;
@@ -170,6 +173,7 @@ function Field({
           type={textarea ? undefined : type}
           placeholder={placeholder}
           required
+          autoComplete={autoComplete}
           disabled={disabled}
           rows={textarea ? rows : undefined}
           value={value}
@@ -223,7 +227,8 @@ function Field({
 export default function ContactPage() {
   const [form, setForm] = useState({ fullname: "", email: "", message: "" });
   const [touched, setTouched] = useState({ fullname: false, email: false, message: false });
-  const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "sent" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showPanel, setShowPanel] = useState(false);
   const reduce = useReducedMotion();
 
@@ -236,22 +241,35 @@ export default function ContactPage() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (status !== "idle") return;
+    if (status === "submitting" || status === "sent") return;
     if (!valid) {
       setTouched({ fullname: true, email: true, message: true });
       return;
     }
     setStatus("submitting");
+    setErrorMessage(null);
     const data = new FormData(e.currentTarget);
     try {
-      await fetch("https://formspree.io/f/mgoggodq", {
+      const res = await fetch("https://formspree.io/f/mgoggodq", {
         method: "POST",
         body: data,
         headers: { Accept: "application/json" },
       });
-    } finally {
-      setStatus("sent");
-      window.setTimeout(() => setShowPanel(true), 200);
+      if (res.ok) {
+        setStatus("sent");
+        window.setTimeout(() => setShowPanel(true), 200);
+      } else {
+        const resData = await res.json().catch(() => null);
+        const detail =
+          resData?.errors?.map((err: { message?: string }) => err.message).filter(Boolean).join(", ") ||
+          resData?.error ||
+          "Message delivery failed. Please check your inputs or try again later.";
+        setErrorMessage(detail);
+        setStatus("error");
+      }
+    } catch {
+      setErrorMessage("Network connection error. Please verify your internet connection and try again.");
+      setStatus("error");
     }
   }
 
@@ -440,10 +458,14 @@ export default function ContactPage() {
                 <Field
                   name="fullname"
                   label="Full name"
-                  placeholder="Enter Your Beutiful Name"
+                  placeholder="e.g. Alex Morgan"
+                  autoComplete="name"
                   value={form.fullname}
-                  onChange={(v) => setForm({ ...form, fullname: v })}
-                  disabled={status !== "idle"}
+                  onChange={(v) => {
+                    setForm({ ...form, fullname: v });
+                    if (status === "error") setStatus("idle");
+                  }}
+                  disabled={status === "submitting"}
                   touched={touched.fullname}
                   onTouch={() => setTouched((t) => ({ ...t, fullname: true }))}
                   error={errors.fullname}
@@ -452,10 +474,14 @@ export default function ContactPage() {
                   name="email"
                   type="email"
                   label="Email address"
-                  placeholder="Enter Your Email Address"
+                  placeholder="alex@example.com"
+                  autoComplete="email"
                   value={form.email}
-                  onChange={(v) => setForm({ ...form, email: v })}
-                  disabled={status !== "idle"}
+                  onChange={(v) => {
+                    setForm({ ...form, email: v });
+                    if (status === "error") setStatus("idle");
+                  }}
+                  disabled={status === "submitting"}
                   touched={touched.email}
                   onTouch={() => setTouched((t) => ({ ...t, email: true }))}
                   error={errors.email}
@@ -467,20 +493,77 @@ export default function ContactPage() {
                   textarea
                   rows={5}
                   value={form.message}
-                  onChange={(v) => setForm({ ...form, message: v })}
-                  disabled={status !== "idle"}
+                  onChange={(v) => {
+                    setForm({ ...form, message: v });
+                    if (status === "error") setStatus("idle");
+                  }}
+                  disabled={status === "submitting"}
                   touched={touched.message}
                   onTouch={() => setTouched((t) => ({ ...t, message: true }))}
                   error={errors.message}
                 />
 
+                {status === "error" && (
+                  <div
+                    role="alert"
+                    style={{
+                      padding: "12px 16px",
+                      borderRadius: 8,
+                      background: "hsla(0, 50%, 15%, 0.6)",
+                      border: "1px solid var(--bittersweet-shimmer)",
+                      color: "var(--white-2)",
+                      fontSize: "var(--fs-7)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 6,
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <AlertCircle size={16} color="var(--bittersweet-shimmer)" />
+                      <span style={{ fontWeight: 600 }}>Message delivery failed</span>
+                    </div>
+                    <p style={{ margin: 0, color: "var(--light-gray)" }}>
+                      {errorMessage || "Unable to deliver your message. Please try again or email directly."}
+                    </p>
+                    <div style={{ display: "flex", gap: 12, marginTop: 4, alignItems: "center" }}>
+                      <button
+                        type="button"
+                        onClick={() => setStatus("idle")}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: "var(--orange-yellow-crayola)",
+                          fontSize: "var(--fs-7)",
+                          fontWeight: 600,
+                          cursor: "pointer",
+                          padding: 0,
+                          textDecoration: "underline",
+                        }}
+                      >
+                        Try again
+                      </button>
+                      <span style={{ color: "var(--light-gray-70)", fontSize: "var(--fs-8)" }}>•</span>
+                      <a
+                        href="mailto:taitaskeenhaider@gmail.com"
+                        style={{
+                          color: "var(--light-gray-70)",
+                          fontSize: "var(--fs-7)",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        Email directly
+                      </a>
+                    </div>
+                  </div>
+                )}
+
                 <motion.button
                   type="submit"
                   layout
-                  disabled={status === "submitting"}
+                  disabled={status === "submitting" || (!valid && status !== "error")}
                   className="shimmer-btn"
-                  whileHover={valid && status === "idle" && !reduce ? { y: -2 } : undefined}
-                  whileTap={valid && status === "idle" && !reduce ? { scale: scaleToken.press } : undefined}
+                  whileHover={valid && status !== "submitting" && !reduce ? { y: -2 } : undefined}
+                  whileTap={valid && status !== "submitting" && !reduce ? { scale: scaleToken.press } : undefined}
                   transition={spring.snap}
                   style={{
                     background:
@@ -498,7 +581,7 @@ export default function ContactPage() {
                     padding: "12px 24px",
                     borderRadius: 8,
                     border: "none",
-                    cursor: valid && status === "idle" ? "pointer" : "not-allowed",
+                    cursor: valid && status !== "submitting" ? "pointer" : "not-allowed",
                     fontSize: "var(--fs-6)",
                     fontWeight: 600,
                     display: "flex",
@@ -534,6 +617,16 @@ export default function ContactPage() {
                         style={{ display: "flex", alignItems: "center", gap: 8 }}
                       >
                         <Check size={16} /> Sent
+                      </motion.span>
+                    ) : status === "error" ? (
+                      <motion.span
+                        key="error"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        style={{ display: "flex", alignItems: "center", gap: 8 }}
+                      >
+                        Retry sending <ArrowRight size={15} />
                       </motion.span>
                     ) : (
                       <motion.span

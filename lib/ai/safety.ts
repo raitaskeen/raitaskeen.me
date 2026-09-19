@@ -4,10 +4,17 @@ export interface RateLimitConfig {
 }
 
 const DEFAULT_CONFIG: RateLimitConfig = {
-  windowMs: 60 * 1000, // 1 minute window
+  windowMs: 60 * 1000, // 1 minute sliding window
   maxRequests: 30,      // max 30 requests per minute
 };
 
+/**
+ * Architectural Limitation Notice:
+ * This rate limiter is strictly process-local (in-memory Map within the current Node.js runtime).
+ * It is NOT a distributed cache (e.g. Redis / Upstash) and does not synchronize state across
+ * multiple concurrent serverless instances. It protects individual runtime containers from
+ * memory exhaustion and burst abuse via an enforced FIFO capacity ceiling.
+ */
 const ipRequestMap = new Map<string, number[]>();
 let requestCounter = 0;
 const SWEEP_INTERVAL = 50;
@@ -15,12 +22,13 @@ const MAX_MAP_SIZE = 500;
 
 /**
  * Checks whether an incoming client IP is allowed within the rate limit window.
+ * Evicts stale timestamps and enforces a hard ceiling of MAX_MAP_SIZE entries via FIFO eviction.
  */
 export function isAllowedRate(ip: string, config: RateLimitConfig = DEFAULT_CONFIG): boolean {
   const now = Date.now();
   requestCounter++;
 
-  // Lazy global cleanup every SWEEP_INTERVAL requests or if map exceeds capacity
+  // Periodic lazy global cleanup every SWEEP_INTERVAL requests or if map exceeds capacity
   if (requestCounter >= SWEEP_INTERVAL || ipRequestMap.size > MAX_MAP_SIZE) {
     requestCounter = 0;
     for (const [key, timestamps] of ipRequestMap.entries()) {
@@ -29,7 +37,7 @@ export function isAllowedRate(ip: string, config: RateLimitConfig = DEFAULT_CONF
       }
     }
 
-    // Strict capacity ceiling under burst load: evict oldest entries
+    // Strict capacity ceiling under burst load: evict oldest entries (FIFO)
     if (ipRequestMap.size > MAX_MAP_SIZE) {
       const excess = ipRequestMap.size - MAX_MAP_SIZE;
       let count = 0;

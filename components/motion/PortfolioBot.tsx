@@ -29,7 +29,12 @@ import { Send, X, ArrowRight, Download, ExternalLink, RefreshCw } from "lucide-r
 import { usePointerSystem } from "./PointerSystem";
 import { spring, ease, scaleToken } from "@/lib/motion";
 import { classifyIntent, extractActions, getRandomStatus, CompanionAction } from "@/lib/ai";
-import BotMarkdown from "./BotMarkdown";
+import dynamic from "next/dynamic";
+
+const BotMarkdown = dynamic(() => import("./BotMarkdown"), {
+  ssr: false,
+  loading: () => <span style={{ opacity: 0.6 }}>...</span>,
+});
 
 type Message = {
   id: string;
@@ -221,6 +226,7 @@ export default function PortfolioBot() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const activeAbortRef = useRef<AbortController | null>(null);
 
   // Derive computational entity state (Spec §5)
   const entityState: EntityState = isStreaming
@@ -235,10 +241,18 @@ export default function PortfolioBot() {
     ? "READY"
     : "IDLE";
 
+  // Abort ongoing stream on unmount
+  useEffect(() => {
+    return () => {
+      activeAbortRef.current?.abort();
+    };
+  }, []);
+
   // Keyboard Escape listener
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape" && isOpen) {
+        activeAbortRef.current?.abort();
         setIsOpen(false);
       }
     }
@@ -338,6 +352,13 @@ export default function PortfolioBot() {
       setStatusText(getRandomStatus(intent));
     }, 750);
 
+    // Cancel previous stream if active
+    if (activeAbortRef.current) {
+      activeAbortRef.current.abort();
+    }
+    const controller = new AbortController();
+    activeAbortRef.current = controller;
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -346,12 +367,14 @@ export default function PortfolioBot() {
           messages: [...messages, userMsg].map((m) => ({ role: m.role, content: m.content })),
           currentRoute: pathname,
         }),
+        signal: controller.signal,
       });
 
       clearTimeout(rotateTimer);
 
       if (!response.ok || !response.body) {
-        throw new Error("Failed to connect to companion");
+        const errData = await response.json().catch(() => null);
+        throw new Error(errData?.error || "Failed to connect to companion");
       }
 
       setStatusText(null);
@@ -423,21 +446,28 @@ export default function PortfolioBot() {
           }
         }
       }
-    } catch {
+    } catch (err: unknown) {
       clearTimeout(rotateTimer);
       setStatusText(null);
+      if (err instanceof Error && err.name === "AbortError") {
+        return;
+      }
+      const errMessage =
+        err instanceof Error && err.message && !err.message.includes("Failed to connect")
+          ? err.message
+          : "I ran into a temporary network bottleneck. Feel free to inspect the systems architecture directly, browse the builds, or reach out to Taskeen at raitaskeen.dev@gmail.com!";
       setMessages((prev) => [
         ...prev,
         {
           id: "err-" + Date.now(),
           role: "assistant",
-          content:
-            "I ran into a temporary network bottleneck. Feel free to inspect the systems architecture directly, browse the builds, or reach out to Taskeen at raitaskeen.dev@gmail.com!",
+          content: errMessage,
           actions: [{ label: "Contact Taskeen", href: "/contact", isExternal: false }],
         },
       ]);
     } finally {
       setIsStreaming(false);
+      activeAbortRef.current = null;
     }
   }
 
