@@ -55,10 +55,14 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_ENV: production
 
-      - name: Verify static artifacts & PWA assets
+      - name: Run content tests
+        run: bun test
+
+      - name: Verify built pages and linked files
         run: |
-          test -f public/sw.js || { echo "Missing public/sw.js"; exit 1; }
-          test -f app/manifest.ts || { echo "Missing app/manifest.ts source"; exit 1; }
-          test -d .next || { echo "Missing .next build directory"; exit 1; }
-          test -f .next/server/app/manifest.webmanifest.body || { echo "Missing compiled manifest.webmanifest"; exit 1; }
+          test -f public/assets/Taskeen_Haider_Resume.pdf || { echo "Missing résumé PDF"; exit 1; }
+          for slug in legacyexodus raavi-volt annemarie-schimmel-haus analysis-sample; do
+            test -f ".next/server/app/work/${slug}.html" || { echo "Missing case study page: ${slug}"; exit 1; }
+          done
+          test -f .next/server/app/index.html || { echo "Missing home page"; exit 1; }
           echo "Production quality gate completed successfully."
