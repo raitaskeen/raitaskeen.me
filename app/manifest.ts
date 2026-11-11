@@ -3,17 +3,15 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "Taskeen Haider — Full-Stack Engineer",
+    name: "Taskeen Haider",
     short_name: "raitaskeen",
-    description: "Portfolio and systems architecture work of Taskeen Haider",
+    description: "Founder and lead architect of LegacyExodus. Websites, web apps and JS/TS codebase audits.",
     start_url: "/",
     scope: "/",
-    display: "standalone",
-    display_override: ["standalone", "minimal-ui", "browser"],
-    orientation: "portrait-primary",
-    background_color: "#121212",
-    theme_color: "#FFCF59",
-    categories: ["portfolio", "engineering", "productivity", "utilities"],
+    display: "browser",
+    background_color: "#0b0d14",
+    theme_color: "#0b0d14",
+    categories: ["portfolio"],
     icons: [
       {
         src: "/icon-192.png",

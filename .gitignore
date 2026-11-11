@@ -36,3 +36,6 @@ Thumbs.db
 *.tmp
 *.temp
 scratch/
+
+# Local handoff kit (not part of the site)
+handoff/
