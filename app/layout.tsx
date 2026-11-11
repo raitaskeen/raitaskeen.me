@@ -21,7 +21,13 @@ export const metadata: Metadata = {
     images: [{ url: "/media/legacyexodus.jpg", width: 1592, height: 1088 }],
   },
   twitter: { card: "summary_large_image", creator: "@raitaskeen786" },
-  icons: { icon: "/icon.svg", apple: "/icon-192.png" },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export const viewport: Viewport = {
