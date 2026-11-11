@@ -3,17 +3,16 @@
 import { useEffect, useRef } from "react";
 
 // The LegacyExodus moment, built in code so it is sharp at any size.
-// Left: the Ghost 6.73 run. Right: the real commander run from legacyexodus.tech, typed out.
+// Left: the Ghost 6.73 figures. Right: the same run, typed out. Only measured numbers appear.
 
-const LINES: { text: string; kind?: "cmd" | "ok" }[] = [
-  { text: "$ legacy-exodus analyze ./commander", kind: "cmd" },
-  { text: "discovering 12 files" },
-  { text: "parsing 7 sources" },
-  { text: "binding 859 symbols" },
-  { text: "connecting 723 calls · 13 module edges" },
-  { text: "tracing 304 control-flow graphs" },
+const LINES: { text: string; kind?: "cmd" | "ok" | "dim" }[] = [
+  { text: "$ legacy-exodus analyze ./ghost", kind: "cmd" },
+  { text: "discovering 7,172 files" },
+  { text: "connecting 415,492 calls" },
   { text: "sealing 13 artifacts → .discovery/" },
-  { text: "13/13 byte-identical · manifest d845ec324fa8", kind: "ok" },
+  { text: "done in 183 s", kind: "dim" },
+  { text: "$ legacy-exodus analyze ./ghost   # rerun", kind: "cmd" },
+  { text: "13/13 artifacts byte-identical on rerun", kind: "ok" },
 ];
 
 const CHAR_MS = 22;
@@ -23,7 +22,7 @@ const timeline = (() => {
   return LINES.map((l) => {
     const dur = Math.max(240, l.text.length * CHAR_MS);
     const start = t;
-    t += dur + (l.kind === "cmd" ? GAP_MS * 2 : GAP_MS);
+    t += dur + (l.kind === "cmd" ? GAP_MS * 2 : l.kind === "dim" ? GAP_MS * 3 : GAP_MS);
     return { start, dur };
   });
 })();
@@ -94,7 +93,7 @@ export function Showcase() {
   }, []);
 
   return (
-    <div ref={ref} className="lx" role="img" aria-label="LegacyExodus mapped 415,492 calls across 7,172 files of Ghost 6.73 in one 183-second run; a rerun reproduced 13 of 13 artifacts byte for byte. Beside it, a terminal replays the analysis of the commander package.">
+    <div ref={ref} className="lx" role="img" aria-label="LegacyExodus mapped 415,492 calls across 7,172 files of Ghost 6.73 in one 183-second run; a rerun reproduced 13 of 13 artifacts byte for byte. Beside it, a terminal replays that run and its rerun.">
       <span className="lx-light" aria-hidden />
       <div className="lx-stats" aria-hidden>
         <p className="lx-kicker mono">
@@ -122,7 +121,7 @@ export function Showcase() {
             <i />
             <i />
           </span>
-          <span className="mono">commander — legacy-exodus</span>
+          <span className="mono">ghost 6.73 — legacy-exodus</span>
         </div>
         <ol className="lx-lines mono">
           {LINES.map((l, i) => (

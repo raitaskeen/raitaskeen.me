@@ -1379,6 +1379,10 @@ svg {
   color: #fff;
   margin-bottom: 4px;
 }
+.lx-lines .lx-dim {
+  color: #8a8172;
+  margin-bottom: 12px;
+}
 .lx-lines .lx-ok {
   white-space: normal;
   margin-top: 8px;
@@ -1415,8 +1419,9 @@ svg {
 .lx.is-run .lx-ok {
   animation: fade 300ms var(--ease) var(--start) forwards;
 }
+/* Overshoots the right edge so the last step always shows the final character */
 @keyframes lx-type {
   to {
-    clip-path: inset(0 0 0 0);
+    clip-path: inset(0 -12% 0 0);
   }
 }
