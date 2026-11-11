@@ -126,13 +126,6 @@ export default function Home() {
 
           <footer className="site-foot">
             <span>© 2026 {person.name}</span>
-            <span>
-              Design rules adapted from{" "}
-              <a className="text-link" href="https://github.com/heydamir/unslop" target="_blank" rel="noopener noreferrer">
-                unslop by Damir Sokolovsky
-              </a>
-              , CC BY 4.0
-            </span>
           </footer>
         </div>
       </main>
