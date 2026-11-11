@@ -6,11 +6,8 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 2678400,
     dangerouslyAllowSVG: true,
-    remotePatterns: [
-      { protocol: "https", hostname: "ghchart.rshah.org" },
-      { protocol: "https", hostname: "streak-stats.demolab.com" },
-      { protocol: "https", hostname: "komarev.com" },
-    ],
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   async headers() {
     return [
@@ -62,6 +59,15 @@ const nextConfig = {
         ],
       },
       {
+        source: "/media/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=604800, stale-while-revalidate=2592000",
+          },
+        ],
+      },
+      {
         source: "/assets/Taskeen_Haider_Resume.pdf",
         headers: [
           {
@@ -95,7 +101,41 @@ const nextConfig = {
             key: "Cache-Control",
             value: "public, max-age=86400, stale-while-revalidate=604800",
           },
+          {
+            key: "Content-Type",
+            value: "application/manifest+json; charset=utf-8",
+          },
         ],
+      },
+      {
+        source: "/manifest.json",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+          {
+            key: "Content-Type",
+            value: "application/manifest+json; charset=utf-8",
+          },
+        ],
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      { source: "/projects/legacy-exodus", destination: "/work/legacyexodus", permanent: true },
+      { source: "/projects", destination: "/", permanent: true },
+      { source: "/about", destination: "/", permanent: true },
+      { source: "/resources", destination: "/", permanent: true },
+      { source: "/contact", destination: "/#contact", permanent: true },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/manifest.json",
+        destination: "/manifest.webmanifest",
       },
     ];
   },

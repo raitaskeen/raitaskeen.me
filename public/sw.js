@@ -1,103 +1,15 @@
-// Service Worker for raitaskeen portfolio PWA
-const CACHE_NAME = "raitaskeen-v3";
-
-const PRECACHE_ASSETS = [
-  "/",
-  "/assets/images/logo.svg",
-  "/icon-192.png",
-];
-
-// Install: Cache critical app shell assets
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(PRECACHE_ASSETS))
-      .then(() => self.skipWaiting())
-  );
-});
-
-// Activate: Purge obsolete caches and claim clients immediately
+// The site no longer ships a service worker. This one replaces the old
+// offline cache: it clears every cache it left behind, unregisters itself,
+// and reloads open tabs so visitors get the new site from the network.
+self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => key !== CACHE_NAME)
-            .map((key) => caches.delete(key))
-        )
-      )
-      .then(() => self.clients.claim())
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+      await self.registration.unregister();
+      const tabs = await self.clients.matchAll({ type: "window" });
+      tabs.forEach((tab) => tab.navigate(tab.url));
+    })(),
   );
-});
-
-// Fetch: Strategy depending on request type
-self.addEventListener("fetch", (event) => {
-  const { request } = event;
-
-  // Only handle GET requests
-  if (request.method !== "GET") return;
-
-  const url = new URL(request.url);
-
-  // Skip cross-origin requests except same origin and fonts
-  if (url.origin !== self.location.origin) {
-    return;
-  }
-
-  // Always bypass Service Worker for API routes and PDF files (e.g. fresh resume)
-  if (url.pathname.startsWith("/api/") || url.pathname.endsWith(".pdf")) {
-    return;
-  }
-
-  // 1. Navigation requests: Network-first with cache fallback
-  if (request.mode === "navigate") {
-    event.respondWith(
-      fetch(request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, responseClone);
-            });
-          }
-          return networkResponse;
-        })
-        .catch(async () => {
-          const cachedResponse = await caches.match(request);
-          if (cachedResponse) return cachedResponse;
-          // Fallback to cached home page if offline
-          return caches.match("/");
-        })
-    );
-    return;
-  }
-
-  // 2. Static assets: Stale-While-Revalidate
-  const isStaticAsset =
-    url.pathname.startsWith("/_next/static/") ||
-    url.pathname.startsWith("/assets/") ||
-    url.pathname.match(/\.(js|css|svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)$/);
-
-  if (isStaticAsset) {
-    event.respondWith(
-      caches.match(request).then((cachedResponse) => {
-        const fetchPromise = fetch(request)
-          .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              const responseClone = networkResponse.clone();
-              caches.open(CACHE_NAME).then((cache) => {
-                cache.put(request, responseClone);
-              });
-            }
-            return networkResponse;
-          })
-          .catch(() => cachedResponse);
-
-        return cachedResponse || fetchPromise;
-      })
-    );
-  }
 });
